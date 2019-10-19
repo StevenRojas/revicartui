@@ -1,0 +1,111 @@
+<div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch kt_body_workshop">
+  <div class="kt-container kt-container--fluid kt-grid kt-grid--ver kt_body-workshop-container">
+    <div class="ng-star-inserted">
+      <div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch" id="kt_body">
+        <div [ngClass]="{'kt-container kt-container--fluid kt-grid kt-grid--ver': true}" [ngStyle]="{'margin-right': '5px'}">
+          <!-- begin:: Aside Left -->
+          <!--        <button class="kt-aside-close" id="kt_aside_close_btn"><i class="la la-close"></i></button>-->
+          <!-- BEGIN: Aside Menu -->
+          <button class="kt-aside-close" id="kt_aside_close_btn"><i class="la la-close"></i></button>
+          <div ktOffcanvas [options]="menuCanvasOptions"
+               class="kt-aside kt-aside--fixed kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop" id="kt_aside"
+               [ngStyle]="{'padding-top': '0px'}">
+            <div class="kt-aside-menu-wrapper kt-portlet--height-fluid kt-grid__item kt-grid__item--fluid"
+                 id="kt_aside_menu_wrapper">
+              <div #asideMenu ktMenu [options]="menuOptions" [perfectScrollbar]="{wheelPropagation: false}"
+                   [ngStyle]="{'max-height': '95vh', 'position': 'relative'}" id="kt_aside_menu"
+                   class="kt-aside-menu mt-0" (mouseenter)="mouseEnter($event)" (mouseleave)="mouseLeave($event)"
+              >
+                <kt-portlet-client [class]="'kt-portlet--height-fluid'">
+                  <!--                Company options::START-->
+                  <kt-portlet-header [title]="'Empresas'" [ngStyle]="{'z-index': 2}">
+                    <ng-container ktPortletTools>
+                      <kt-context-menu-company></kt-context-menu-company>
+                    </ng-container>
+                  </kt-portlet-header>
+                  <!--                Company options::END-->
+                  <!--                Company search::START-->
+                  <kt-portlet-client-header [ngStyle]="{'z-index': 1}">
+                    <ng-container ktPortletTools>
+                      <kt-search-company-top-menu
+                        [searchString]="forceSearch"
+                        (emitCompanySelected)="searchCompanySelected($event)"
+                        (emitCompanyClear)="searchCompanyClear($event)"
+                      ></kt-search-company-top-menu>
+                    </ng-container>
+                  </kt-portlet-client-header>
+                  <!--                Company search::END-->
+                  <!--                Company List::START-->
+                  <ng-container *ngIf="list.list">
+                    <kt-portlet-client-body>
+                      <ng-container>
+                        <kt-widget-company-list [data]="searchList?searchList:list" (companySelectedEmit)="getCompany($event)" [companySelected]="company?.id" >
+                          <ng-template #actionTemplate let-item="item">
+                            <span class="kt-widget4__number" [ngStyle]="{'width': '0rem'}" [ngClass]="item.valueColor">1</span>
+                          </ng-template>
+                        </kt-widget-company-list>
+                      </ng-container>
+                    </kt-portlet-client-body>
+                  </ng-container>
+
+                  <!--                <div class="kt-space-20"></div>-->
+                  <!--                Company List::END-->
+                  <ng-container *ngIf="list.list && !searchList">
+                    <mat-paginator [length]="list?.pagination.total"
+                                   [pageSize]="10"
+                                   [pageSizeOptions]="[10]"
+                                   [hidePageSize]="true"
+                                   [pageIndex]="list?.pagination.page - 1"
+                                   (page)="changePage($event)"
+                    >
+                    </mat-paginator>
+                  </ng-container>
+                  <div class="kt-space-20"></div>
+                  <div class="kt-space-20"></div>
+                  <div class="kt-space-20"></div>
+                  <div class="kt-space-20"></div>
+                </kt-portlet-client>
+              </div>
+            </div>
+          </div>
+          <!-- END: Left Aside -->
+          <!-- end:: Aside Left -->
+        </div>
+      </div>
+    </div>
+
+    <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" [ngStyle]="">
+      <div ktContentAnimate class="kt-container kt-grid__item kt-grid__item--fluid kt-container--fluid">
+        <div class="">
+          <div class="row">
+            <div class="col-sm-12 col-md-6 col-6">
+              <kt-company-header [companySelected]="company"
+                                (companyUpdateListRequestEmit)="updateCompanyPageList($event)"
+                                (companyAddListRequestEmit)="searchCompanyId($event)"
+              >
+
+              </kt-company-header>
+              <kt-portlet [class]="'kt-portlet--height-fluid'">
+                <kt-portlet-body [class]="'p-0 mb-0 '">
+                  <ng-container *ngIf="company.id">
+                    <kt-company-edit [company]="company" (companyUpdateEmit)="updateCompanyInList($event)"
+                                    cl></kt-company-edit>
+                    <kt-company-note [companyId]="company.id" class="kt-portlet--height-fluid"></kt-company-note>
+                  </ng-container>
+                </kt-portlet-body>
+              </kt-portlet>
+            </div>
+            <div class="col-sm-12 col-md-6 col-6">
+              <kt-vehicle-header></kt-vehicle-header>
+              <kt-portlet [class]="'kt-portlet--height-fluid'">
+                <kt-portlet-body>
+                  <kt-company-vehicle [companyId]="company.id"></kt-company-vehicle>
+                </kt-portlet-body>
+              </kt-portlet>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

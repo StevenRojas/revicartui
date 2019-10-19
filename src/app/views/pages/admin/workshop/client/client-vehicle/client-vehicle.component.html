@@ -1,0 +1,31 @@
+<div class="kt-widget5">
+  <ng-container *ngIf="vehicles.length != 0">
+    <ng-container *ngFor="let detail of vehicles">
+      <ng-container [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{item: detail.vehicle}"></ng-container>
+    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="vehicles.length == 0">
+    <p>No hay vehículos registrados</p>
+  </ng-container>
+</div>
+
+<ng-template #itemTemplate let-item="item">
+  <div class="kt-widget5__item">
+    <div class="kt-widget5__content">
+      <div class="kt-widget5__pic">
+        <img class="kt-widget7__img" [attr.src]="item.photo_path" alt="">
+      </div>
+      <div class="kt-widget5__section">
+        <a href="javascript:;" class="kt-widget5__title">{{item.brand.name}}</a>
+        <p class="kt-widget5__desc">{{item.license_plate}}</p>
+        <div class="kt-widget5__info"><a mat-raised-button color="primary" [routerLink]="['/admin/workshop/vehicle']" [queryParams]="{'q_id': item.id, 'client_id': clientId}">Detalles</a></div>
+      </div>
+    </div>
+    <div class="kt-widget5__content">
+      <div class="kt-widget5__stats">
+        <span class="kt-widget5__number">{{item.mileage}}</span>
+        <span class="kt-widget5__sales">Kilometraje</span>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,28 @@
+<div class="kt-widget4">
+    <ng-container *ngIf="data.list.length > 0">
+        <ng-container *ngFor="let vehicle of data?.list">
+            <ng-container [ngTemplateOutletContext]="{item: vehicle}" [ngTemplateOutlet]="itemTemplate"></ng-container>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngIf="data.list.length == 0">
+        No tiene vehículos registrados
+    </ng-container>
+</div>
+
+<ng-template #itemTemplate let-item="item">
+  <div class="kt-widget4__item">
+<!--    <span *ngIf="item.icon" class="kt-widget4__icon">-->
+<!--			<i [ngClass]="item.icon"></i>-->
+<!--		</span>-->
+<!--    <a *ngIf="item.name" routerLinkActive="active" routerLink="/admin/workshop/vehicle/{{item.id}}" class="kt-widget4__title" >{{item.name}}</a>-->
+    <a *ngIf="item.license_plate"  [ngClass]="{'active': item.id == vehicleSelected}" (click)="selectVehicle(item.id)" class="kt-widget4__title" >{{item.license_plate}}</a>
+
+<!--    <div *ngIf="item.desc" class="kt-widget4__info">-->
+<!--      <a [attr.href]="item.url" class="kt-widget4__username" href="javascript:;">{{item.username}}</a>-->
+<!--      <a [attr.href]="item.url" class="kt-widget4__title" href="javascript:;">{{item.title}}</a>-->
+<!--      <p *ngIf="item.desc" class="kt-widget4__text">{{item.desc}}</p>-->
+<!--    </div>-->
+
+    <ng-container [ngTemplateOutletContext]="{item: item}" [ngTemplateOutlet]="actionTemplate"></ng-container>
+  </div>
+</ng-template>

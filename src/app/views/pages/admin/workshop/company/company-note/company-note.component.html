@@ -1,0 +1,39 @@
+<!--<kt-portlet [ngStyle]="{'padding-bottom': '0px'}">-->
+<!--  <kt-portlet-body>-->
+<div class="kt-register kt-register--v1">
+  <div class="kt-register__wrapper">
+    <div class="kt-register__body pl-5 pr-5 pt-5">
+      <h5>Notas</h5>
+      <!--begin::Signin-->
+      <!--      <div class="kt-register__form row">-->
+      <div class="kt-separator kt-separator--dashed"></div>
+      <ng-container *ngIf="notes?.list" >
+        <kt-company-note-item [data]="notes.list">
+        </kt-company-note-item>
+      </ng-container>
+
+      <mat-paginator [length]="notes?.pagination.total"
+                     [pageSize]="pageSize"
+                     [pageSizeOptions]="[5]"
+                     [hidePageSize]="true"
+                     [pageIndex]="notes?.pagination.page - 1"
+                     (page)="changePage($event)"
+      >
+      </mat-paginator>
+      <div class="row">
+        <div class="col-8">
+          <mat-form-field class="mt-1 w-100">
+            <textarea [(ngModel)]="comment"  matInput placeholder="Añadir Nota" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
+          </mat-form-field>
+        </div>
+        <div class="col-4">
+          <button [disabled]="!companyId || !comment" class="btn btn-primary btn-elevate" (click)="addComment()">Comentar</button>
+        </div>
+      </div>
+      <!--      </div>-->
+    </div>
+  </div>
+</div>
+
+<!--  </kt-portlet-body>-->
+<!--</kt-portlet>-->

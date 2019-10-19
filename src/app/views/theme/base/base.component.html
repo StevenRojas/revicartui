@@ -1,0 +1,39 @@
+<!-- begin:: Page -->
+<ng-container *ngIf="selfLayout !== 'blank'; else blankLayout">
+  <!-- begin:: Header Mobile -->
+  <kt-header-mobile></kt-header-mobile>
+  <!-- end:: Header Mobile -->
+
+  <div class="kt-grid kt-grid--hor kt-grid--root">
+    <!-- begin::Body -->
+    <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--ver kt-page">
+      <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-wrapper" id="kt_wrapper">
+        <!-- begin:: Header -->
+        <kt-header></kt-header>
+        <!-- end:: Header -->
+
+        <!-- begin:: Content -->
+            <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" id="kt_content">
+              <!-- begin:: Content Head -->
+              <kt-subheader *ngIf="subheaderDisplay" class="d-none d-lg-block"></kt-subheader>
+              <!-- end:: Content Head -->
+                <router-outlet></router-outlet>
+              <!-- end:: Content Body -->
+            </div>
+          <!-- end:: Content -->
+
+        <kt-footer *ngIf="footerDisplay"></kt-footer>
+      </div>
+    </div>
+    <!-- end:: Body -->
+
+    <!--		<kt-quick-panel></kt-quick-panel>-->
+    <!--		<kt-scroll-top></kt-scroll-top>-->
+    <!--		<kt-sticky-toolbar></kt-sticky-toolbar>-->
+  </div>
+</ng-container>
+<!-- end:: Page -->
+
+<ng-template #blankLayout>
+  <router-outlet></router-outlet>
+</ng-template>

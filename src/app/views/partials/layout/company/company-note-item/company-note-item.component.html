@@ -1,0 +1,14 @@
+<div class="kt-widget4">
+	<ng-container *ngFor="let item of data">
+		<ng-container [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{item: item}"></ng-container>
+	</ng-container>
+</div>
+
+<ng-template #itemTemplate let-item="item">
+	<div class="kt-widget4__item">
+		<div class="kt-widget4__info">
+      <a href="javascript:;" class="kt-widget4__username">{{item.user.name}} <span class="pl-4 small text-black-50">{{ item.date | dateFormat: 'YYYY-MM-DD, h:mm:ss' }} </span></a>
+      <p class="kt-widget4__text">{{item.comment}}</p>
+		</div>
+	</div>
+</ng-template>

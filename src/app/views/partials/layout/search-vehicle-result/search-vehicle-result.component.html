@@ -1,0 +1,35 @@
+<div class="kt-quick-search__result">
+  <ng-container *ngIf="!data">
+    <div class="kt-quick-search__message kt-hidden">
+      {{noRecordText || 'Sin resultados'}}
+    </div>
+  </ng-container>
+  <ng-container *ngIf="data">
+    <ng-container *ngFor="let item of data">
+      <ng-container [ngTemplateOutletContext]="{item: item}"
+                    [ngTemplateOutlet]="itemTemplate"></ng-container>
+    </ng-container>
+  </ng-container>
+</div>
+
+<ng-template #itemTemplate let-item="item">
+  <div class="kt-quick-search__item">
+    <div [innerHTML]="item.icon ? item.icon : item.img" [ngClass]="{'kt-quick-search__item-img': item.img, 'kt-quick-search__item-icon': item.icon}"
+         class="">
+    </div>
+    <div class="kt-quick-search__item-wrapper">
+      <a class="kt-quick-search__item-title" (click)="vehicleSelected(item)">
+        {{item.license_plate}}
+      </a>
+      <div class="kt-quick-search__item-desc">
+        {{item.year}}
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #emptyResultTemplate>
+  <div class="kt-quick-search__message kt-hidden">
+    {{noRecordText || 'Sin resultados'}}
+  </div>
+</ng-template>

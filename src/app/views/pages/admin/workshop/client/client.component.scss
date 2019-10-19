@@ -1,0 +1,28 @@
+@import "sass/pages/admin/client/register-1";
+
+.form-group > * {
+  width: 100%;
+}
+
+.kt_body_workshop {
+  height: 100%;
+  padding-top: 0px!important;
+  .kt_body_workshop-container {
+    height: 100%;
+    .dropdown-menu.dropdown-menu-lg {
+      width: 245px;
+    }
+  }
+}
+
+.kt-aside--fixed.kt-header--minimize .kt-aside-menu-wrapper {
+  width: 200px!important;
+}
+
+.kt-widget4__number {
+  width: 0rem;
+  //flex-grow: 1;
+  //text-align: right;
+  //font-weight: 500;
+  //font-size: 1.1rem;
+}
