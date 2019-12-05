@@ -1,622 +1,605 @@
 <div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch kt_body_workshop">
-  <div class="kt-container kt-container--fluid kt-grid kt-grid--ver kt_body-workshop-container">
-    <div class="ng-star-inserted kt-hidden">
-      <div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch" id="kt_body">
-        <div class="" [ngClass]="{'kt-container kt-container--fluid kt-grid kt-grid--ver': true}"
-             [ngStyle]="{'margin-right': '5px'}">
-          <!-- begin:: Aside Left -->
-          <button class="kt-aside-close" id="kt_aside_close_btn"><i class="la la-close"></i></button>
-          <!-- BEGIN: Aside Menu -->
-          <div ktOffcanvas [options]="menuCanvasOptions"
-               class="kt-aside kt-aside--fixed kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop"
-               id="kt_aside"
-               [ngStyle]="{'padding-top': '0px'}">
-            <div class="kt-aside-menu-wrapper kt-portlet--height-fluid kt-grid__item kt-grid__item--fluid"
-                 id="kt_aside_menu_wrapper">
-              <div #asideMenu ktMenu [options]="menuOptions" [perfectScrollbar]="{wheelPropagation: false}"
-                   [ngStyle]="{'max-height': '95vh', 'position': 'relative'}" id="kt_aside_menu"
-                   class="kt-aside-menu mt-0" (mouseenter)="mouseEnter($event)" (mouseleave)="mouseLeave($event)"
-              >
-                <kt-portlet-client [class]="'kt-portlet--height-fluid'">
-                  <!--                Client options::START-->
-                  <kt-portlet-header [title]="'Vehículos'" [ngStyle]="{'z-index': 2}">
-                    <ng-container ktPortletTools>
-                      <kt-context-menu-vehicle></kt-context-menu-vehicle>
-                    </ng-container>
-                  </kt-portlet-header>
-                  <!--                Client options::END-->
-                  <!--                Client search::START-->
-                  <kt-portlet-client-header [ngStyle]="{'z-index': 1}">
-                    <ng-container ktPortletTools>
-                      <kt-search-vehicle-top-menu
-                        (emitVehicleSelected)="searchVehicleSelected($event)"
-                        (emitVehicleClear)="searchVehicleClear($event)"
-                      ></kt-search-vehicle-top-menu>
-                    </ng-container>
-                  </kt-portlet-client-header>
-                  <!--                Client search::END-->
-                  <!--                Client List::START-->
-                  <ng-container *ngIf="list.list">
-                    <kt-portlet-client-body>
-                      <ng-container>
-                        <kt-widget-vehicle-list [data]="searchList?searchList:list"
-                                                (vehicleSelectedEmit)="getVehicle($event)"
-                                                [vehicleSelected]="vehicle?.id">
-                          <ng-template #actionTemplate let-item="item">
-                            <!--                            <span class="kt-widget4__number" [ngStyle]="{'width': '0rem'}" [ngClass]="item.valueColor">1</span>-->
-                          </ng-template>
-                        </kt-widget-vehicle-list>
-                      </ng-container>
-                    </kt-portlet-client-body>
-                  </ng-container>
+<!--  <div class="kt-container kt-container&#45;&#45;fluid kt-grid kt-grid&#45;&#45;ver kt_body-workshop-container">-->
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-1 col-lg-2">
 
-                  <!--                <div class="kt-space-20"></div>-->
-                  <!--                Client List::END-->
-                  <ng-container *ngIf="list.list && !searchList">
-                    <mat-paginator [length]="list?.pagination.total"
-                                   [pageSize]="10"
-                                   [pageSizeOptions]="[10]"
-                                   [hidePageSize]="true"
-                                   [pageIndex]="list?.pagination.page - 1"
-                                   (page)="changePage($event)"
-                    >
-                    </mat-paginator>
-                  </ng-container>
-                  <div class="kt-space-20"></div>
-                  <div class="kt-space-20"></div>
-                  <div class="kt-space-20"></div>
-                  <div class="kt-space-20"></div>
-                </kt-portlet-client>
+      </div>
+      <div class="col-12 col-sm-12 col-md-10 col-lg-8">
+        <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" [ngStyle]="">
+          <div ktContentAnimate class="kt-container kt-grid__item kt-grid__item--fluid kt-container--fluid">
+            <div class="">
+              <div class="row">
+                <div class="col-12">
+                  <kt-vehicle-list></kt-vehicle-list>
+                </div>
+
+
+                <!--            <div class="col-sm-12 col-md-4 col-4">-->
+
+                <!--            </div>-->
+                <!--            <div class="col-sm-12 col-md-8 col-8">-->
+                <!--              <kt-portlet [class]="'kt-portlet&#45;&#45;height-fluid'">-->
+                <!--                <kt-portlet-body [class]="'p-5 mb-3 '">-->
+                <!--                  <mat-tab-group  [selectedIndex]="3">-->
+                <!--                    <mat-tab label="Detalles"></mat-tab>-->
+                <!--                    <mat-tab label="Recepción"></mat-tab>-->
+                <!--                    <mat-tab label="Historial"></mat-tab>-->
+                <!--                    <mat-tab label="Reparación">-->
+                <!--                      <div class="row">-->
+                <!--                        <div class="col-12">-->
+                <!--                          <div class="row">-->
+                <!--                            <div class="col-4">-->
+                <!--                              <h5>Operador:</h5>-->
+                <!--                              <mat-form-field>-->
+                <!--                                <mat-select placeholder="Operador">-->
+                <!--                                  <mat-option *ngFor="let operator of ['Operador 01', 'Operador 02', 'Operador 03', 'Operador 04']" [value]="operator">-->
+                <!--                                    {{ operator }}-->
+                <!--                                  </mat-option>-->
+                <!--                                </mat-select>-->
+                <!--                              </mat-form-field>-->
+                <!--                            </div>-->
+                <!--                            <div class="col-4">-->
+                <!--                              <h5>Estado:</h5>-->
+                <!--                              <mat-form-field>-->
+                <!--                                <mat-select placeholder="Estado">-->
+                <!--                                  <mat-option *ngFor="let status of ['-&#45;&#45; En Espera -&#45;&#45;', 'Estado 02', 'Estado 03', 'Estado 04']" [value]="status">-->
+                <!--                                    {{ status }}-->
+                <!--                                  </mat-option>-->
+                <!--                                </mat-select>-->
+                <!--                                <span matSuffix>&nbsp;<button (click)="showHistory()" mat-button matSuffix color="info"><i class="flaticon-chat-2"></i></button></span>-->
+                <!--                              </mat-form-field>-->
+                <!--                            </div>-->
+                <!--                            <div class="col-4">-->
+                <!--                              <div class="kt-quick-search__item-wrapper">-->
+                <!--                                <a class="kt-quick-search__item-title" >-->
+                <!--                                  <h5 class="mt-0">Total:</h5>-->
+                <!--                                </a>-->
+                <!--                                <div class="kt-quick-search__item-desc mt-3 w-100 text-center">-->
+                <!--                                  <h4><b>230 Bs</b></h4>-->
+                <!--                                </div>-->
+                <!--                              </div>-->
+                <!--                            </div>-->
+                <!--                          </div>-->
+                <!--                          <div class="row">-->
+                <!--                            <div class="col-12">-->
+                <!--                              <mat-accordion>-->
+                <!--                                <mat-expansion-panel>-->
+                <!--                                  <mat-expansion-panel-header>-->
+                <!--                                    <mat-panel-title>-->
+                <!--                                      <div class="text-black-50">Trabajos Realizados</div>-->
+                <!--                                    </mat-panel-title>-->
+                <!--                                  </mat-expansion-panel-header>-->
+                <!--                                  <div class="kt-separator kt-separator&#45;&#45;dashed pt-1 pb-1 mt-1 mb-3"></div>-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-6">-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-6 text-right">-->
+                <!--                                      <h6>SubTotal: 130 Bs</h6>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-10">-->
+                <!--                                      <div class="material_item">-->
+                <!--                                        <div class="row">-->
+                <!--                                          <div class="col-9">-->
+                <!--                                            <div class="row">-->
+                <!--                                              <div class="col-2">-->
+                <!--                                                <a mat-button matSuffix class="btn btn-icon btn-secondary ml-2 p-0 text-center">-->
+                <!--                                                  <i class="flaticon2-line"></i>-->
+                <!--                                                </a>-->
+                <!--                                              </div>-->
+                <!--                                              <div class="col-10">-->
+                <!--                                                <mat-form-field class="example-full-width mr-2">-->
+                <!--                                                  <input type="text" placeholder="Repuesto o accesorio" aria-label="Repuesto o accesorio" matInput [matAutocomplete]="auto" value="Plastiquero">-->
+                <!--                                                  <mat-autocomplete #auto="matAutocomplete">-->
+                <!--                                                    <mat-option *ngFor="let option of ['Plastiquero', 'Alarmas', 'Tornero']" [value]="option">-->
+                <!--                                                      {{ option }}-->
+                <!--                                                    </mat-option>-->
+                <!--                                                  </mat-autocomplete>-->
+                <!--                                                </mat-form-field>-->
+                <!--                                              </div>-->
+                <!--                                            </div>-->
+
+                <!--                                          </div>-->
+                <!--                                          <div class="col-3">-->
+                <!--                                            <button mat-button matSuffix color="warn" class="mr-1">-->
+                <!--                                              <i class="flaticon2-trash"></i>-->
+                <!--                                            </button>-->
+                <!--                                            <button mat-icon-button matSuffix>-->
+                <!--                                              <button mat-button color="primary"><i class="flaticon2-plus"></i></button>-->
+                <!--                                            </button>-->
+                <!--                                          </div>-->
+                <!--                                        </div>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-2">-->
+                <!--                                      <mat-form-field class="example-full-width w-100 pb-2">-->
+                <!--                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="180">-->
+                <!--                                        <span matSuffix>&nbsp;Bs.</span>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--&lt;!&ndash;                                  ITEMS Start                  &ndash;&gt;-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-10">-->
+                <!--                                      <div class="material_item">-->
+                <!--                                        <div class="row">-->
+                <!--                                          <div class="col-9">-->
+                <!--                                            <div class="row">-->
+                <!--                                              <div class="col-2"></div>-->
+                <!--                                              <div class="col-2">-->
+                <!--                                                <a mat-button matSuffix class="btn btn-icon btn-secondary ml-2 p-0 text-center">-->
+                <!--                                                  <i class="flaticon2-plus"></i>-->
+                <!--                                                </a>-->
+                <!--                                              </div>-->
+                <!--                                              <div class="col-8">-->
+                <!--                                                <mat-form-field class="example-full-width mr-2">-->
+                <!--                                                  <input type="text" placeholder="Repuesto o accesorio" aria-label="Repuesto o accesorio" matInput value="Pegado de bomba de irrigadores">-->
+                <!--                                                </mat-form-field>-->
+                <!--                                              </div>-->
+                <!--                                            </div>-->
+                <!--                                          </div>-->
+                <!--                                          <div class="col-3">-->
+                <!--                                            <button mat-button matSuffix color="warn" class="mr-1">-->
+                <!--                                              <i class="flaticon2-trash"></i>-->
+                <!--                                            </button>-->
+                <!--                                            <button mat-icon-button matSuffix>-->
+                <!--                                              <button mat-button color="primary"><i class="flaticon2-plus"></i></button>-->
+                <!--                                            </button>-->
+                <!--                                          </div>-->
+                <!--                                        </div>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-2">-->
+                <!--                                      <mat-form-field class="example-full-width w-100 pb-2">-->
+                <!--                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="80">-->
+                <!--                                        <span matSuffix>&nbsp;Bs.</span>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--&lt;!&ndash;                                  ITEMS End                  &ndash;&gt;-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-10">-->
+                <!--                                      <div class="material_item">-->
+                <!--                                        <div class="row">-->
+                <!--                                          <div class="col-9">-->
+                <!--                                            <div class="row">-->
+                <!--                                              <div class="col-2">-->
+                <!--                                                <a mat-button matSuffix class="btn btn-icon btn-secondary ml-2 p-0 text-center">-->
+                <!--                                                  <i class="flaticon2-plus"></i>-->
+                <!--                                                </a>-->
+                <!--                                              </div>-->
+                <!--                                              <div class="col-10">-->
+                <!--                                                <mat-form-field class="example-full-width mr-2">-->
+                <!--                                                  <input type="text" placeholder="Repuesto o accesorio" aria-label="Repuesto o accesorio" matInput [matAutocomplete]="auto" value="Tornero">-->
+                <!--                                                  <mat-autocomplete #auto="matAutocomplete">-->
+                <!--                                                    <mat-option *ngFor="let option of ['Plastiquero', 'Alarmas', 'Tornero']" [value]="option">-->
+                <!--                                                      {{ option }}-->
+                <!--                                                    </mat-option>-->
+                <!--                                                  </mat-autocomplete>-->
+                <!--                                                </mat-form-field>-->
+                <!--                                              </div>-->
+                <!--                                            </div>-->
+                <!--                                          </div>-->
+                <!--                                          <div class="col-3">-->
+                <!--                                            <button mat-button matSuffix color="warn" class="mr-1">-->
+                <!--                                              <i class="flaticon2-trash"></i>-->
+                <!--                                            </button>-->
+                <!--                                            <button mat-icon-button matSuffix>-->
+                <!--                                              <button mat-button color="primary"><i class="flaticon2-plus"></i></button>-->
+                <!--                                            </button>-->
+                <!--                                          </div>-->
+                <!--                                        </div>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-2">-->
+                <!--                                      <mat-form-field class="example-full-width w-100 pb-2">-->
+                <!--                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="50">-->
+                <!--                                        <span matSuffix>&nbsp;Bs.</span>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--                                  <button mat-button color="accent">AGREGAR TRABAJO</button>-->
+                <!--                                </mat-expansion-panel>-->
+                <!--                                <mat-expansion-panel>-->
+                <!--                                  <mat-expansion-panel-header>-->
+                <!--                                    <mat-panel-title>-->
+                <!--                                      <div class="text-black-50">Trabajos de Terceros</div>-->
+                <!--                                    </mat-panel-title>-->
+                <!--                                  </mat-expansion-panel-header>-->
+                <!--                                </mat-expansion-panel>-->
+                <!--                                <mat-expansion-panel>-->
+                <!--                                  <mat-expansion-panel-header>-->
+                <!--                                    <mat-panel-title>-->
+                <!--                                      <div class="text-black-50">Insumos y Materiales </div>-->
+                <!--                                    </mat-panel-title>-->
+                <!--                                  </mat-expansion-panel-header>-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-6">-->
+                <!--                                      <button mat-button color="primary"><i class="flaticon2-plus"></i></button>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-6 text-right">-->
+                <!--                                      <h6>SubTotal: 20 Bs</h6>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--                                  <div class="kt-separator kt-separator&#45;&#45;dashed pt-1 pb-1 mt-1 mb-3"></div>-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-8">-->
+                <!--                                      <div class="material_item">-->
+                <!--                                        <p class="text-black-50 pt-4">Cinta aislante 3M Grande</p>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-4">-->
+                <!--                                      <mat-form-field class="example-full-width w-25 pb-2">-->
+                <!--                                        <input matInput placeholder="Cantidad" value="1" type="number">-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <mat-form-field class="example-full-width w-50 pb-2">-->
+                <!--                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="10">-->
+                <!--                                        <span matSuffix>&nbsp;Bs.</span>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <div class="d-inline-block example-full-width w-25">-->
+                <!--                                        <button mat-button matSuffix color="warn" class="p-0">-->
+                <!--                                          <i class="flaticon2-trash"></i>-->
+                <!--                                        </button>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--                                  <div class="kt-separator kt-separator&#45;&#45;dashed pt-1 pb-1 mt-1 mb-3"></div>-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-8">-->
+                <!--                                      <div class="material_item">-->
+                <!--                                        <p class="text-black-50 pt-4">Gasolina (litros)</p>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-4">-->
+                <!--                                      <mat-form-field class="example-full-width w-25 pb-2">-->
+                <!--                                        <input matInput placeholder="Cantidad" value="1" type="number">-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <mat-form-field class="example-full-width w-50 pb-2">-->
+                <!--                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="10">-->
+                <!--                                        <span matSuffix>&nbsp;Bs.</span>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <div class="d-inline-block example-full-width w-25">-->
+                <!--                                        <button mat-button matSuffix color="warn" class="p-0">-->
+                <!--                                          <i class="flaticon2-trash"></i>-->
+                <!--                                        </button>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--                                  <div class="kt-separator kt-separator&#45;&#45;dashed pt-1 pb-1 mt-1 mb-3"></div>-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-8">-->
+                <!--                                      <div class="material_item">-->
+                <!--                                        <mat-form-field class="example-full-width">-->
+                <!--                                        <input type="text" placeholder="Material o insumo" aria-label="Assignee" matInput [matAutocomplete]="auto">-->
+                <!--                                          <button mat-icon-button matSuffix>-->
+                <!--                                            <i class="pl-2 flaticon2-search-1"></i>-->
+                <!--                                          </button>-->
+                <!--                                          <button mat-icon-button matSuffix>-->
+                <!--                                            <i class="pl-2 flaticon2-shopping-cart"></i>-->
+                <!--                                          </button>-->
+                <!--                                        <mat-autocomplete #auto="matAutocomplete">-->
+                <!--                                          <mat-option *ngFor="let option of ['Aceite de caja Repsol', 'Aceite de Motor Repsol SW30', 'Aceite de Motor Repsol SW35(compatible)']" [value]="option">-->
+                <!--                                            {{ option }}-->
+                <!--                                          </mat-option>-->
+                <!--                                        </mat-autocomplete>-->
+                <!--                                        </mat-form-field>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-4">-->
+                <!--                                      <mat-form-field class="example-full-width w-25 pb-2">-->
+                <!--                                        <input matInput placeholder="Cantidad" value="1" type="number">-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <mat-form-field class="example-full-width w-50 pb-2">-->
+                <!--                                        <input matInput placeholder="Monto" type="number" class="example-right-align">-->
+                <!--                                        <span matSuffix>&nbsp;Bs.</span>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <div class="d-inline-block example-full-width w-25">-->
+                <!--                                        <button mat-button matSuffix color="warn" class="p-0">-->
+                <!--                                          <i class="flaticon2-trash"></i>-->
+                <!--                                        </button>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--                                </mat-expansion-panel>-->
+                <!--                                <mat-expansion-panel>-->
+                <!--                                  <mat-expansion-panel-header>-->
+                <!--                                    <mat-panel-title>-->
+                <!--                                      <div class="text-black-50">Repuestos y Accesorios</div>-->
+                <!--                                    </mat-panel-title>-->
+                <!--                                  </mat-expansion-panel-header>-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-6">-->
+                <!--                                      <button mat-button color="primary"><i class="flaticon2-plus"></i></button>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-6 text-right">-->
+                <!--                                      <h6>SubTotal: 200 Bs</h6>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--                                  <div class="kt-separator kt-separator&#45;&#45;dashed pt-1 pb-1 mt-1 mb-3"></div>-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-8">-->
+                <!--                                      <div class="material_item">-->
+                <!--                                        <p class="text-black-50 pt-4">Motor de cierre centralizado</p>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-4">-->
+                <!--                                      <mat-form-field class="example-full-width w-25 pb-2">-->
+                <!--                                        <input matInput placeholder="Cantidad" value="1" type="number">-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <mat-form-field class="example-full-width w-50 pb-2">-->
+                <!--                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="100">-->
+                <!--                                        <span matSuffix>&nbsp;Bs.</span>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <div class="d-inline-block example-full-width w-25">-->
+                <!--                                        <button mat-button matSuffix color="warn" class="p-0">-->
+                <!--                                          <i class="flaticon2-trash"></i>-->
+                <!--                                        </button>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--                                  <div class="kt-separator kt-separator&#45;&#45;dashed pt-1 pb-1 mt-1 mb-3"></div>-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-8">-->
+                <!--                                      <div class="material_item">-->
+                <!--                                        <p class="text-black-50 pt-4">Presinto Plástico</p>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-4">-->
+                <!--                                      <mat-form-field class="example-full-width w-25 pb-2">-->
+                <!--                                        <input matInput placeholder="Cantidad" value="1" type="number">-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <mat-form-field class="example-full-width w-50 pb-2">-->
+                <!--                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="100">-->
+                <!--                                        <span matSuffix>&nbsp;Bs.</span>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <div class="d-inline-block example-full-width w-25">-->
+                <!--                                        <button mat-button matSuffix color="warn" class="p-0">-->
+                <!--                                          <i class="flaticon2-trash"></i>-->
+                <!--                                        </button>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--                                  <div class="kt-separator kt-separator&#45;&#45;dashed pt-1 pb-1 mt-1 mb-3"></div>-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-8">-->
+                <!--                                      <div class="material_item">-->
+                <!--                                        <mat-form-field class="example-full-width">-->
+                <!--                                          <input type="text" placeholder="Repuesto o accesorio" aria-label="Repuesto o accesorio" matInput [matAutocomplete]="auto">-->
+                <!--                                          <button mat-icon-button matSuffix>-->
+                <!--                                            <i class="pl-2 flaticon2-search-1"></i>-->
+                <!--                                          </button>-->
+                <!--                                          <button mat-icon-button matSuffix>-->
+                <!--                                            <i class="pl-2 flaticon2-shopping-cart"></i>-->
+                <!--                                          </button>-->
+                <!--                                          <mat-autocomplete #auto="matAutocomplete">-->
+                <!--                                            <mat-option *ngFor="let option of ['Balata Frono Trasero Renault', 'Balata Freno Trasero Roge', 'Balata Freno Trasero Toyoya']" [value]="option">-->
+                <!--                                              {{ option }}-->
+                <!--                                            </mat-option>-->
+                <!--                                          </mat-autocomplete>-->
+                <!--                                        </mat-form-field>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-4">-->
+                <!--                                      <mat-form-field class="example-full-width w-25 pb-2">-->
+                <!--                                        <input matInput placeholder="Cantidad" value="1" type="number">-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <mat-form-field class="example-full-width w-50 pb-2">-->
+                <!--                                        <input matInput placeholder="Monto" type="number" class="example-right-align">-->
+                <!--                                        <span matSuffix>&nbsp;Bs.</span>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <div class="d-inline-block example-full-width w-25">-->
+                <!--                                        <button mat-button matSuffix color="warn" class="p-0">-->
+                <!--                                          <i class="flaticon2-trash"></i>-->
+                <!--                                        </button>-->
+                <!--                                      </div>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--                                </mat-expansion-panel>-->
+                <!--                                <mat-expansion-panel>-->
+                <!--                                  <mat-expansion-panel-header>-->
+                <!--                                    <mat-panel-title>-->
+                <!--                                      <div class="text-black-50">Control de Calidad</div>-->
+                <!--                                    </mat-panel-title>-->
+                <!--                                  </mat-expansion-panel-header>-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-6">-->
+                <!--                                      <mat-form-field class="w-100">-->
+                <!--                                        <mat-select placeholder="Revisor">-->
+                <!--                                          <mat-option *ngFor="let reviewer of ['Revisor 01', 'Revisor 02', 'Revisor 03', 'Revisor 04']" [value]="reviewer">-->
+                <!--                                            {{ reviewer }}-->
+                <!--                                          </mat-option>-->
+                <!--                                        </mat-select>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-6">-->
+                <!--                                      <button mat-raised-button color="primary" class="btn btn-success">Aceptado</button>-->
+                <!--                                      <button mat-raised-button class="ml-4 btn-danger">Rechazado</button>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-12">-->
+                <!--                                      <mat-form-field class="w-100">-->
+                <!--                                        <textarea matInput placeholder="Notas" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--                                </mat-expansion-panel>-->
+                <!--                                <mat-expansion-panel>-->
+                <!--                                  <mat-expansion-panel-header>-->
+                <!--                                    <mat-panel-title>-->
+                <!--                                      <div class="text-black-50">Próximos Mantenimientos y Notas</div>-->
+                <!--                                    </mat-panel-title>-->
+                <!--                                  </mat-expansion-panel-header>-->
+                <!--                                  <mat-form-field class="w-100">-->
+                <!--                                    <textarea matInput placeholder="Notas Client" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>-->
+                <!--                                  </mat-form-field>-->
+                <!--                                  <mat-form-field class="w-100">-->
+                <!--                                    <textarea matInput placeholder="Notas Vehiculo" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>-->
+                <!--                                  </mat-form-field>-->
+                <!--                                  <div class="row">-->
+                <!--                                    <div class="col-4">-->
+                <!--                                      <h6 class="text-black-50">Aceite Motor</h6>-->
+                <!--                                      <mat-form-field class="w-100 pb-2">-->
+                <!--                                        <input matInput [matDatepicker]="pickerOilM" placeholder="Fecha">-->
+                <!--                                        <mat-datepicker-toggle matSuffix [for]="pickerOilM"></mat-datepicker-toggle>-->
+                <!--                                        <mat-datepicker #pickerOilM></mat-datepicker>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <mat-form-field class="w-100 pb-2">-->
+                <!--                                        <input matInput placeholder="Kilometraje" type="number" class="example-right-align" />-->
+                <!--                                      </mat-form-field>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-4">-->
+                <!--                                      <h6 class="text-black-50">Aceite Caja</h6>-->
+                <!--                                      <mat-form-field class="w-100 pb-2">-->
+                <!--                                        <input matInput [matDatepicker]="pickerOilB" placeholder="Fecha">-->
+                <!--                                        <mat-datepicker-toggle matSuffix [for]="pickerOilB"></mat-datepicker-toggle>-->
+                <!--                                        <mat-datepicker #pickerOilB></mat-datepicker>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <mat-form-field class="w-100 pb-2">-->
+                <!--                                        <input matInput placeholder="Kilometraje" type="number" class="example-right-align" />-->
+                <!--                                      </mat-form-field>-->
+                <!--                                    </div>-->
+                <!--                                    <div class="col-4">-->
+                <!--                                      <h6 class="text-black-50">Mantenimiento</h6>-->
+                <!--                                      <mat-form-field class="w-100 pb-2">-->
+                <!--                                        <input matInput [matDatepicker]="pickerOilC" placeholder="Fecha">-->
+                <!--                                        <mat-datepicker-toggle matSuffix [for]="pickerOilC"></mat-datepicker-toggle>-->
+                <!--                                        <mat-datepicker #pickerOilC></mat-datepicker>-->
+                <!--                                      </mat-form-field>-->
+                <!--                                      <mat-form-field class="w-100 pb-2">-->
+                <!--                                        <input matInput placeholder="Kilometraje" type="number" class="example-right-align" />-->
+                <!--                                      </mat-form-field>-->
+                <!--                                    </div>-->
+                <!--                                  </div>-->
+                <!--                                </mat-expansion-panel>-->
+                <!--                              </mat-accordion>-->
+                <!--                            </div>-->
+                <!--                          </div>-->
+                <!--                        </div>-->
+                <!--                      </div>-->
+                <!--                    </mat-tab>-->
+                <!--                  </mat-tab-group>-->
+                <!--                </kt-portlet-body>-->
+                <!--              </kt-portlet>-->
+
+                <!--              &lt;!&ndash;              <kt-vehicle-header></kt-vehicle-header>&ndash;&gt;-->
+                <!--              &lt;!&ndash;              <kt-portlet [class]="'kt-portlet&#45;&#45;height-fluid'">&ndash;&gt;-->
+                <!--              &lt;!&ndash;                <kt-portlet-body>&ndash;&gt;-->
+                <!--              &lt;!&ndash;                  <kt-client-vehicle [clientId]="client.id" ></kt-client-vehicle>&ndash;&gt;-->
+                <!--              &lt;!&ndash;                </kt-portlet-body>&ndash;&gt;-->
+                <!--              &lt;!&ndash;              </kt-portlet>&ndash;&gt;-->
+                <!--            </div>-->
               </div>
             </div>
           </div>
-          <!-- END: Left Aside -->
-          <!-- end:: Aside Left -->
         </div>
       </div>
-    </div>
+      <div class="col-12 col-sm-12 col-md-1 col-lg-2">
 
-    <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" [ngStyle]="">
-      <div ktContentAnimate class="kt-container kt-grid__item kt-grid__item--fluid kt-container--fluid">
-        <div class="">
-          <div class="row">
-            <div class="col-sm-12 col-md-4 col-4">
-              <!--              <kt-client-header [clientSelected]="client"-->
-              <!--                                (clientUpdateListRequestEmit)="updateClientPageList($event)"-->
-              <!--                                (clientAddListRequestEmit)="searchClientId($event)"-->
-              <!--              >-->
-
-              <!--              </kt-client-header>-->
-              <kt-portlet [class]="'kt-portlet--height-fluid'">
-                <kt-portlet-body [class]="'p-0 mb-0 '">
-                  <div class="kt-widget26 p-4">
-                    <div class="kt-widget26__content" *ngIf="vehicle.brand && vehicle.model">
-                      <span class="kt-widget26__number">{{ vehicle?.brand.name }} {{ vehicle?.model.name }} <span class="kt-font-md ">{{ vehicle.year }}</span></span>
-                      <span class="kt-widget26__desc kt-font-xl kt-form__heading-title">{{ vehicle.license_plate }}</span>
-                      <ng-container *ngIf="client && client?.id">
-                        <span class="kt-widget26__desc">{{ client?.name }} <{{ client?.email }}></span>
-                      </ng-container>
-                      <ng-container *ngIf="company && company?.id">
-                        <span class="kt-widget26__desc">{{ company?.name }} <{{ company?.email }}></span>
-                      </ng-container>
-
-                      <span class="kt-widget26__desc" *ngIf="vehicle?.updated_at"><i class="flaticon2-calendar-1"></i> {{ vehicle.updated_at | dateFormat: 'YYYY-MM-DD, h:mm:ss' }}</span>
-                    </div>
-                    <div class="kt-widget26__chart" style="height:auto; width: auto;">
-                      <img class="img-fluid " [src]="vehicle.photo_path">
-                    </div>
-                    <div class="kt-widget26__content">
-                      <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent">Cambiar Foto</button></span>
-                      <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent">Cambiar Dueño</button></span>
-                      <span class="kt-widget26__desc"><i class="flaticon2-trash"></i> <button mat-button color="warn">Eliminar vehiculo</button></span>
-                    </div>
-                  </div>
-                </kt-portlet-body>
-              </kt-portlet>
-            </div>
-            <div class="col-sm-12 col-md-8 col-8">
-              <kt-portlet [class]="'kt-portlet--height-fluid'">
-                <kt-portlet-body [class]="'p-5 mb-3 '">
-                  <mat-tab-group  [selectedIndex]="3">
-                    <mat-tab label="Detalles"></mat-tab>
-                    <mat-tab label="Recepción"></mat-tab>
-                    <mat-tab label="Historial"></mat-tab>
-                    <mat-tab label="Reparación">
-                      <div class="row">
-                        <div class="col-12">
-                          <div class="row">
-                            <div class="col-4">
-                              <h5>Operador:</h5>
-                              <mat-form-field>
-                                <mat-select placeholder="Operador">
-                                  <mat-option *ngFor="let operator of ['Operador 01', 'Operador 02', 'Operador 03', 'Operador 04']" [value]="operator">
-                                    {{ operator }}
-                                  </mat-option>
-                                </mat-select>
-                              </mat-form-field>
-                            </div>
-                            <div class="col-4">
-                              <h5>Estado:</h5>
-                              <mat-form-field>
-                                <mat-select placeholder="Estado">
-                                  <mat-option *ngFor="let status of ['--- En Espera ---', 'Estado 02', 'Estado 03', 'Estado 04']" [value]="status">
-                                    {{ status }}
-                                  </mat-option>
-                                </mat-select>
-                                <span matSuffix>&nbsp;<button (click)="showHistory()" mat-button matSuffix color="info"><i class="flaticon-chat-2"></i></button></span>
-                              </mat-form-field>
-                            </div>
-                            <div class="col-4">
-                              <div class="kt-quick-search__item-wrapper">
-                                <a class="kt-quick-search__item-title" >
-                                  <h5 class="mt-0">Total:</h5>
-                                </a>
-                                <div class="kt-quick-search__item-desc mt-3 w-100 text-center">
-                                  <h4><b>230 Bs</b></h4>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-12">
-                              <mat-accordion>
-                                <mat-expansion-panel>
-                                  <mat-expansion-panel-header>
-                                    <mat-panel-title>
-                                      <div class="text-black-50">Trabajos Realizados</div>
-                                    </mat-panel-title>
-                                  </mat-expansion-panel-header>
-                                  <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-                                  <div class="row">
-                                    <div class="col-6">
-                                    </div>
-                                    <div class="col-6 text-right">
-                                      <h6>SubTotal: 130 Bs</h6>
-                                    </div>
-                                  </div>
-                                  <div class="row">
-                                    <div class="col-10">
-                                      <div class="material_item">
-                                        <div class="row">
-                                          <div class="col-9">
-                                            <div class="row">
-                                              <div class="col-2">
-                                                <a mat-button matSuffix class="btn btn-icon btn-secondary ml-2 p-0 text-center">
-                                                  <i class="flaticon2-line"></i>
-                                                </a>
-                                              </div>
-                                              <div class="col-10">
-                                                <mat-form-field class="example-full-width mr-2">
-                                                  <input type="text" placeholder="Repuesto o accesorio" aria-label="Repuesto o accesorio" matInput [matAutocomplete]="auto" value="Plastiquero">
-                                                  <mat-autocomplete #auto="matAutocomplete">
-                                                    <mat-option *ngFor="let option of ['Plastiquero', 'Alarmas', 'Tornero']" [value]="option">
-                                                      {{ option }}
-                                                    </mat-option>
-                                                  </mat-autocomplete>
-                                                </mat-form-field>
-                                              </div>
-                                            </div>
-
-                                          </div>
-                                          <div class="col-3">
-                                            <button mat-button matSuffix color="warn" class="mr-1">
-                                              <i class="flaticon2-trash"></i>
-                                            </button>
-                                            <button mat-icon-button matSuffix>
-                                              <button mat-button color="primary"><i class="flaticon2-plus"></i></button>
-                                            </button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="col-2">
-                                      <mat-form-field class="example-full-width w-100 pb-2">
-                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="180">
-                                        <span matSuffix>&nbsp;Bs.</span>
-                                      </mat-form-field>
-                                    </div>
-                                  </div>
-<!--                                  ITEMS Start                  -->
-                                  <div class="row">
-                                    <div class="col-10">
-                                      <div class="material_item">
-                                        <div class="row">
-                                          <div class="col-9">
-                                            <div class="row">
-                                              <div class="col-2"></div>
-                                              <div class="col-2">
-                                                <a mat-button matSuffix class="btn btn-icon btn-secondary ml-2 p-0 text-center">
-                                                  <i class="flaticon2-plus"></i>
-                                                </a>
-                                              </div>
-                                              <div class="col-8">
-                                                <mat-form-field class="example-full-width mr-2">
-                                                  <input type="text" placeholder="Repuesto o accesorio" aria-label="Repuesto o accesorio" matInput value="Pegado de bomba de irrigadores">
-                                                </mat-form-field>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          <div class="col-3">
-                                            <button mat-button matSuffix color="warn" class="mr-1">
-                                              <i class="flaticon2-trash"></i>
-                                            </button>
-                                            <button mat-icon-button matSuffix>
-                                              <button mat-button color="primary"><i class="flaticon2-plus"></i></button>
-                                            </button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="col-2">
-                                      <mat-form-field class="example-full-width w-100 pb-2">
-                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="80">
-                                        <span matSuffix>&nbsp;Bs.</span>
-                                      </mat-form-field>
-                                    </div>
-                                  </div>
-<!--                                  ITEMS End                  -->
-                                  <div class="row">
-                                    <div class="col-10">
-                                      <div class="material_item">
-                                        <div class="row">
-                                          <div class="col-9">
-                                            <div class="row">
-                                              <div class="col-2">
-                                                <a mat-button matSuffix class="btn btn-icon btn-secondary ml-2 p-0 text-center">
-                                                  <i class="flaticon2-plus"></i>
-                                                </a>
-                                              </div>
-                                              <div class="col-10">
-                                                <mat-form-field class="example-full-width mr-2">
-                                                  <input type="text" placeholder="Repuesto o accesorio" aria-label="Repuesto o accesorio" matInput [matAutocomplete]="auto" value="Tornero">
-                                                  <mat-autocomplete #auto="matAutocomplete">
-                                                    <mat-option *ngFor="let option of ['Plastiquero', 'Alarmas', 'Tornero']" [value]="option">
-                                                      {{ option }}
-                                                    </mat-option>
-                                                  </mat-autocomplete>
-                                                </mat-form-field>
-                                              </div>
-                                            </div>
-                                          </div>
-                                          <div class="col-3">
-                                            <button mat-button matSuffix color="warn" class="mr-1">
-                                              <i class="flaticon2-trash"></i>
-                                            </button>
-                                            <button mat-icon-button matSuffix>
-                                              <button mat-button color="primary"><i class="flaticon2-plus"></i></button>
-                                            </button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="col-2">
-                                      <mat-form-field class="example-full-width w-100 pb-2">
-                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="50">
-                                        <span matSuffix>&nbsp;Bs.</span>
-                                      </mat-form-field>
-                                    </div>
-                                  </div>
-                                  <button mat-button color="accent">AGREGAR TRABAJO</button>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel>
-                                  <mat-expansion-panel-header>
-                                    <mat-panel-title>
-                                      <div class="text-black-50">Trabajos de Terceros</div>
-                                    </mat-panel-title>
-                                  </mat-expansion-panel-header>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel>
-                                  <mat-expansion-panel-header>
-                                    <mat-panel-title>
-                                      <div class="text-black-50">Insumos y Materiales </div>
-                                    </mat-panel-title>
-                                  </mat-expansion-panel-header>
-                                  <div class="row">
-                                    <div class="col-6">
-                                      <button mat-button color="primary"><i class="flaticon2-plus"></i></button>
-                                    </div>
-                                    <div class="col-6 text-right">
-                                      <h6>SubTotal: 20 Bs</h6>
-                                    </div>
-                                  </div>
-                                  <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-                                  <div class="row">
-                                    <div class="col-8">
-                                      <div class="material_item">
-                                        <p class="text-black-50 pt-4">Cinta aislante 3M Grande</p>
-                                      </div>
-                                    </div>
-                                    <div class="col-4">
-                                      <mat-form-field class="example-full-width w-25 pb-2">
-                                        <input matInput placeholder="Cantidad" value="1" type="number">
-                                      </mat-form-field>
-                                      <mat-form-field class="example-full-width w-50 pb-2">
-                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="10">
-                                        <span matSuffix>&nbsp;Bs.</span>
-                                      </mat-form-field>
-                                      <div class="d-inline-block example-full-width w-25">
-                                        <button mat-button matSuffix color="warn" class="p-0">
-                                          <i class="flaticon2-trash"></i>
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-                                  <div class="row">
-                                    <div class="col-8">
-                                      <div class="material_item">
-                                        <p class="text-black-50 pt-4">Gasolina (litros)</p>
-                                      </div>
-                                    </div>
-                                    <div class="col-4">
-                                      <mat-form-field class="example-full-width w-25 pb-2">
-                                        <input matInput placeholder="Cantidad" value="1" type="number">
-                                      </mat-form-field>
-                                      <mat-form-field class="example-full-width w-50 pb-2">
-                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="10">
-                                        <span matSuffix>&nbsp;Bs.</span>
-                                      </mat-form-field>
-                                      <div class="d-inline-block example-full-width w-25">
-                                        <button mat-button matSuffix color="warn" class="p-0">
-                                          <i class="flaticon2-trash"></i>
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-                                  <div class="row">
-                                    <div class="col-8">
-                                      <div class="material_item">
-                                        <mat-form-field class="example-full-width">
-                                        <input type="text" placeholder="Material o insumo" aria-label="Assignee" matInput [matAutocomplete]="auto">
-                                          <button mat-icon-button matSuffix>
-                                            <i class="pl-2 flaticon2-search-1"></i>
-                                          </button>
-                                          <button mat-icon-button matSuffix>
-                                            <i class="pl-2 flaticon2-shopping-cart"></i>
-                                          </button>
-                                        <mat-autocomplete #auto="matAutocomplete">
-                                          <mat-option *ngFor="let option of ['Aceite de caja Repsol', 'Aceite de Motor Repsol SW30', 'Aceite de Motor Repsol SW35(compatible)']" [value]="option">
-                                            {{ option }}
-                                          </mat-option>
-                                        </mat-autocomplete>
-                                        </mat-form-field>
-                                      </div>
-                                    </div>
-                                    <div class="col-4">
-                                      <mat-form-field class="example-full-width w-25 pb-2">
-                                        <input matInput placeholder="Cantidad" value="1" type="number">
-                                      </mat-form-field>
-                                      <mat-form-field class="example-full-width w-50 pb-2">
-                                        <input matInput placeholder="Monto" type="number" class="example-right-align">
-                                        <span matSuffix>&nbsp;Bs.</span>
-                                      </mat-form-field>
-                                      <div class="d-inline-block example-full-width w-25">
-                                        <button mat-button matSuffix color="warn" class="p-0">
-                                          <i class="flaticon2-trash"></i>
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel>
-                                  <mat-expansion-panel-header>
-                                    <mat-panel-title>
-                                      <div class="text-black-50">Repuestos y Accesorios</div>
-                                    </mat-panel-title>
-                                  </mat-expansion-panel-header>
-                                  <div class="row">
-                                    <div class="col-6">
-                                      <button mat-button color="primary"><i class="flaticon2-plus"></i></button>
-                                    </div>
-                                    <div class="col-6 text-right">
-                                      <h6>SubTotal: 200 Bs</h6>
-                                    </div>
-                                  </div>
-                                  <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-                                  <div class="row">
-                                    <div class="col-8">
-                                      <div class="material_item">
-                                        <p class="text-black-50 pt-4">Motor de cierre centralizado</p>
-                                      </div>
-                                    </div>
-                                    <div class="col-4">
-                                      <mat-form-field class="example-full-width w-25 pb-2">
-                                        <input matInput placeholder="Cantidad" value="1" type="number">
-                                      </mat-form-field>
-                                      <mat-form-field class="example-full-width w-50 pb-2">
-                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="100">
-                                        <span matSuffix>&nbsp;Bs.</span>
-                                      </mat-form-field>
-                                      <div class="d-inline-block example-full-width w-25">
-                                        <button mat-button matSuffix color="warn" class="p-0">
-                                          <i class="flaticon2-trash"></i>
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-                                  <div class="row">
-                                    <div class="col-8">
-                                      <div class="material_item">
-                                        <p class="text-black-50 pt-4">Presinto Plástico</p>
-                                      </div>
-                                    </div>
-                                    <div class="col-4">
-                                      <mat-form-field class="example-full-width w-25 pb-2">
-                                        <input matInput placeholder="Cantidad" value="1" type="number">
-                                      </mat-form-field>
-                                      <mat-form-field class="example-full-width w-50 pb-2">
-                                        <input matInput placeholder="Monto" type="number" class="example-right-align" value="100">
-                                        <span matSuffix>&nbsp;Bs.</span>
-                                      </mat-form-field>
-                                      <div class="d-inline-block example-full-width w-25">
-                                        <button mat-button matSuffix color="warn" class="p-0">
-                                          <i class="flaticon2-trash"></i>
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-                                  <div class="row">
-                                    <div class="col-8">
-                                      <div class="material_item">
-                                        <mat-form-field class="example-full-width">
-                                          <input type="text" placeholder="Repuesto o accesorio" aria-label="Repuesto o accesorio" matInput [matAutocomplete]="auto">
-                                          <button mat-icon-button matSuffix>
-                                            <i class="pl-2 flaticon2-search-1"></i>
-                                          </button>
-                                          <button mat-icon-button matSuffix>
-                                            <i class="pl-2 flaticon2-shopping-cart"></i>
-                                          </button>
-                                          <mat-autocomplete #auto="matAutocomplete">
-                                            <mat-option *ngFor="let option of ['Balata Frono Trasero Renault', 'Balata Freno Trasero Roge', 'Balata Freno Trasero Toyoya']" [value]="option">
-                                              {{ option }}
-                                            </mat-option>
-                                          </mat-autocomplete>
-                                        </mat-form-field>
-                                      </div>
-                                    </div>
-                                    <div class="col-4">
-                                      <mat-form-field class="example-full-width w-25 pb-2">
-                                        <input matInput placeholder="Cantidad" value="1" type="number">
-                                      </mat-form-field>
-                                      <mat-form-field class="example-full-width w-50 pb-2">
-                                        <input matInput placeholder="Monto" type="number" class="example-right-align">
-                                        <span matSuffix>&nbsp;Bs.</span>
-                                      </mat-form-field>
-                                      <div class="d-inline-block example-full-width w-25">
-                                        <button mat-button matSuffix color="warn" class="p-0">
-                                          <i class="flaticon2-trash"></i>
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel>
-                                  <mat-expansion-panel-header>
-                                    <mat-panel-title>
-                                      <div class="text-black-50">Control de Calidad</div>
-                                    </mat-panel-title>
-                                  </mat-expansion-panel-header>
-                                  <div class="row">
-                                    <div class="col-6">
-                                      <mat-form-field class="w-100">
-                                        <mat-select placeholder="Revisor">
-                                          <mat-option *ngFor="let reviewer of ['Revisor 01', 'Revisor 02', 'Revisor 03', 'Revisor 04']" [value]="reviewer">
-                                            {{ reviewer }}
-                                          </mat-option>
-                                        </mat-select>
-                                      </mat-form-field>
-                                    </div>
-                                    <div class="col-6">
-                                      <button mat-raised-button color="primary" class="btn btn-success">Aceptado</button>
-                                      <button mat-raised-button class="ml-4 btn-danger">Rechazado</button>
-                                    </div>
-                                    <div class="col-12">
-                                      <mat-form-field class="w-100">
-                                        <textarea matInput placeholder="Notas" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
-                                      </mat-form-field>
-                                    </div>
-                                  </div>
-                                </mat-expansion-panel>
-                                <mat-expansion-panel>
-                                  <mat-expansion-panel-header>
-                                    <mat-panel-title>
-                                      <div class="text-black-50">Próximos Mantenimientos y Notas</div>
-                                    </mat-panel-title>
-                                  </mat-expansion-panel-header>
-                                  <mat-form-field class="w-100">
-                                    <textarea matInput placeholder="Notas Client" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
-                                  </mat-form-field>
-                                  <mat-form-field class="w-100">
-                                    <textarea matInput placeholder="Notas Vehiculo" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
-                                  </mat-form-field>
-                                  <div class="row">
-                                    <div class="col-4">
-                                      <h6 class="text-black-50">Aceite Motor</h6>
-                                      <mat-form-field class="w-100 pb-2">
-                                        <input matInput [matDatepicker]="pickerOilM" placeholder="Fecha">
-                                        <mat-datepicker-toggle matSuffix [for]="pickerOilM"></mat-datepicker-toggle>
-                                        <mat-datepicker #pickerOilM></mat-datepicker>
-                                      </mat-form-field>
-                                      <mat-form-field class="w-100 pb-2">
-                                        <input matInput placeholder="Kilometraje" type="number" class="example-right-align" />
-                                      </mat-form-field>
-                                    </div>
-                                    <div class="col-4">
-                                      <h6 class="text-black-50">Aceite Caja</h6>
-                                      <mat-form-field class="w-100 pb-2">
-                                        <input matInput [matDatepicker]="pickerOilB" placeholder="Fecha">
-                                        <mat-datepicker-toggle matSuffix [for]="pickerOilB"></mat-datepicker-toggle>
-                                        <mat-datepicker #pickerOilB></mat-datepicker>
-                                      </mat-form-field>
-                                      <mat-form-field class="w-100 pb-2">
-                                        <input matInput placeholder="Kilometraje" type="number" class="example-right-align" />
-                                      </mat-form-field>
-                                    </div>
-                                    <div class="col-4">
-                                      <h6 class="text-black-50">Mantenimiento</h6>
-                                      <mat-form-field class="w-100 pb-2">
-                                        <input matInput [matDatepicker]="pickerOilC" placeholder="Fecha">
-                                        <mat-datepicker-toggle matSuffix [for]="pickerOilC"></mat-datepicker-toggle>
-                                        <mat-datepicker #pickerOilC></mat-datepicker>
-                                      </mat-form-field>
-                                      <mat-form-field class="w-100 pb-2">
-                                        <input matInput placeholder="Kilometraje" type="number" class="example-right-align" />
-                                      </mat-form-field>
-                                    </div>
-                                  </div>
-                                </mat-expansion-panel>
-                              </mat-accordion>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </mat-tab>
-                  </mat-tab-group>
-                </kt-portlet-body>
-              </kt-portlet>
-
-              <!--              <kt-vehicle-header></kt-vehicle-header>-->
-              <!--              <kt-portlet [class]="'kt-portlet&#45;&#45;height-fluid'">-->
-              <!--                <kt-portlet-body>-->
-              <!--                  <kt-client-vehicle [clientId]="client.id" ></kt-client-vehicle>-->
-              <!--                </kt-portlet-body>-->
-              <!--              </kt-portlet>-->
-            </div>
-          </div>
-        </div>
       </div>
     </div>
-  </div>
+<!--    <div class="ng-star-inserted kt-hidden">-->
+<!--      <div class="kt-body kt-grid__item kt-grid__item&#45;&#45;fluid kt-grid kt-grid&#45;&#45;hor kt-grid&#45;&#45;stretch" id="kt_body">-->
+<!--        <div class="" [ngClass]="{'kt-container kt-container&#45;&#45;fluid kt-grid kt-grid&#45;&#45;ver': true}"-->
+<!--             [ngStyle]="{'margin-right': '5px'}">-->
+<!--          &lt;!&ndash; begin:: Aside Left &ndash;&gt;-->
+<!--          <button class="kt-aside-close" id="kt_aside_close_btn"><i class="la la-close"></i></button>-->
+<!--          &lt;!&ndash; BEGIN: Aside Menu &ndash;&gt;-->
+<!--          <div ktOffcanvas [options]="menuCanvasOptions"-->
+<!--               class="kt-aside kt-aside&#45;&#45;fixed kt-grid__item kt-grid kt-grid&#45;&#45;desktop kt-grid&#45;&#45;hor-desktop"-->
+<!--               id="kt_aside"-->
+<!--               [ngStyle]="{'padding-top': '0px'}">-->
+<!--            <div class="kt-aside-menu-wrapper kt-portlet&#45;&#45;height-fluid kt-grid__item kt-grid__item&#45;&#45;fluid"-->
+<!--                 id="kt_aside_menu_wrapper">-->
+<!--              <div #asideMenu ktMenu [options]="menuOptions" [perfectScrollbar]="{wheelPropagation: false}"-->
+<!--                   [ngStyle]="{'max-height': '95vh', 'position': 'relative'}" id="kt_aside_menu"-->
+<!--                   class="kt-aside-menu mt-0" (mouseenter)="mouseEnter($event)" (mouseleave)="mouseLeave($event)"-->
+<!--              >-->
+<!--                <kt-portlet-client [class]="'kt-portlet&#45;&#45;height-fluid'">-->
+<!--                  &lt;!&ndash;                Client options::START&ndash;&gt;-->
+<!--                  <kt-portlet-header [title]="'Vehículos'" [ngStyle]="{'z-index': 2}">-->
+<!--                    <ng-container ktPortletTools>-->
+<!--                      <kt-context-menu-vehicle></kt-context-menu-vehicle>-->
+<!--                    </ng-container>-->
+<!--                  </kt-portlet-header>-->
+<!--                  &lt;!&ndash;                Client options::END&ndash;&gt;-->
+<!--                  &lt;!&ndash;                Client search::START&ndash;&gt;-->
+<!--                  <kt-portlet-client-header [ngStyle]="{'z-index': 1}">-->
+<!--                    <ng-container ktPortletTools>-->
+<!--                      <kt-search-vehicle-top-menu-->
+<!--                        (emitVehicleSelected)="searchVehicleSelected($event)"-->
+<!--                        (emitVehicleClear)="searchVehicleClear($event)"-->
+<!--                      ></kt-search-vehicle-top-menu>-->
+<!--                    </ng-container>-->
+<!--                  </kt-portlet-client-header>-->
+<!--                  &lt;!&ndash;                Client search::END&ndash;&gt;-->
+<!--                  &lt;!&ndash;                Client List::START&ndash;&gt;-->
+<!--                  <ng-container *ngIf="list.list">-->
+<!--                    <kt-portlet-client-body>-->
+<!--                      <ng-container>-->
+<!--                        <kt-widget-vehicle-list [data]="searchList?searchList:list"-->
+<!--                                                (vehicleSelectedEmit)="getVehicle($event)"-->
+<!--                                                [vehicleSelected]="vehicle?.id">-->
+<!--                          <ng-template #actionTemplate let-item="item">-->
+<!--                            &lt;!&ndash;                            <span class="kt-widget4__number" [ngStyle]="{'width': '0rem'}" [ngClass]="item.valueColor">1</span>&ndash;&gt;-->
+<!--                          </ng-template>-->
+<!--                        </kt-widget-vehicle-list>-->
+<!--                      </ng-container>-->
+<!--                    </kt-portlet-client-body>-->
+<!--                  </ng-container>-->
+
+<!--                  &lt;!&ndash;                <div class="kt-space-20"></div>&ndash;&gt;-->
+<!--                  &lt;!&ndash;                Client List::END&ndash;&gt;-->
+<!--                  <ng-container *ngIf="list.list && !searchList">-->
+<!--                    <mat-paginator [length]="list?.pagination.total"-->
+<!--                                   [pageSize]="10"-->
+<!--                                   [pageSizeOptions]="[10]"-->
+<!--                                   [hidePageSize]="true"-->
+<!--                                   [pageIndex]="list?.pagination.page - 1"-->
+<!--                                   (page)="changePage($event)"-->
+<!--                    >-->
+<!--                    </mat-paginator>-->
+<!--                  </ng-container>-->
+<!--                  <div class="kt-space-20"></div>-->
+<!--                  <div class="kt-space-20"></div>-->
+<!--                  <div class="kt-space-20"></div>-->
+<!--                  <div class="kt-space-20"></div>-->
+<!--                </kt-portlet-client>-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          &lt;!&ndash; END: Left Aside &ndash;&gt;-->
+<!--          &lt;!&ndash; end:: Aside Left &ndash;&gt;-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
 </div>
 
-<swal
-    #historyModal
-    title="Historial de Reparación"
-    type="info"
-    [swalOptions]="historyModalOption"
-    [showConfirmButton]="false"
->
-  <div *swalPortal>
-    <div class="kt-widget4">
-      <ng-container *ngFor="let item of [{date: 'Agosto 11 17:20', status: 'Retraso', 'message': 'El tornero no entrega las piezas'},{date: 'Agosto 11 15:15', status: 'En Espera', 'message': 'Esperando por las piezas del tornero'}, {date: 'Agosto 11 11:15', status: 'En Diagnóstico', 'message': ''} , {date: 'Agosto 11 09:05', status: 'Recibido', 'message': ''}]">
-        <ng-container [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{item: item}"></ng-container>
-      </ng-container>
-    </div>
+<!--<swal-->
+<!--    #historyModal-->
+<!--    title="Historial de Reparación"-->
+<!--    type="info"-->
+<!--    [swalOptions]="historyModalOption"-->
+<!--    [showConfirmButton]="false"-->
+<!--&gt;-->
+<!--  <div *swalPortal>-->
+<!--    <div class="kt-widget4">-->
+<!--      <ng-container *ngFor="let item of [{date: 'Agosto 11 17:20', status: 'Retraso', 'message': 'El tornero no entrega las piezas'},{date: 'Agosto 11 15:15', status: 'En Espera', 'message': 'Esperando por las piezas del tornero'}, {date: 'Agosto 11 11:15', status: 'En Diagnóstico', 'message': ''} , {date: 'Agosto 11 09:05', status: 'Recibido', 'message': ''}]">-->
+<!--        <ng-container [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{item: item}"></ng-container>-->
+<!--      </ng-container>-->
+<!--    </div>-->
 
-    <ng-template #itemTemplate let-item="item">
-      <div [ngStyle]="{'border-bottom': '1px dashed #ebedf2'}">
-        <div class="kt-widget4__item" [ngStyle]="{'border-bottom': 'none'}">
-          <a href="javascript:;" [attr.href]="item.url" class="kt-widget4__title" >{{item.date}} <span class="ml-5 text-danger">{{item.status}}</span></a>
-          <div class="w-25" >
-            <button mat-raised-button class="ml-4 btn-secondary"><i class="flaticon2-edit"></i></button>
-          </div>
-        </div>
-        <p class="kt-widget4__text">{{item.message}}</p>
-      </div>
+<!--    <ng-template #itemTemplate let-item="item">-->
+<!--      <div [ngStyle]="{'border-bottom': '1px dashed #ebedf2'}">-->
+<!--        <div class="kt-widget4__item" [ngStyle]="{'border-bottom': 'none'}">-->
+<!--          <a href="javascript:;" [attr.href]="item.url" class="kt-widget4__title" >{{item.date}} <span class="ml-5 text-danger">{{item.status}}</span></a>-->
+<!--          <div class="w-25" >-->
+<!--            <button mat-raised-button class="ml-4 btn-secondary"><i class="flaticon2-edit"></i></button>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <p class="kt-widget4__text">{{item.message}}</p>-->
+<!--      </div>-->
 
-    </ng-template>
-  </div>
-</swal>
+<!--    </ng-template>-->
+<!--  </div>-->
+<!--</swal>-->

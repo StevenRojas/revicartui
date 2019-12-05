@@ -26,12 +26,36 @@ import { CompanyEditComponent } from './company/company-edit/company-edit.compon
 import { CompanyNoteComponent } from './company/company-note/company-note.component';
 import { CompanyVehicleComponent } from './company/company-vehicle/company-vehicle.component';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { VehicleRepairComponent } from './vehicle/vehicle-repair/vehicle-repair.component';
+import { VehicleEditComponent } from './vehicle/vehicle-edit/vehicle-edit.component';
+import { VehicleListComponent } from './vehicle/vehicle-list/vehicle-list.component';
+
+import { WorkHeaderComponent } from './vehicle/vehicle-repair/work-header/work-header.component';
+import { WorkComponent } from './vehicle/vehicle-repair/work/work.component';
+import { WorkThirdpartyComponent } from './vehicle/vehicle-repair/work-thirdparty/work-thirdparty.component';
+import { WorkMaterialsComponent } from './vehicle/vehicle-repair/work-materials/work-materials.component';
+import { WorkAccesoriesComponent } from './vehicle/vehicle-repair/work-accesories/work-accesories.component';
+import { WorkQaComponent } from './vehicle/vehicle-repair/work-qa/work-qa.component';
+import { WorkMaintenanceComponent } from './vehicle/vehicle-repair/work-maintenance/work-maintenance.component';
+import { VehicleReceptionComponent } from './vehicle/vehicle-reception/vehicle-reception.component';
+import { WorkStatusComponent } from './vehicle/vehicle-reception/work-status/work-status.component';
+import { WorkTodoComponent } from './vehicle/vehicle-reception/work-todo/work-todo.component';
+import { VehicleHistoryComponent } from './vehicle/vehicle-history/vehicle-history.component';
+import { WorkResumeComponent } from './vehicle/vehicle-history/work-resume/work-resume.component';
+import { WorkDocumentsComponent } from './vehicle/vehicle-history/work-documents/work-documents.component';
+import {DialogCarPhotoDialog, WorkPhotosComponent} from './vehicle/vehicle-history/work-photos/work-photos.component';
+import { VehicleResumeComponent } from './vehicle/vehicle-resume/vehicle-resume.component';
+
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 @NgModule({
   declarations: [
+    DialogCarPhotoDialog,
     WorkshopComponent, ClientComponent, ClientEditComponent, CompanyComponent, ClientNoteComponent, VehicleComponent,
-    ClientVehicleComponent, ClientVehicleComponent, CompanyEditComponent, CompanyNoteComponent, CompanyVehicleComponent],
+    ClientVehicleComponent, ClientVehicleComponent, CompanyEditComponent, CompanyNoteComponent, CompanyVehicleComponent, VehicleRepairComponent, VehicleEditComponent, VehicleListComponent, WorkHeaderComponent, WorkComponent, WorkThirdpartyComponent, WorkMaterialsComponent, WorkAccesoriesComponent, WorkQaComponent, WorkMaintenanceComponent, VehicleReceptionComponent, WorkStatusComponent, WorkTodoComponent, VehicleHistoryComponent, WorkResumeComponent, WorkDocumentsComponent, WorkPhotosComponent, VehicleResumeComponent],
   imports: [
     CommonModule,
+    NgbModule,
     WorkshopRoutingModule,
     CoreModule,
     PartialsModule,
@@ -50,6 +74,9 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     MatDatepickerModule,
     SweetAlert2Module,
     FormsModule
+  ],
+  entryComponents: [
+    DialogCarPhotoDialog
   ]
 })
 export class WorkshopModule {

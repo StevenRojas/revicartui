@@ -1,0 +1,80 @@
+<div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch kt_body_workshop">
+  <!--  <div class="kt-container kt-container&#45;&#45;fluid kt-grid kt-grid&#45;&#45;ver kt_body-workshop-container">-->
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+      <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" [ngStyle]="">
+        <div ktContentAnimate class="kt-container kt-grid__item kt-grid__item--fluid kt-container--fluid">
+          <div class="">
+            <div class="row">
+              <div class="col-sm-12 col-md-4 col-4">
+                <kt-portlet [class]="'kt-portlet--height-fluid'">
+                  <kt-portlet-body [class]="'p-0 mb-0 '">
+                    <div class="kt-widget26 p-4">
+                      <div class="kt-widget26__content" *ngIf="vehicle.brand && vehicle.model">
+                        <span class="kt-widget26__number">{{ vehicle?.brand.name }} {{ vehicle?.model.name }} <span class="kt-font-md ">{{ vehicle.year }}</span></span>
+                        <span class="kt-widget26__desc kt-font-xl kt-form__heading-title">{{ vehicle.license_plate }}</span>
+                        <ng-container *ngIf="client && client?.id">
+                          <span class="kt-widget26__desc">{{ client?.name }} <{{ client?.email }}></span>
+                        </ng-container>
+                        <ng-container *ngIf="company && company?.id">
+                          <span class="kt-widget26__desc">{{ company?.name }} <{{ company?.email }}></span>
+                        </ng-container>
+                        <ng-container *ngIf="vehicle.updated_at != ''">
+                        <span class="kt-widget26__desc">
+                          <i class="flaticon2-calendar-1"></i> {{ vehicle.updated_at | dateFormat: 'YYYY-MM-DD, h:mm:ss' }}
+                        </span>
+                        </ng-container>
+                        <ng-container *ngIf="vehicle.updated_at == ''">
+                        <span class="kt-widget26__desc">
+                          <i class="flaticon2-calendar-1"></i> Sin definir
+                        </span>
+                        </ng-container>
+                      </div>
+                      <div class="kt-widget26__chart" style="height:auto; width: auto;">
+                        <img class="img-fluid " [src]="vehicle.photo_path">
+                      </div>
+                      <div class="kt-widget26__content">
+                        <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent">Cambiar Foto</button></span>
+                        <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent">Cambiar Dueño</button></span>
+                        <span class="kt-widget26__desc"><i class="flaticon2-trash"></i> <button mat-button color="warn">Eliminar vehiculo</button></span>
+                      </div>
+                    </div>
+                  </kt-portlet-body>
+                </kt-portlet>
+              </div>
+              <div class="col-sm-12 col-md-8 col-8">
+                <kt-portlet [class]="'kt-portlet--height-fluid'">
+                  <kt-portlet-body [class]="'p-5 mb-3 '">
+                    <mat-tab-group  [selectedIndex]="3">
+                      <mat-tab label="Detalles">
+                        <kt-vehicle-edit></kt-vehicle-edit>
+                      </mat-tab>
+                      <mat-tab label="Recepción">
+                        <kt-vehicle-reception></kt-vehicle-reception>
+                      </mat-tab>
+                      <mat-tab label="Historial">
+                        <kt-vehicle-history></kt-vehicle-history>
+                      </mat-tab>
+                      <mat-tab label="Reparación">
+                        <div class="row">
+                          <div class="col-12">
+                            <kt-work-header></kt-work-header>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-12">
+                            <kt-vehicle-repair></kt-vehicle-repair>
+                          </div>
+                        </div>
+                      </mat-tab>
+                    </mat-tab-group>
+                  </kt-portlet-body>
+                </kt-portlet>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

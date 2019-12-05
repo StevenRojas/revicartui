@@ -1,0 +1,182 @@
+<div class="row">
+  <div class="col-6">
+    <h3>19 de Marzo, 2019</h3>
+  </div>
+  <div class="col-6 kt-align-right">
+    <button mat-button
+            (click)="controlCollapse(1, 'photo')"
+            [attr.aria-expanded]="!isCollapsedPhotos[1]"
+            aria-controls="collapse_photo_1" [ngClass]="{'text-success': !isCollapsedPhotos[1]}">Fotos</button>
+    <button mat-button
+            (click)="controlCollapse(1, 'doc')"
+            [attr.aria-expanded]="!isCollapsedDocuments[1]"
+            aria-controls="collapse_documents_1" [ngClass]="{'text-success': !isCollapsedDocuments[1]}">Documentos</button>
+    <button mat-button
+            (click)="controlCollapse(1, 'work')"
+            [attr.aria-expanded]="!isCollapsedWorks[1]"
+            aria-controls="collapse_works_1" [ngClass]="{'text-success': !isCollapsedWorks[1]}">Trabajos</button>
+  </div>
+  <div class="col-12 d-flex">
+    <div class="position-relative d-flex">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    </div>
+    <div class="position-relative d-flex">
+      <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>
+      <button mat-button><i class="flaticon2-mail fa-2x"></i></button>
+    </div>
+  </div>
+  <div class="col-12">
+    <div id="collapse_photo_1" [ngbCollapse]="isCollapsedPhotos[1]">
+      <div class="card">
+        <div class="card-body">
+          <kt-work-photos></kt-work-photos>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div id="collapse_documents_1" [ngbCollapse]="isCollapsedDocuments[1]">
+      <div class="card">
+        <div class="card-body">
+          <kt-work-documents></kt-work-documents>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div id="collapse_works_1" [ngbCollapse]="isCollapsedWorks[1]">
+      <div class="card">
+        <div class="card-body">
+          <kt-work-resume></kt-work-resume>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-6">
+    <h3>19 de Marzo, 2019</h3>
+  </div>
+  <div class="col-6 kt-align-right">
+    <button mat-button>Fotos</button>
+    <button mat-button>Documentos</button>
+    <button mat-button>Trabajos</button>
+  </div>
+  <div class="col-12 d-flex">
+    <div class="position-relative d-flex">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    </div>
+    <div class="position-relative d-flex">
+      <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>
+      <button mat-button><i class="flaticon2-mail fa-2x"></i></button>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="col-6">
+    <h3>19 de Marzo, 2019</h3>
+  </div>
+  <div class="col-6 kt-align-right">
+    <button mat-button>Fotos</button>
+    <button mat-button>Documentos</button>
+    <button mat-button>Trabajos</button>
+  </div>
+  <div class="col-12 d-flex">
+    <div class="position-relative d-flex">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    </div>
+    <div class="position-relative d-flex">
+      <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>
+      <button mat-button><i class="flaticon2-mail fa-2x"></i></button>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="col-6">
+    <h3>19 de Marzo, 2019</h3>
+  </div>
+  <div class="col-6 kt-align-right">
+    <button mat-button>Fotos</button>
+    <button mat-button>Documentos</button>
+    <button mat-button>Trabajos</button>
+  </div>
+  <div class="col-12 d-flex">
+    <div class="position-relative d-flex">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    </div>
+    <div class="position-relative d-flex">
+      <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>
+      <button mat-button><i class="flaticon2-mail fa-2x"></i></button>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="col-6">
+    <h3>19 de Marzo, 2019</h3>
+  </div>
+  <div class="col-6 kt-align-right">
+    <button mat-button>Fotos</button>
+    <button mat-button>Documentos</button>
+    <button mat-button>Trabajos</button>
+  </div>
+  <div class="col-12 d-flex">
+    <div class="position-relative d-flex">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    </div>
+    <div class="position-relative d-flex">
+      <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>
+      <button mat-button><i class="flaticon2-mail fa-2x"></i></button>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="col-6">
+    <h3>19 de Marzo, 2019</h3>
+  </div>
+  <div class="col-6 kt-align-right">
+    <button mat-button>Fotos</button>
+    <button mat-button>Documentos</button>
+    <button mat-button>Trabajos</button>
+  </div>
+  <div class="col-12 d-flex">
+    <div class="position-relative d-flex">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+    </div>
+    <div class="position-relative d-flex">
+      <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>
+      <button mat-button><i class="flaticon2-mail fa-2x"></i></button>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
+  </div>
+</div>

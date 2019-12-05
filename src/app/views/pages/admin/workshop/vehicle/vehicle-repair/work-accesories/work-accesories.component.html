@@ -1,0 +1,87 @@
+<div class="row">
+  <div class="col-6">
+    <button mat-button color="primary"><i class="flaticon2-plus"></i></button>
+  </div>
+  <div class="col-6 text-right">
+    <h6>SubTotal: 200 Bs</h6>
+  </div>
+</div>
+<div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
+<div class="row">
+  <div class="col-8">
+    <div class="material_item">
+      <p class="text-black-50 pt-4">Motor de cierre centralizado</p>
+    </div>
+  </div>
+  <div class="col-4">
+    <mat-form-field class="example-full-width w-25 pb-2">
+      <input matInput placeholder="Cantidad" value="1" type="number">
+    </mat-form-field>
+    <mat-form-field class="example-full-width w-50 pb-2">
+      <input matInput placeholder="Monto" type="number" class="example-right-align" value="100">
+      <span matSuffix>&nbsp;Bs.</span>
+    </mat-form-field>
+    <div class="d-inline-block example-full-width w-25">
+      <button mat-button matSuffix color="warn" class="p-0">
+        <i class="flaticon2-trash"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
+<div class="row">
+  <div class="col-8">
+    <div class="material_item">
+      <p class="text-black-50 pt-4">Presinto Plástico</p>
+    </div>
+  </div>
+  <div class="col-4">
+    <mat-form-field class="example-full-width w-25 pb-2">
+      <input matInput placeholder="Cantidad" value="1" type="number">
+    </mat-form-field>
+    <mat-form-field class="example-full-width w-50 pb-2">
+      <input matInput placeholder="Monto" type="number" class="example-right-align" value="100">
+      <span matSuffix>&nbsp;Bs.</span>
+    </mat-form-field>
+    <div class="d-inline-block example-full-width w-25">
+      <button mat-button matSuffix color="warn" class="p-0">
+        <i class="flaticon2-trash"></i>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
+<div class="row">
+  <div class="col-8">
+    <div class="material_item">
+      <mat-form-field class="example-full-width">
+        <input type="text" placeholder="Repuesto o accesorio" aria-label="Repuesto o accesorio" matInput [matAutocomplete]="auto">
+        <button mat-icon-button matSuffix>
+          <i class="pl-2 flaticon2-search-1"></i>
+        </button>
+        <button mat-icon-button matSuffix>
+          <i class="pl-2 flaticon2-shopping-cart"></i>
+        </button>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of ['Balata Frono Trasero Renault', 'Balata Freno Trasero Roge', 'Balata Freno Trasero Toyoya']" [value]="option">
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="col-4">
+    <mat-form-field class="example-full-width w-25 pb-2">
+      <input matInput placeholder="Cantidad" value="1" type="number">
+    </mat-form-field>
+    <mat-form-field class="example-full-width w-50 pb-2">
+      <input matInput placeholder="Monto" type="number" class="example-right-align">
+      <span matSuffix>&nbsp;Bs.</span>
+    </mat-form-field>
+    <div class="d-inline-block example-full-width w-25">
+      <button mat-button matSuffix color="warn" class="p-0">
+        <i class="flaticon2-trash"></i>
+      </button>
+    </div>
+  </div>
+</div>

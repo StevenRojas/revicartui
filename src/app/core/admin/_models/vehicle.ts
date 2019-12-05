@@ -12,9 +12,15 @@ export class Vehicle {
   gas_type: any;
   use_type: any;
   mileage: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
+  color: string;
+  created_at: any;
+  updated_at: any;
+  deleted_at: any;
+  // TODO CHECK THIS
+  client?: any;
+  company?: any;
+  work_todo?: any;
+  work_status?: any;
 
   constructor(obj?: any) {
     Object.assign(this, obj);
@@ -32,6 +38,7 @@ export class Vehicle {
     this.gas_type = {};
     this.use_type = {};
     this.mileage = '';
+    this.color = '';
     this.created_at = '';
     this.updated_at = '';
     this.deleted_at = '';

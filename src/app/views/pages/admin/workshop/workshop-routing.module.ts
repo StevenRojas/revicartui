@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import {ClientComponent} from './client/client.component';
 import {CompanyComponent} from './company/company.component';
 import {VehicleComponent} from './vehicle/vehicle.component';
+import {VehicleResumeComponent} from './vehicle/vehicle-resume/vehicle-resume.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
     path: 'vehicle',
     component: VehicleComponent
   },
+  {
+    path: 'vehicle/:id',
+    component: VehicleResumeComponent
+  }
 ];
 
 @NgModule({

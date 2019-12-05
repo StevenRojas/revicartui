@@ -1,0 +1,61 @@
+<div class="kt-container--fluid mr-lg-5 ml-lg-5">
+  <kt-portlet>
+    <kt-portlet-body>
+      <div class="kt-subheader kt-grid__item">
+        <div class="kt-container">
+          <div class="kt-subheader__main">
+            <kt-search-vehicle-top-menu></kt-search-vehicle-top-menu>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <kt-context-menu-vehicle></kt-context-menu-vehicle>
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+            <button class="btn btn-label-primary btn-bold btn-icon-h" >
+              <i class="kt-nav__link-icon flaticon2-add"></i> Nuevo
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="kt-widget5">
+        <ng-container *ngIf="list">
+          <ng-container *ngFor="let vehicle of list.list">
+            <ng-container [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{item: vehicle}"></ng-container>
+          </ng-container>
+        </ng-container>
+        <!--  TODO PAGINATION THERE-->
+      </div>
+    </kt-portlet-body>
+  </kt-portlet>
+</div>
+
+<ng-template #itemTemplate let-item="item">
+  <div class="kt-widget5__item">
+    <div class="kt-widget5__content">
+      <div class="kt-widget5__pic">
+        <img class="kt-widget7__img" [attr.src]="item.photo_path" alt="">
+        <span class="text-black-50 text-center font-weight-bold kt-font-lg position-relative d-block"> {{ item.license_plate }}</span>
+      </div>
+      <div class="kt-widget5__section">
+        <a href="javascript:;" [attr.href]="item.url" class="kt-widget5__title">{{item.brand.name}} {{item.model.name}} {{item.year}} ({{item.color}})</a>
+        <ng-container *ngIf="item?.client">
+          <p class="kt-widget5__desc">{{item.client.name}}</p>
+        </ng-container>
+        <ng-container *ngIf="item?.companies">
+          <p class="kt-widget5__desc">{{item.companies[0].name}}</p>
+        </ng-container>
+        <div class="row">
+          <div class="col-6" *ngFor="let work of item.work_todo">
+            <div class="kt-widget5__info" [innerHTML]="work.work_subcategory.work_category.category"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="kt-widget5__content">
+      <div class="kt-widget5__stats text-center">
+        <span class="kt-widget5__sales">{{item.updated_at | dateFormat: 'YYYY-MM-DD, h:mm:ss'}}</span>
+        <span class="kt-widget5__number">{{item.work_status.status}}</span>
+        <a [routerLink]="['/admin/workshop/vehicle/', item.id]" [queryParams]="{'q_id': item.id, 'client_id': item.client.id}" class="btn btn-primary btn-sm">Details</a>
+      </div>
+    </div>
+  </div>
+</ng-template>

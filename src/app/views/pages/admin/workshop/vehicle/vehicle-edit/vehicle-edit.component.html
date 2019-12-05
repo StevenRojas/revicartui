@@ -1,0 +1,201 @@
+<!--<kt-portlet [ngStyle]="{'padding-bottom': '0px'}">-->
+<!--  <kt-portlet-body>-->
+<div class="kt-register kt-register--v1">
+  <div class="kt-register__wrapper">
+    <div class="kt-register__body pl-5 pr-5 pt-5">
+      <!--begin::Signin-->
+      <div class="kt-register__form row">
+        <form [formGroup]="registerVehicleForm" autocomplete="off" class="kt-register__form kt-form"
+              [ngStyle]="{'margin': '1rem auto'}">
+          <div class="row">
+            <div class="col-sm-12 col-xs-12 col-12 col-md-6 col-lg-6">
+              <div class="form-group">
+                <ng-container *ngIf="vehicle && vehicle.id">
+                  <input formControlName="id" type="hidden"/>
+                </ng-container>
+                <!--                    <ng-container *ngIf="vehicle.vehicle_count">-->
+                <!--                      <input formControlName="vehicle_count" type="hidden"/>-->
+                <!--                    </ng-container>-->
+<!--                <ng-container *ngIf="vehicle.license_plate">-->
+<!--                  <input formControlName="license_plate" type="hidden"/>-->
+<!--                </ng-container>-->
+                <mat-form-field>
+                  <mat-label>Placa</mat-label>
+                  <input formControlName="license_plate" matInput placeholder="Placa" type="text"/>
+<!--                  <mat-error *ngIf="isControlHasError('name','required')">-->
+<!--                    <strong>Este campo es requerido</strong>-->
+<!--                  </mat-error>-->
+<!--                  <mat-error *ngIf="isControlHasError('name','minlength')">-->
+<!--                    <strong>La longitud mímino es de 3</strong>-->
+<!--                  </mat-error>-->
+<!--                  <mat-error *ngIf="isControlHasError('name','maxlength')">-->
+<!--                    <strong>La longitud máxima es de 100</strong>-->
+<!--                  </mat-error>-->
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 col-12 col-md-6 col-lg-6">
+              <div class="form-group">
+                <mat-form-field class="input-full-width">
+                  <mat-label>Marca</mat-label>
+<!--                  TODO change to Autocomplete-->
+                  <input formControlName="brand" matInput placeholder="Marca" type="text"/>
+<!--                  <mat-error *ngIf="isControlHasError('phone','minlength')">-->
+<!--                    <strong>La longitud mímino es de 3</strong>-->
+<!--                  </mat-error>-->
+<!--                  <mat-error *ngIf="isControlHasError('phone','maxlength')">-->
+<!--                    <strong>La longitud máxima es de 100</strong>-->
+<!--                  </mat-error>-->
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 col-12 col-md-6 col-lg-6">
+              <div class="form-group">
+                <mat-form-field>
+                  <mat-label>Modelo</mat-label>
+                  <input formControlName="model" matInput placeholder="Modelo" type="text"/>
+<!--                  <mat-error *ngIf="isControlHasError('cell_phone','minlength')">-->
+<!--                    <strong>La longitud mímino es de 3</strong>-->
+<!--                  </mat-error>-->
+<!--                  <mat-error *ngIf="isControlHasError('cell_phone','maxlength')">-->
+<!--                    <strong>La longitud máxima es de 100</strong>-->
+<!--                  </mat-error>-->
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 col-12 col-md-6 col-lg-6">
+              <div class="form-group">
+                <mat-form-field>
+                  <mat-label>Año</mat-label>
+                  <input autocomplete="off" formControlName="year" matInput placeholder="Año" type="number"/>
+<!--                  <mat-error *ngIf="isControlHasError('email','required')">-->
+<!--                    <strong>Este campo es requerido</strong>-->
+<!--                  </mat-error>-->
+<!--                  <mat-error *ngIf="isControlHasError('email','email')">-->
+<!--                    <strong>No es un email valido</strong>-->
+<!--                  </mat-error>-->
+<!--                  <mat-error *ngIf="isControlHasError('email','minlength')">-->
+<!--                    <strong>La longitud mímino es de 5</strong>-->
+<!--                  </mat-error>-->
+<!--                  <mat-error *ngIf="isControlHasError('email','maxlength')">-->
+<!--                    <strong>La longitud máxima es de 200</strong>-->
+<!--                  </mat-error>-->
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 col-12 col-md-6 col-lg-6">
+              <div class="form-group">
+                <mat-form-field>
+                  <mat-label>Transmisión</mat-label>
+                  <input formControlName="transmission" matInput placeholder="Transmisión" type="text"/>
+<!--                  <mat-error *ngIf="isControlHasError('business_name','minlength')">-->
+<!--                    <strong>La longitud mímino es de 5</strong>-->
+<!--                  </mat-error>-->
+<!--                  <mat-error *ngIf="isControlHasError('business_name','maxlength')">-->
+<!--                    <strong>La longitud máxima es de 200</strong>-->
+<!--                  </mat-error>-->
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 col-12 col-md-6 col-lg-6">
+              <div class="form-group">
+                <mat-form-field>
+                  <mat-label>Combustible</mat-label>
+                  <input formControlName="gas_type" matInput placeholder="Combustible" type="text"/>
+<!--                  <mat-error *ngIf="isControlHasError('nit','minlength')">-->
+<!--                    <strong>La longitud mímino es de 5</strong>-->
+<!--                  </mat-error>-->
+<!--                  <mat-error *ngIf="isControlHasError('nit','maxlength')">-->
+<!--                    <strong>La longitud máxima es de 200</strong>-->
+<!--                  </mat-error>-->
+                </mat-form-field>
+              </div>
+            </div>
+            <ng-container *ngIf="vehicle && vehicle.company">
+              <div class="col-sm-12 col-xs-12 col-12 col-md-6 col-lg-6">
+                <div class="form-group">
+                  <mat-form-field>
+                    <mat-label>Responsable</mat-label>
+                    <input formControlName="company" matInput placeholder="Responsable" type="text"/>
+                    <!--                  <mat-error *ngIf="isControlHasError('business_name','minlength')">-->
+                    <!--                    <strong>La longitud mímino es de 5</strong>-->
+                    <!--                  </mat-error>-->
+                    <!--                  <mat-error *ngIf="isControlHasError('business_name','maxlength')">-->
+                    <!--                    <strong>La longitud máxima es de 200</strong>-->
+                    <!--                  </mat-error>-->
+                  </mat-form-field>
+                </div>
+              </div>
+            </ng-container>
+            <div class="col-sm-12 col-xs-12 col-12 col-md-6 col-lg-6">
+              <div class="form-group">
+                <mat-form-field>
+                  <mat-label>Kilometraje</mat-label>
+                  <input formControlName="mileage" matInput placeholder="Kilometraje" type="text"/>
+                  <!--                  <mat-error *ngIf="isControlHasError('business_name','minlength')">-->
+                  <!--                    <strong>La longitud mímino es de 5</strong>-->
+                  <!--                  </mat-error>-->
+                  <!--                  <mat-error *ngIf="isControlHasError('business_name','maxlength')">-->
+                  <!--                    <strong>La longitud máxima es de 200</strong>-->
+                  <!--                  </mat-error>-->
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 col-12 col-md-6 col-lg-6">
+              <div class="form-group">
+                <mat-form-field>
+                  <mat-label>De Uso</mat-label>
+                  <input formControlName="use_type" matInput placeholder="De Uso" type="text"/>
+                  <!--                  <mat-error *ngIf="isControlHasError('business_name','minlength')">-->
+                  <!--                    <strong>La longitud mímino es de 5</strong>-->
+                  <!--                  </mat-error>-->
+                  <!--                  <mat-error *ngIf="isControlHasError('business_name','maxlength')">-->
+                  <!--                    <strong>La longitud máxima es de 200</strong>-->
+                  <!--                  </mat-error>-->
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-12 col-xs-12 col-12 col-md-6 col-lg-6">
+              <div class="form-group">
+                <mat-form-field>
+                  <mat-label>Subtipo</mat-label>
+                  <input formControlName="subtype" matInput placeholder="Subtipo" type="text"/>
+                  <!--                  <mat-error *ngIf="isControlHasError('business_name','minlength')">-->
+                  <!--                    <strong>La longitud mímino es de 5</strong>-->
+                  <!--                  </mat-error>-->
+                  <!--                  <mat-error *ngIf="isControlHasError('business_name','maxlength')">-->
+                  <!--                    <strong>La longitud máxima es de 200</strong>-->
+                  <!--                  </mat-error>-->
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <!--begin::Action-->
+          <ng-container *ngIf="vehicle.id">
+            <div class="kt-register__actions" [ngStyle]="{'margin-bottom': '0.5rem'}">
+              <button [hidden]="vehicle.id" [disabled]="loading" class="btn btn-secondary btn-elevate"
+                      routerLink="/admin/workshop/vehicle">Cancelar
+              </button>
+              <ng-container *ngIf="vehicle.id">
+                <button [disabled]="!registerVehicleForm.valid || loading || !registerVehicleForm.dirty"
+                        [ngClass]="{'kt-spinner kt-spinner--right kt-spinner--md kt-spinner--light': loading}"
+                        class="btn btn-primary btn-elevate">Guardar
+                </button>
+              </ng-container>
+              <ng-container *ngIf="!vehicle.id">
+                <button [disabled]="!registerVehicleForm.valid || loading"
+                        [ngClass]="{'kt-spinner kt-spinner--right kt-spinner--md kt-spinner--light': loading}"
+                        class="btn btn-primary btn-elevate">Crear
+                </button>
+              </ng-container>
+
+            </div>
+          </ng-container>
+          <!--end::Action-->
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  </kt-portlet-body>-->
+<!--</kt-portlet>-->

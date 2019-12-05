@@ -49,7 +49,7 @@
                 <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">
                   <div class="form-group">
                     <mat-form-field class="input-full-width w-100">
-                      <input type="text" placeholder="Empresa Madre" aria-label="Number" matInput formControlName="parent" [matAutocomplete]="parent" >
+                      <input type="text" placeholder="Empresa Matriz" aria-label="Number" matInput formControlName="parent" [matAutocomplete]="parent" >
                       <mat-autocomplete #parent="matAutocomplete" [displayWith]="displayCompanyName">
                         <mat-option *ngFor="let parent of parents | async" [value]="parent">
                           {{ parent.name }}

@@ -1,0 +1,131 @@
+<div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
+<div class="row">
+  <div class="col-6">
+  </div>
+  <div class="col-6 text-right">
+    <h6>SubTotal: 130 Bs</h6>
+  </div>
+</div>
+<div class="row">
+  <div class="col-10">
+    <div class="material_item">
+      <div class="row">
+        <div class="col-9">
+          <div class="row">
+            <div class="col-2">
+              <a mat-button matSuffix class="btn btn-icon btn-secondary ml-2 p-0 text-center">
+                <i class="flaticon2-line"></i>
+              </a>
+            </div>
+            <div class="col-10">
+              <mat-form-field class="example-full-width mr-2">
+                <input type="text" placeholder="Repuesto o accesorio" aria-label="Repuesto o accesorio" matInput [matAutocomplete]="auto" value="Plastiquero">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let option of ['Plastiquero', 'Alarmas', 'Tornero']" [value]="option">
+                    {{ option }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </div>
+
+        </div>
+        <div class="col-3">
+          <button mat-button matSuffix color="warn" class="mr-1">
+            <i class="flaticon2-trash"></i>
+          </button>
+          <button mat-icon-button matSuffix>
+            <button mat-button color="primary"><i class="flaticon2-plus"></i></button>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-2">
+    <mat-form-field class="example-full-width w-100 pb-2">
+      <input matInput placeholder="Monto" type="number" class="example-right-align" value="180">
+      <span matSuffix>&nbsp;Bs.</span>
+    </mat-form-field>
+  </div>
+</div>
+<!--                                  ITEMS Start                  -->
+<div class="row">
+  <div class="col-10">
+    <div class="material_item">
+      <div class="row">
+        <div class="col-9">
+          <div class="row">
+            <div class="col-2"></div>
+            <div class="col-2">
+              <a mat-button matSuffix class="btn btn-icon btn-secondary ml-2 p-0 text-center">
+                <i class="flaticon2-plus"></i>
+              </a>
+            </div>
+            <div class="col-8">
+              <mat-form-field class="example-full-width mr-2">
+                <input type="text" placeholder="Repuesto o accesorio" aria-label="Repuesto o accesorio" matInput value="Pegado de bomba de irrigadores">
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <button mat-button matSuffix color="warn" class="mr-1">
+            <i class="flaticon2-trash"></i>
+          </button>
+          <button mat-icon-button matSuffix>
+            <button mat-button color="primary"><i class="flaticon2-plus"></i></button>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-2">
+    <mat-form-field class="example-full-width w-100 pb-2">
+      <input matInput placeholder="Monto" type="number" class="example-right-align" value="80">
+      <span matSuffix>&nbsp;Bs.</span>
+    </mat-form-field>
+  </div>
+</div>
+<!--                                  ITEMS End                  -->
+<div class="row">
+  <div class="col-10">
+    <div class="material_item">
+      <div class="row">
+        <div class="col-9">
+          <div class="row">
+            <div class="col-2">
+              <a mat-button matSuffix class="btn btn-icon btn-secondary ml-2 p-0 text-center">
+                <i class="flaticon2-plus"></i>
+              </a>
+            </div>
+            <div class="col-10">
+              <mat-form-field class="example-full-width mr-2">
+                <input type="text" placeholder="Repuesto o accesorio" aria-label="Repuesto o accesorio" matInput [matAutocomplete]="auto" value="Tornero">
+                <mat-autocomplete #auto="matAutocomplete">
+                  <mat-option *ngFor="let option of ['Plastiquero', 'Alarmas', 'Tornero']" [value]="option">
+                    {{ option }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-3">
+          <button mat-button matSuffix color="warn" class="mr-1">
+            <i class="flaticon2-trash"></i>
+          </button>
+          <button mat-icon-button matSuffix>
+            <button mat-button color="primary"><i class="flaticon2-plus"></i></button>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-2">
+    <mat-form-field class="example-full-width w-100 pb-2">
+      <input matInput placeholder="Monto" type="number" class="example-right-align" value="50">
+      <span matSuffix>&nbsp;Bs.</span>
+    </mat-form-field>
+  </div>
+</div>
+<button mat-button color="accent">AGREGAR TRABAJO</button>
