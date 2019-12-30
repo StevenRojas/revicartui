@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'kt-vehic le-reception',
+  selector: 'kt-vehicle-reception',
   templateUrl: './vehicle-reception.component.html',
   styleUrls: ['./vehicle-reception.component.scss']
 })
