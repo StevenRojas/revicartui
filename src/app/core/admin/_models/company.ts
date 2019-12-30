@@ -9,7 +9,7 @@ export class Company {
   address: string;
   nit: string;
   vehicle_count: number;
-  has_alert: number;
+  has_alert: any;
   created_at: string;
   updated_at: string;
   deleted_at: string;

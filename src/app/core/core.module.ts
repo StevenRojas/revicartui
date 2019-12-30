@@ -10,6 +10,7 @@ import {
   SafePipe,
   JoinPipe,
   ToggleDirective,
+  ImageDirective,
   OffcanvasDirective,
   MenuDirective,
   HeaderDirective, ContentAnimateDirective, ScrollTopDirective, SparklineChartDirective, StickyDirective, TabClickEventDirective, MomentPipe
@@ -19,6 +20,7 @@ import {
   imports: [CommonModule],
   declarations: [
     ToggleDirective,
+    ImageDirective,
     OffcanvasDirective,
     MenuDirective,
     HeaderDirective,
@@ -36,6 +38,7 @@ import {
   ],
   exports: [
     ToggleDirective,
+    ImageDirective,
     OffcanvasDirective,
     MenuDirective,
     HeaderDirective,

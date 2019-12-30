@@ -13,6 +13,8 @@ export class VehicleService {
   constructor(
     private http: HttpClient
   ) { }
+
+
   all(pagination: VehiclePagination, detail: boolean): Observable<VehicleList> {
     const httpHeaders = new HttpHeaders();
     httpHeaders.set('Content-Type', 'application/json');
@@ -34,10 +36,24 @@ export class VehicleService {
     });
   }
 
+  get(vehicleId: number): Observable<Vehicle> {
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.set('Content-Type', 'application/json');
+    httpHeaders.set('token', '123');
+    return this.http.get<Vehicle>(environment.api_url + 'vehicle/' + vehicleId, {headers: httpHeaders});
+  }
+
+
   post(vehicle: any): Observable<Vehicle> {
     const httpHeaders = new HttpHeaders();
     httpHeaders.set('Content-Type', 'application/json');
     httpHeaders.set('token', '123');
+    if(vehicle.year) {
+      vehicle.year = parseInt(vehicle.year, 10);
+    }
+    if(vehicle.mileage) {
+      vehicle.mileage = parseInt(vehicle.mileage, 10);
+    }
     // vehicle.has_alert = vehicle.has_alert ? 1 : 0;
     return this.http.post<Vehicle>(environment.api_url + 'vehicle', vehicle, {headers: httpHeaders});
   }
@@ -46,8 +62,9 @@ export class VehicleService {
     const httpHeaders = new HttpHeaders();
     httpHeaders.set('Content-Type', 'application/json');
     httpHeaders.set('token', '123');
-    // Pass to integer
-    // vehicle.has_alert = vehicle.has_alert ? 1 : 0;
+    if (vehicle.year) {
+      vehicle.year = parseInt(vehicle.year, 10);
+    }
     return this.http.put<Vehicle>(environment.api_url + 'vehicle/' + vehicle.id, vehicle, {headers: httpHeaders});
   }
 
@@ -60,5 +77,14 @@ export class VehicleService {
     //   .then( res => true)
     //   .catch( err => false)
     return this.http.delete(environment.api_url + 'vehicle/' + vehicleId, {headers: httpHeaders});
+  }
+
+  accesories(): Observable<any> {
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.set('Content-Type', 'application/json');
+    httpHeaders.set('token', '123');
+    return this.http.get<any>(environment.api_url + 'vehicle/enum/accessory', {
+      headers: httpHeaders
+    });
   }
 }

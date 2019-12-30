@@ -37,10 +37,11 @@ export class ClientService {
   }
 
   post(client: any): Observable<Client> {
+    console.log(client)
     const httpHeaders = new HttpHeaders();
     httpHeaders.set('Content-Type', 'application/json');
     httpHeaders.set('token', '123');
-    client.has_alert = client.has_alert ? 1 : 0;
+    client.has_alert = client.has_alert ? true : false;
     return this.http.post<Client>(environment.api_url + 'client', client, {headers: httpHeaders});
   }
 
@@ -49,7 +50,7 @@ export class ClientService {
     httpHeaders.set('Content-Type', 'application/json');
     httpHeaders.set('token', '123');
     // Pass to integer
-    client.has_alert = client.has_alert ? 1 : 0;
+    client.has_alert = client.has_alert ? true : false;
     return this.http.put<Client>(environment.api_url + 'client/' + client.id, client, {headers: httpHeaders});
   }
 

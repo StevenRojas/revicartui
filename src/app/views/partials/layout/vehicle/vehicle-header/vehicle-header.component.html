@@ -1,11 +1,203 @@
-<div class="kt-subheader kt-grid__item">
-    <div class="kt-container">
+<ng-container [ngSwitch]="type">
+  <ng-container *ngSwitchCase="'link'">
+    <a class="kt-link" (click)="openAddVehicleModal($event)">
+      <i class="kt-nav__link-icon flaticon2-add"></i> Nuevo
+    </a>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="'button'">
+    <button class="btn btn-label-primary btn-bold btn-icon-h" (click)="openAddVehicleModal($event)">
+      <i class="kt-nav__link-icon flaticon2-add"></i> Nuevo
+    </button>
+  </ng-container>
+  <ng-container *ngSwitchDefault>
+    <div class="kt-subheader kt-grid__item">
+      <div class="kt-container">
         <div class="kt-subheader__main">
-            <h3 class="kt-subheader__title">Lista de Vehiculos</h3>
-            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <a href="javascript:;" class="btn btn-label-primary btn-bold btn-icon-h">
-                <i class="kt-nav__link-icon flaticon2-add"></i> Nuevo
-            </a>
+          <h3 class="kt-subheader__title">Lista de Vehiculos</h3>
+          <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+          <button class="btn btn-label-primary btn-bold btn-icon-h" (click)="openAddVehicleModal($event)">
+            <i class="kt-nav__link-icon flaticon2-add"></i> Nuevo
+          </button>
         </div>
+      </div>
     </div>
-</div>
+  </ng-container>
+</ng-container>
+
+
+
+<swal
+    #addVehicleModal
+    [swalOptions]="addModalOption"
+    (confirm)="addListRequest(vehicle)"
+    (afterClose)="resetForm()"
+>
+  <form *swalPortal [formGroup]="vehicleAddFormControl" autocomplete="off" class="kt-register__form kt-form"
+        [ngStyle]="{'margin': '1rem auto'}">
+    <ng-container *ngIf="clientSelected">
+      <div class="row">
+        <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">
+          <div class="form-group text-center">
+            <h4>{{ clientSelected.name }}</h4>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="companySelected">
+      <div class="row">
+        <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">
+          <div class="form-group text-center">
+            <h4><span *ngIf="companySelected.parent">Sucursal: </span> {{ companySelected.name }}</h4>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+
+    <div class="row">
+      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
+        <div class="form-group">
+          <mat-form-field class="input-full-width w-100">
+            <mat-label>Número de Placa</mat-label>
+            <input formControlName="license_plate" matInput placeholder="Número de Placa" type="text"/>
+            <mat-error *ngIf="isControlHasError('license_plate','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+            <mat-error *ngIf="isControlHasError('license_plate','minlength')">
+              <strong>La longitud mímino es de 1</strong>
+            </mat-error>
+            <mat-error *ngIf="isControlHasError('license_plate','maxlength')">
+              <strong>La longitud máxima es de 10</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
+        <div class="form-group">
+          <mat-form-field class="input-full-width w-100">
+            <mat-label>Kilometraje</mat-label>
+            <input formControlName="mileage" matInput placeholder="Kilometraje" type="text"/>
+            <mat-error *ngIf="isControlHasError('mileage','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+            <mat-error *ngIf="isControlHasError('mileage','minlength')">
+              <strong>La longitud mímino es de 1</strong>
+            </mat-error>
+            <mat-error *ngIf="isControlHasError('mileage','maxlength')">
+              <strong>La longitud máxima es de 20</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
+        <div class="form-group">
+          <mat-form-field class="input-full-width w-100">
+            <mat-label>Año</mat-label>
+            <input formControlName="year" matInput placeholder="Año" type="text"/>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
+        <div class="form-group" >
+          <mat-form-field class="input-full-width w-100">
+            <input type="text" placeholder="Marca" aria-label="Marca" matInput formControlName="brand" [matAutocomplete]="brand" >
+            <mat-autocomplete #brand="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let brand of brands | async" [value]="brand">
+                {{ brand.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="isControlHasError('brand','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
+        <div class="form-group" >
+          <mat-form-field class="input-full-width w-100">
+            <input type="text" placeholder="Modelo" aria-label="Modelo" matInput formControlName="model" [matAutocomplete]="model" >
+            <mat-autocomplete #model="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let model of models | async" [value]="model">
+                {{ model.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="isControlHasError('model','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
+        <div class="form-group" >
+          <mat-form-field class="input-full-width w-100">
+            <input type="text" placeholder="Sub Tipo" aria-label="Sub Tipo" matInput formControlName="subtype" [matAutocomplete]="subtype" >
+            <mat-autocomplete #subtype="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let subtype of subtypes | async" [value]="subtype">
+                {{ subtype.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="isControlHasError('subtype','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
+        <div class="form-group" >
+          <mat-form-field class="input-full-width w-100">
+            <input type="text" placeholder="Tipo de Transmisión" aria-label="Tipo de Transmisión" matInput formControlName="transmission" [matAutocomplete]="transmission" >
+            <mat-autocomplete #transmission="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let transmission of transmissions | async" [value]="transmission">
+                {{ transmission.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="isControlHasError('transmission','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
+        <div class="form-group" >
+          <mat-form-field class="input-full-width w-100">
+            <input type="text" placeholder="Tipo de combustible" aria-label="Tipo de combustible" matInput formControlName="gas_type" [matAutocomplete]="gas_type" >
+            <mat-autocomplete #gas_type="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let gas_type of gastypes | async" [value]="gas_type">
+                {{ gas_type.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="isControlHasError('gas_type','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
+        <div class="form-group" >
+          <mat-form-field class="input-full-width w-100">
+            <input type="text" placeholder="Tipo de Uso" aria-label="Tipo de Uso" matInput formControlName="use_type" [matAutocomplete]="use_type" >
+            <mat-autocomplete #use_type="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let use_type of usetypes | async" [value]="use_type">
+                {{ use_type.name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="isControlHasError('use_type','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+  </form>
+</swal>

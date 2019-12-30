@@ -16,7 +16,7 @@ export class ClientVehicleService {
   ) {
   }
 
-  allById(clientId: string, pagination: ClientPagination, detail: boolean): Observable<ClientVehicleList> {
+  allById(clientId: number, pagination: ClientPagination, detail: boolean): Observable<ClientVehicleList> {
     const httpHeaders = new HttpHeaders();
     httpHeaders.set('Content-Type', 'application/json');
     httpHeaders.set('token', '123');
@@ -31,9 +31,18 @@ export class ClientVehicleService {
     if (detail) {
       params = params.set('entity_detail', '1');
     }
+    params = params.set('sort', pagination.sort);
     return this.http.get<ClientVehicleList>(environment.api_url + 'client/' + clientId + '/vehicle', {
       params: params,
       headers: httpHeaders
     });
+  }
+
+  post(vehicleClient: any): Observable<any> {
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.set('Content-Type', 'application/json');
+    httpHeaders.set('token', '123');
+    return this.http.post<any>(environment.api_url + 'client/' + vehicleClient.client.id + '/vehicle',
+      vehicleClient, {headers: httpHeaders});
   }
 }

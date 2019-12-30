@@ -11,7 +11,8 @@
                   <kt-portlet-body [class]="'p-0 mb-0 '">
                     <div class="kt-widget26 p-4">
                       <div class="kt-widget26__content" *ngIf="vehicle.brand && vehicle.model">
-                        <span class="kt-widget26__number">{{ vehicle?.brand.name }} {{ vehicle?.model.name }} <span class="kt-font-md ">{{ vehicle.year }}</span></span>
+
+                        <span class="kt-widget26__number"> <img class="image-brand-logo pr-1" [src]="vehicle.brand.icon" >{{ vehicle?.brand.name }} {{ vehicle?.model.name }} <span class="kt-font-md ">{{ vehicle.year }}</span></span>
                         <span class="kt-widget26__desc kt-font-xl kt-form__heading-title">{{ vehicle.license_plate }}</span>
                         <ng-container *ngIf="client && client?.id">
                           <span class="kt-widget26__desc">{{ client?.name }} <{{ client?.email }}></span>
@@ -45,9 +46,11 @@
               <div class="col-sm-12 col-md-8 col-8">
                 <kt-portlet [class]="'kt-portlet--height-fluid'">
                   <kt-portlet-body [class]="'p-5 mb-3 '">
-                    <mat-tab-group  [selectedIndex]="3">
+                    <mat-tab-group  [selectedIndex]=0>
                       <mat-tab label="Detalles">
-                        <kt-vehicle-edit></kt-vehicle-edit>
+                        <ng-container *ngIf="vehicle.id">
+                          <kt-vehicle-edit [vehicle]="vehicle" (vehicleUpdateEmit)="updateVehicleInList($event)" ></kt-vehicle-edit>
+                        </ng-container>
                       </mat-tab>
                       <mat-tab label="Recepción">
                         <kt-vehicle-reception></kt-vehicle-reception>

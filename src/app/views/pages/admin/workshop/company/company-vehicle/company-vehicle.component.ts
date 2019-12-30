@@ -29,6 +29,7 @@ export class CompanyVehicleComponent implements OnInit, OnChanges {
   loadVehicles() {
     this.companyVehicleService.allById(this.companyId, this.pagination, true).subscribe(
       (vehicles: CompanyVehicleList) => {
+        console.log(vehicles)
         this.vehicles = vehicles.list;
       }
     );

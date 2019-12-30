@@ -12,8 +12,7 @@ export class CompanyVehicleService {
 
   constructor(
     private http: HttpClient
-  ) {
-  }
+  ) { }
 
   allById(companyId: string, pagination: CompanyPagination, detail: boolean): Observable<CompanyVehicleList> {
     const httpHeaders = new HttpHeaders();
@@ -34,5 +33,13 @@ export class CompanyVehicleService {
       params: params,
       headers: httpHeaders
     });
+  }
+
+  post(vehicleClient: any):Observable<any> {
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.set('Content-Type', 'application/json');
+    httpHeaders.set('token', '123');
+    return this.http.post<any>(environment.api_url + 'company/' + vehicleClient.company.id + '/vehicle',
+      vehicleClient, {headers: httpHeaders});
   }
 }

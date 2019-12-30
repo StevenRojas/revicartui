@@ -32,9 +32,9 @@ import {HeaderComponent} from './header/header.component';
 import {AsideLeftComponent} from './aside/aside-left.component';
 import {SubheaderComponent} from './subheader/subheader.component';
 import {FooterComponent} from './footer/footer.component';
+
 // import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 // import {AsideLeftComponent} from './aside/aside-left.component';
-
 
 
 @NgModule({

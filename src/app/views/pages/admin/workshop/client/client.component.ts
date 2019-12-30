@@ -160,6 +160,8 @@ export class ClientComponent implements OnInit {
       { queryParams : { q_id : client.id}});
   }
 
+
+
   /**
    * Use for fixed left aside menu, to show menu on mouseenter event.
    * @param e Event

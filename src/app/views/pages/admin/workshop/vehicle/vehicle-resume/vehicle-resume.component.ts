@@ -12,8 +12,10 @@ import * as moment from 'moment';
   styleUrls: ['./vehicle-resume.component.scss']
 })
 export class VehicleResumeComponent implements OnInit {
+
   public insideTm: any;
   public outsideTm: any;
+
   public menuCanvasOptions: OffcanvasOptions = {
     baseClass: 'kt-aside',
     overlay: true,
@@ -32,7 +34,7 @@ export class VehicleResumeComponent implements OnInit {
     cancelButtonClass: 'btn btn-secondary btn-elevate',
     // showLoaderOnConfirm: true,
     focusCancel: true
-    // preConfirm: () => this.deleteClient(this.clientSelected)
+    // preConfirm: () => this.deleteClien   t(this.clientSelected)
   };
   public menuOptions: MenuOptions = {
     // vertical scroll
@@ -54,7 +56,6 @@ export class VehicleResumeComponent implements OnInit {
   };
   public loading = false;
   public errors: any = [];
-  public registerVehicleForm: FormGroup;
   public list: VehicleList;
   public searchList: VehicleList;
   public vehicle: Vehicle;
@@ -65,6 +66,7 @@ export class VehicleResumeComponent implements OnInit {
   public works = [];
   public client: Client;
   public company: Company;
+
   constructor(
     private render: Renderer2,
     private vehicleService: VehicleService,
@@ -97,15 +99,30 @@ export class VehicleResumeComponent implements OnInit {
         if (queryParams.q_id) {
           this.pagination.queryId = queryParams.q_id;
           detail = true;
-        }
-        this.vehicleService.all(this.pagination, detail).subscribe(
-          (list: VehicleList) => {
-            if (list) {
-              this.list = list;
-              this.vehicle = this.list.list[0];
+          this.vehicleService.get(queryParams.q_id).subscribe(
+            (vehicle: Vehicle) => {
+              if (vehicle) {
+                this.list = new VehicleList();
+                this.list.list = [vehicle];
+                this.list.pagination = {
+                  page: 1,
+                  total: 1
+                };
+                this.vehicle = this.list.list[0];
+              }
             }
-          }
-        );
+          );
+        } else {
+          this.vehicleService.all(this.pagination, detail).subscribe(
+            (list: VehicleList) => {
+              if (list) {
+                this.list = list;
+                this.vehicle = this.list.list[0];
+              }
+            }
+          );
+        }
+
       });
     });
   }
@@ -155,12 +172,20 @@ export class VehicleResumeComponent implements OnInit {
     this.vehicle = this.list.list.find((vehicle) => vehicle.id === +vehicleId);
   }
 
-  updateVehicleInList(vehicle: any) {
-    Object.keys(this.list.list).forEach((key) => {
-      if (this.list.list[key].id === vehicle.id) {
-        this.list.list[key] = vehicle;
-      }
-    });
+  updateVehicleInList(vehicle: Vehicle) {
+    console.log(this.vehicle.id == vehicle.id)
+    console.log(vehicle)
+    if (this.vehicle.id == vehicle.id) {
+      this.vehicle = vehicle;
+    }
+
+    // Object.keys(this.list.list).forEach((key) => {
+    //   if (this.list.list[key].id === vehicle.id) {
+    //     this.list.list[key] = vehicle;
+    //   }
+    // });
+
+
   }
 
   /**

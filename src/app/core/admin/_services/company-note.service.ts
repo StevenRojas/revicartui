@@ -25,7 +25,7 @@ export class CompanyNoteService {
     let params = new HttpParams();
     params = params.set('page', page);
     params = params.set('limit', limit);
-    params = params.set('sort_field', sortField);
+    params = params.set('sort', sortField);
     params = params.set('entity_detail', '1');
     return this.http.get<CompanyNoteList>(environment.api_url + 'company/' + companyId + '/note', {
       params: params,

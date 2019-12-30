@@ -23,7 +23,7 @@ export class ClientNoteService {
     let params = new HttpParams();
     params = params.set('page', page);
     params = params.set('limit', limit);
-    params = params.set('sort_field', sortField);
+    params = params.set('sort', sortField);
     params = params.set('entity_detail', '1');
     return this.http.get<ClientNoteList>(environment.api_url + 'client/' + clientId + '/note', {
       params: params,

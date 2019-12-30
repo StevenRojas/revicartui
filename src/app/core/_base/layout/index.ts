@@ -27,7 +27,7 @@ export {ScrollTopDirective} from './directives/scroll-top.directive';
 export {SparklineChartOptions, SparklineChartDirective} from './directives/sparkline-chart.directive';
 export {StickyDirective} from './directives/sticky.directive';
 export {TabClickEventDirective} from './directives/tab-click-event.directive';
-
+export {ImageDirective} from './directives/image.directive';
 
 
 

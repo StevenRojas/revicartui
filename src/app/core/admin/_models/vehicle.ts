@@ -7,7 +7,7 @@ export class Vehicle {
   brand: any;
   model: any;
   subtype: any;
-  year: string;
+  year: any;
   transmission: any;
   gas_type: any;
   use_type: any;
@@ -33,7 +33,7 @@ export class Vehicle {
     this.brand = {};
     this.model = {};
     this.subtype = {};
-    this.year = '';
+    this.year = null;
     this.transmission = {};
     this.gas_type = {};
     this.use_type = {};

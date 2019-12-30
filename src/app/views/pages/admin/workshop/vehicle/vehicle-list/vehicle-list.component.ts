@@ -8,7 +8,7 @@ import {Vehicle, VehicleList, VehicleService} from '../../../../../../core/admin
 })
 export class VehicleListComponent implements OnInit {
   public list: VehicleList;
-  public pagination = { page: 1, query: undefined, queryId: undefined, limit: 10, sort: 'vehicle.id'};
+  public pagination = { page: 1, query: undefined, queryId: undefined, limit: 5, sort: 'updated_at'};
   constructor(
     private vehicleService: VehicleService
   ) { }

@@ -59,7 +59,7 @@ export class CompanyService {
     const httpHeaders = new HttpHeaders();
     httpHeaders.set('Content-Type', 'application/json');
     httpHeaders.set('token', '123');
-    company.has_alert = company.has_alert ? 1 : 0;
+    company.has_alert = company.has_alert ? true : false;
     if (company.parent) {
       company.parent = {id: company.parent.id};
     }
@@ -73,7 +73,7 @@ export class CompanyService {
     let params = new HttpParams();
     params = params.set('entity_detail', '1');
     // Pass to integer
-    company.has_alert = company.has_alert ? 1 : 0;
+    company.has_alert = company.has_alert ? true : false;
     if (company.parent) {
       company.parent = {id: company.parent.id};
     }

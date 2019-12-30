@@ -4,6 +4,9 @@
       <div class="kt-register__wrapper">
         <div class="kt-register__body pl-5 pr-5 pt-5">
           <!--begin::Signin-->
+          <ng-container *ngIf="company.parent">
+            <h5>"Sucursal"</h5>
+          </ng-container>
           <div class="kt-register__form row">
             <form [formGroup]="registerCompanyForm" autocomplete="off" class="kt-register__form kt-form"
                   [ngStyle]="{'margin': '1rem auto'}">

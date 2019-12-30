@@ -2,9 +2,18 @@
 
 export {ClientService} from './_services/client.service';
 export {ClientNoteService} from './_services/client-note.service';
+// export {ClientVehicleService} from './_services/client-vehicle.service';
 export {CompanyService} from './_services/company.service';
 export {CompanyNoteService} from './_services/company-note.service';
+// export {CompanyVehicleService} from './_services/company-vehicle.service';
 export {VehicleService} from './_services/vehicle.service';
+export {BrandService} from './_services/brand.service';
+export {ModelService} from './_services/model.service';
+export {SubtypeService} from './_services/subtype.service'
+export {TransmissionService} from './_services/transmission.service';
+export {GasTypeService} from './_services/gas-type.service';
+export {UseTypeService} from './_services/use-type.service';
+export {ReceptionAccessoryService} from './_services/reception-accessory.service';
 // MODELS
 
 export {Client} from './_models/client';
