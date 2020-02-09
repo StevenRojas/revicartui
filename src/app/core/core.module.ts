@@ -11,6 +11,7 @@ import {
   JoinPipe,
   ToggleDirective,
   ImageDirective,
+  PrimaryImageDirective,
   OffcanvasDirective,
   MenuDirective,
   HeaderDirective, ContentAnimateDirective, ScrollTopDirective, SparklineChartDirective, StickyDirective, TabClickEventDirective, MomentPipe
@@ -21,6 +22,7 @@ import {
   declarations: [
     ToggleDirective,
     ImageDirective,
+    PrimaryImageDirective,
     OffcanvasDirective,
     MenuDirective,
     HeaderDirective,
@@ -39,6 +41,7 @@ import {
   exports: [
     ToggleDirective,
     ImageDirective,
+    PrimaryImageDirective,
     OffcanvasDirective,
     MenuDirective,
     HeaderDirective,

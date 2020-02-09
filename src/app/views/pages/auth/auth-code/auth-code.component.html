@@ -1,0 +1,8 @@
+<ng-container *ngIf="errorMsg">
+    <p>Invalid Code Type: {{errorMsg}}</p>
+</ng-container>
+
+<ng-container *ngIf="!errorMsg">
+    <p>Validating login ... please wait</p>
+</ng-container>
+

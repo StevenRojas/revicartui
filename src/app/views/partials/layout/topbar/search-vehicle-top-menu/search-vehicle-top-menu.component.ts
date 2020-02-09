@@ -1,5 +1,5 @@
 // Angular
-import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import { fromEvent } from 'rxjs';
 import {debounceTime, distinctUntilChanged, filter, map} from 'rxjs/operators';
 import {Vehicle, VehicleService} from '../../../../../core/admin';
@@ -8,14 +8,15 @@ import {Vehicle, VehicleService} from '../../../../../core/admin';
   selector: 'kt-search-vehicle-top-menu',
   templateUrl: './search-vehicle-top-menu.component.html',
 })
-export class SearchVehicleTopMenuComponent implements OnInit {
+export class SearchVehicleTopMenuComponent implements OnInit, OnChanges {
   @Input() icon: string = 'flaticon2-search-1';
   @Input() useSVG: boolean;
+  @Input() searchString: string;
+  @Input() owner: string;
   @Output() emitVehicleSelected = new EventEmitter<Vehicle>();
   @Output() emitVehicleClear = new EventEmitter<boolean>();
 
   @ViewChild('searchInput', {static: true}) searchInput: ElementRef;
-
   public data: any[];
   public result: any[];
   public loading: boolean;
@@ -39,13 +40,13 @@ export class SearchVehicleTopMenuComponent implements OnInit {
       map((event: any) => {
         return event.target.value;
       }),
-      filter(res => res.length > 2),
-      debounceTime(1000),
-      distinctUntilChanged()
+      filter(res => res.length > 1),
+      debounceTime(400),
+      // distinctUntilChanged()
     ).subscribe((text) => {
       this.pagination.query = text;
       this.loading = true;
-      this.vehicleService.all(this.pagination, false).subscribe(
+      this.vehicleService.allByOwner(this.pagination, true, this.owner).subscribe(
         (response) => {
           this.data = response.list;
           this.loading = false;
@@ -55,6 +56,9 @@ export class SearchVehicleTopMenuComponent implements OnInit {
     });
   }
 
+  ngOnChanges(changes) {
+    if (this.owner) { }
+  }
   /**
    * @param $event
    */

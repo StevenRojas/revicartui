@@ -14,6 +14,13 @@ export {TransmissionService} from './_services/transmission.service';
 export {GasTypeService} from './_services/gas-type.service';
 export {UseTypeService} from './_services/use-type.service';
 export {ReceptionAccessoryService} from './_services/reception-accessory.service';
+export {VehicleReceptionService} from './_services/vehicle-reception.service';
+export {FileService} from './_services/file.service';
+export {PhotoService} from './_services/photo.service';
+export {ReceptionPhotoService} from './_services/reception-photo.service';
+export {WorkCategoryService} from './_services/work-category.service';
+export {WorkSubCategoryService} from './_services/work-sub-category.service';
+export {WorkTodoService} from './_services/work-todo.service';
 // MODELS
 
 export {Client} from './_models/client';

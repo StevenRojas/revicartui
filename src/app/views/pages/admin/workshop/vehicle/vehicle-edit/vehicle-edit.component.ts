@@ -35,7 +35,6 @@ export class VehicleEditComponent implements OnInit, OnChanges {
   public usetypes: Observable<any[]>;
   constructor(
     private fb: FormBuilder,
-
     private brandService: BrandService,
     private modelService: ModelService,
     private subtypeService: SubtypeService,

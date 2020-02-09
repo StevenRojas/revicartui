@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {ClientVehicleList} from '../../../../../../core/admin';
+import {ClientVehicleList, Company, PhotoService} from '../../../../../../core/admin';
 import {CompanyVehicleService} from '../../../../../../core/admin/_services/company-vehicle.service';
 import {CompanyVehicleList} from '../../../../../../core/admin/_models/company-vehicle-list';
 
@@ -9,27 +9,34 @@ import {CompanyVehicleList} from '../../../../../../core/admin/_models/company-v
   styleUrls: ['./company-vehicle.component.scss']
 })
 export class CompanyVehicleComponent implements OnInit, OnChanges {
-  @Input() companyId: string;
+  @Input() companySelected: Company;
   public pagination = { page: 1, query: undefined, queryId: undefined, limit: 10, sort: 'company_vehicle.id'};
   public vehicles = [];
 
   constructor(
-    private companyVehicleService: CompanyVehicleService
+    public companyVehicleService: CompanyVehicleService,
+    private photoService: PhotoService
   ) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.companyId) {
+    if (this.companySelected.id) {
       this.loadVehicles();
     }
   }
 
   loadVehicles() {
-    this.companyVehicleService.allById(this.companyId, this.pagination, true).subscribe(
+    this.companyVehicleService.allById(this.companySelected.id, this.pagination, true).subscribe(
       (vehicles: CompanyVehicleList) => {
-        console.log(vehicles)
+        this.vehicles = vehicles.list;
+      }
+    );
+  }
+
+  refreshVehicles() {
+    this.companyVehicleService.allById(this.companySelected.id, this.pagination, true).subscribe(
+      (vehicles: CompanyVehicleList) => {
         this.vehicles = vehicles.list;
       }
     );

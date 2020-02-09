@@ -9,7 +9,7 @@ import {Client, ClientService} from '../../../../../core/admin';
   templateUrl: './search-client-top-menu.component.html',
 })
 export class SearchClientTopMenuComponent implements OnInit {
-  @Input() icon: string = 'flaticon2-search-1';
+  @Input() icon = 'flaticon2-search-1';
   @Input() useSVG: boolean;
   @Input() searchString: string;
   @Output() emitClientSelected = new EventEmitter<Client>();
@@ -35,7 +35,6 @@ export class SearchClientTopMenuComponent implements OnInit {
    * On init
    */
   ngOnInit(): void {
-    this.result = [];
     fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
       map((event: any) => {
         return event.target.value;

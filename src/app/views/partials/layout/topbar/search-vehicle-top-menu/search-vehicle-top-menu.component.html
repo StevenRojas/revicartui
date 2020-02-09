@@ -1,4 +1,6 @@
 <!--begin: Search -->
+
+
 <div class="kt-header__topbar-item kt-header__topbar-item--search">
   <div class="kt-header__topbar-wrapper">
     <div class="kt-header-toolbar">
@@ -16,7 +18,7 @@
             <input #searchInput class="form-control kt-quick-search__input" placeholder="Buscar Vehículo..."
                    type="text"/>
             <div class="input-group-append">
-              <span class="input-group-text"><i (click)="clear($event)" [hidden]="!data || !data?.length"
+              <span class="input-group-text"><i (click)="clear($event)" [hidden]="(!data || !data?.length) && !searchString"
                                                 [ngStyle]="{'display': 'flex'}"
                                                 class="la la-close kt-quick-search__close"></i></span>
             </div>
@@ -27,7 +29,7 @@
                ngbDropdownMenu [ngStyle]="{'position': 'absolute'}">
             <div [ngStyle]="{'max-height': '40vh', 'position': 'relative'}" [perfectScrollbar]="{wheelPropagation: true}"
                  class="kt-quick-search__wrapper">
-              <kt-search-vehicle-result [data]="data" (emitVehicleSelected)="vehicleSelected($event)"></kt-search-vehicle-result>
+              <kt-search-vehicle-result [data]="data" [owner]="owner" (emitVehicleSelected)="vehicleSelected($event)"></kt-search-vehicle-result>
             </div>
           </div>
         </ng-container>

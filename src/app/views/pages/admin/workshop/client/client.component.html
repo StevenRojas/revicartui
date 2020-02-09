@@ -78,7 +78,7 @@
       <div ktContentAnimate class="kt-container kt-grid__item kt-grid__item--fluid kt-container--fluid">
         <div class="">
           <div class="row">
-            <div class="col-sm-12 col-md-6 col-6">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
               <kt-client-header [clientSelected]="client"
                                 (clientUpdateListRequestEmit)="updateClientPageList($event)"
                                 (clientAddListRequestEmit)="searchClientId($event)"
@@ -87,15 +87,14 @@
               </kt-client-header>
               <kt-portlet [class]="'kt-portlet--height-fluid'">
                 <kt-portlet-body [class]="'p-0 mb-0 '">
-                  <ng-container *ngIf="client.id">
-                    <kt-client-edit [client]="client" (clientUpdateEmit)="updateClientInList($event)"
-                                    cl></kt-client-edit>
+                  <ng-container *ngIf="client?.id">
+                    <kt-client-edit [client]="client" (clientUpdateEmit)="updateClientInList($event)"></kt-client-edit>
                     <kt-client-note [clientId]="client.id" class="kt-portlet--height-fluid"></kt-client-note>
                   </ng-container>
                 </kt-portlet-body>
               </kt-portlet>
             </div>
-            <div class="col-sm-12 col-md-6 col-6">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
               <kt-client-vehicle [clientSelected]="client" ></kt-client-vehicle>
             </div>
           </div>

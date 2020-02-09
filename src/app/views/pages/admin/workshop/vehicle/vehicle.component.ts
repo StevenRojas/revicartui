@@ -104,14 +104,14 @@ export class VehicleComponent implements OnInit {
           this.pagination.queryId = queryParams.q_id;
           detail = true;
         }
-        this.vehicleService.all(this.pagination, detail).subscribe(
-          (list: VehicleList) => {
-            if (list) {
-              this.list = list;
-              this.vehicle = this.list.list[0];
-            }
-          }
-        );
+        // this.vehicleService.all(this.pagination, detail).subscribe(
+        //   (list: VehicleList) => {
+        //     if (list) {
+        //       this.list = list;
+        //       this.vehicle = this.list.list[0];
+        //     }
+        //   }
+        // );
       });
     });
   }

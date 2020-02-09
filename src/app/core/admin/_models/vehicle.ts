@@ -4,6 +4,7 @@ export class Vehicle {
   id: number;
   license_plate: string;
   photo_path: string;
+  photos?: any;
   brand: any;
   model: any;
   subtype: any;

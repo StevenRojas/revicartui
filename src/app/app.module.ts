@@ -15,6 +15,9 @@ import {InlineSVGModule} from 'ng-inline-svg';
 // Perfect Scroll bar
 import {PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
 
+// Guard
+import { AuthGuard } from './core/auth';
+
 // Partials
 import {PartialsModule} from './views/partials/partials.module';
 // Layout Services
@@ -36,8 +39,12 @@ import {CoreModule} from './core/core.module';
 import {ThemeModule} from './views/theme/theme.module';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 
+// Auth
+import { AuthModule } from './views/pages/auth/auth.module';
+
 // Admin
 import {AdminModule} from './views/pages/admin/admin.module';
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   wheelSpeed: 0.5,
@@ -74,7 +81,8 @@ export function initializeLayoutConfig(appConfig: LayoutConfigService) {
     AdminModule,
     TranslateModule.forRoot(),
     InlineSVGModule.forRoot(),
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
+    AuthModule.forRoot()
   ],
   providers: [
     LayoutConfigService,
@@ -86,6 +94,7 @@ export function initializeLayoutConfig(appConfig: LayoutConfigService) {
     SubheaderService,
     SplashScreenService,
     KtDialogService,
+    AuthGuard,
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG

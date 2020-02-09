@@ -10,12 +10,13 @@
   <br>
 </div>
 <div class="row row-no-padding row-col-separator-xl row-col-separator-md row-col-separator">
+<!--  ACCESSORIES CONTAINER START-->
   <div class="col-md-6 col-xl-6 pr-3">
     <ng-container *ngFor="let vehicle_accessory of vehicleAccessories">
       <div class="kt-widget4">
         <div class="kt-widget4__item" [ngStyle]="{'height': '25px'}">
             <div class="kt-widget4__info">
-              <mat-checkbox #checkbox_accessory (change)="updateAccessory($event, receptionAccessoriesIds.indexOf(vehicle_accessory.id), input_accessory_quantity, vehicle_accessory.id)" [checked]="receptionAccessoriesIds.indexOf(vehicle_accessory.id) !== -1">{{ vehicle_accessory.name }}</mat-checkbox>
+              <mat-checkbox #checkbox_accessory (change)="createOrRemoveAccessory($event, receptionAccessoriesIds.indexOf(vehicle_accessory.id), input_accessory_quantity, vehicle_accessory.id)" [checked]="receptionAccessoriesIds.indexOf(vehicle_accessory.id) !== -1">{{ vehicle_accessory.name }}</mat-checkbox>
             </div>
             <mat-form-field [ngStyle]="{'width': '40px'}">
               <input #input_accessory_quantity
@@ -26,42 +27,38 @@
       </div>
     </ng-container>
   </div>
-  <div class="col-md-6 col-xl-6 pl-3">
+  <!--  ACCESSORIES CONTAINER END-->
+  <!--  PHOTOS RECEPTION CONTAINER START-->
+  <div class="col-md-6 col-xl-6 pl-3 ">
     <div class="row pb-3">
       <div class="col-12">
         <button mat-button color="accent" (click)="openAddPhotoModal($event)" >AGREGAR FOTO</button>
       </div>
     </div>
-<!--    <div class="kt-widget5">-->
-<!--      <div class="kt-widget5__item">-->
-<!--        <div class="kt-widget5__content">-->
-<!--          <div class="kt-widget5__pic">-->
-<!--            <img class="kt-widget7__img" src="./assets/media/cars/interior/interior_01.jpg" alt="">-->
-<!--          </div>-->
-<!--        </div>-->
-<!--        <div class="kt-widget5__content">-->
-<!--          <mat-form-field [ngStyle]="{'width': '100%'}">-->
-<!--            <textarea matInput placeholder="Notas" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>-->
-<!--          </mat-form-field>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
+    <div class="photos_reception_container--list">
+      <ng-container *ngIf="receptionPhotos">
+        <div class="kt-widget5" *ngFor="let receptionPhoto of receptionPhotos">
+          <div class="kt-widget5__item">
+            <div class="kt-widget5__content">
+              <div class="kt-widget5__pic">
+                <!--                  TODO validate if photo object exist-->
+                <ng-container *ngIf="receptionPhoto.photo?.path_file">
+                  <img class="kt-widget7__img" [src]="urlImages + receptionPhoto.photo.path_file" alt="" (click)="openDialog(urlImages + receptionPhoto.photo.path_file)">
+                </ng-container>
 
-  <!--    <div class="kt-widget5">-->
-  <!--      <div class="kt-widget5__item">-->
-  <!--        <div class="kt-widget5__content">-->
-  <!--          <div class="kt-widget5__pic">-->
-  <!--            <img class="kt-widget7__img" src="./assets/media/cars/interior/interior_02.jpg" alt="">-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--        <div class="kt-widget5__content">-->
-  <!--          <mat-form-field [ngStyle]="{'width': '100%'}">-->
-  <!--            <textarea matInput placeholder="Notas" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>-->
-  <!--          </mat-form-field>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--    </div>-->
+              </div>
+            </div>
+            <div class="kt-widget5__content">
+              <mat-form-field [ngStyle]="{'width': '100%'}">
+                <textarea matInput [value]="receptionPhoto.notes" readonly placeholder="Notas" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
   </div>
+  <!--  PHOTOS RECEPTION CONTAINER END-->
 </div>
 
 <swal
@@ -76,7 +73,11 @@
     </file-pond>
     <mat-form-field class="input-full-width w-100">
       <mat-label>Comentarios</mat-label>
-      <textarea matInput placeholder="Comentarios" type="text" rows="5"></textarea>
+      <textarea #receptionPhotoNoteInput matInput placeholder="Comentarios" type="text" rows="5"></textarea>
     </mat-form-field>
+    <ng-container *ngIf="receptionPhotoError && receptionPhotoError!=null && receptionPhotoError!=''">
+      <p class="text-danger">{{receptionPhotoError}}</p>
+    </ng-container>
+
   </div>
 </swal>

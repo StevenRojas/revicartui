@@ -4,18 +4,27 @@
     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
       <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" [ngStyle]="">
         <div ktContentAnimate class="kt-container kt-grid__item kt-grid__item--fluid kt-container--fluid">
-          <div class="">
-            <div class="row">
-              <div class="col-12">
-                <kt-work-status vehicleReceptionId="1"></kt-work-status>
+          <ng-container *ngIf="vehicleReception">
+            <div class="">
+              <div class="row">
+                <div class="col-12">
+                  <kt-work-status [vehicleReception]="vehicleReception"></kt-work-status>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <kt-work-todo [vehicleReception]="vehicleReception"></kt-work-todo>
+                </div>
               </div>
             </div>
+          </ng-container>
+          <ng-container *ngIf="!vehicleReception">
             <div class="row">
-              <div class="col-12">
-                <kt-work-todo></kt-work-todo>
+              <div class="col-12 text-center">
+                <button mat-stroked-button color="primary">Comenzar con la recepción del auto</button>
               </div>
             </div>
-          </div>
+          </ng-container>
         </div>
       </div>
     </div>

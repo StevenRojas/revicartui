@@ -14,15 +14,26 @@
 
 <ng-template #itemTemplate let-item="item">
   <div class="kt-quick-search__item">
-    <div [innerHTML]="item.icon ? item.icon : item.img" [ngClass]="{'kt-quick-search__item-img': item.img, 'kt-quick-search__item-icon': item.icon}"
-         class="">
-    </div>
+<!--    <div [innerHTML]="item.icon ? item.icon : item.img" [ngClass]="{'kt-quick-search__item-img': item.img, 'kt-quick-search__item-icon': item.icon}"-->
+<!--         class="">-->
+<!--    </div>-->
     <div class="kt-quick-search__item-wrapper">
-      <a class="kt-quick-search__item-title" (click)="vehicleSelected(item)">
-        {{item.license_plate}}
-      </a>
+      <ng-container *ngIf="owner=='client'">
+        <a class="kt-quick-search__item-title" [routerLink]="['/admin/workshop/vehicle/' + item.vehicle.id]" [queryParams]="{'q_id': item.vehicle.id, 'client_id': item.client.id}" >
+        {{item.vehicle.license_plate}}
+        </a>
+      </ng-container>
+      <ng-container *ngIf="owner=='company'">
+        <a class="kt-quick-search__item-title" [routerLink]="['/admin/workshop/vehicle/' + item.vehicle.id]" [queryParams]="{'q_id': item.vehicle.id, 'company_id': item.company.id}">
+          {{item.vehicle.license_plate}}
+        </a>
+      </ng-container>
+
+<!--      <a class="kt-quick-search__item-title" [routerLink]="['/admin/workshop/vehicle/' + item.id]" [queryParams]="{'q_id': item.id, 'client_id': clientSelected.id}">-->
+<!--      <a class="kt-quick-search__item-title" (click)="vehicleSelected(item)">-->
+
       <div class="kt-quick-search__item-desc">
-        {{item.year}}
+        {{item.vehicle.year}}
       </div>
     </div>
   </div>

@@ -21,6 +21,7 @@ export class CompanyEditComponent implements OnInit, OnChanges {
   public registerCompanyForm: FormGroup;
   public parentAutoComplete: FormControl = new FormControl();
   public parents: Observable<Company[]>;
+  // public responsibles: Observable<any[]>;
   constructor(
     private translate: TranslateService,
     private fb: FormBuilder,
@@ -33,6 +34,7 @@ export class CompanyEditComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     this.initRegisterCompanyForm();
+    this.initQuickSearch();
   }
 
   ngOnChanges(changes) {
@@ -97,20 +99,6 @@ export class CompanyEditComponent implements OnInit, OnChanges {
     this.registerCompanyForm.get('email').setValue(this.company.email);
     this.registerCompanyForm.get('address').setValue(this.company.address);
     this.registerCompanyForm.get('nit').setValue(this.company.nit);
-    this.parents = this.registerCompanyForm.controls.parent.valueChanges.pipe(
-    // this.parents = this.parentAutoComplete.valueChanges.pipe(
-        filter(res => res !== null && res !== '' && res !== undefined),
-        filter(res => res.length > 2),
-        debounceTime(1000),
-        distinctUntilChanged(),
-        switchMap( val => {
-          return this.getParents(val);
-        })
-      );
-  }
-
-  getParents(companyName) {
-    return this.companyService.quickSearch(companyName);
   }
 
   submit() {
@@ -161,4 +149,33 @@ export class CompanyEditComponent implements OnInit, OnChanges {
     return company ? company.name : undefined;
   }
 
+  getParents(companyName) {
+    return this.companyService.quickSearch(companyName);
+  }
+
+  // getResponsible(name: string) {
+  //   return this.companyService.quickSearchResponsible(this.company.id, name);
+  // }
+
+  private initQuickSearch() {
+    this.parents = this.registerCompanyForm.controls.parent.valueChanges.pipe(
+      filter(res => res !== null && res !== '' && res !== undefined),
+      filter(res => res.length > 2),
+      debounceTime(600),
+      distinctUntilChanged(),
+      switchMap( val => {
+        return this.getParents(val);
+      })
+    );
+
+    // this.responsibles = this.registerCompanyForm.controls.responsible.valueChanges.pipe(
+    //   filter(res => res !== null && res !== '' && res !== undefined),
+    //   filter(res => res.length > 2),
+    //   debounceTime(600),
+    //   distinctUntilChanged(),
+    //   switchMap(val => {
+    //     return this.getResponsible(val);
+    //   })
+    // );
+  }
 }

@@ -22,6 +22,7 @@ import {CompanyVehicleService} from '../../../../../core/admin/_services/company
   templateUrl: './vehicle-header.component.html',
   styleUrls: ['./vehicle-header.component.scss']
 })
+
 export class VehicleHeaderComponent implements OnInit {
   @Input() vehicleSelected: Vehicle;
   @Input() clientSelected: Client;
@@ -135,7 +136,7 @@ export class VehicleHeaderComponent implements OnInit {
           if (this.companySelected) {
             this.companyVehicleService.post(
               {
-                comapny: {id: this.companySelected.id},
+                company: {id: this.companySelected.id},
                 vehicle: {id: vehicle.id},
                 responsible: {id: 1}
               }
@@ -159,6 +160,7 @@ export class VehicleHeaderComponent implements OnInit {
   }
 
   openAddVehicleModal(event: any) {
+    console.log(this.companySelected)
     this.addVehicleModal.fire().then((result) => {
       if (result.value) {
         // TODO Message for confirm creation
@@ -235,8 +237,8 @@ export class VehicleHeaderComponent implements OnInit {
   bindAutocompleteFields() {
     this.brands = this.vehicleAddFormControl.controls.brand.valueChanges.pipe(
       filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 2),
-      debounceTime(600),
+      filter(res => res.length > 1),
+      debounceTime(400),
       distinctUntilChanged(),
       switchMap( val => {
         return this.getBrands(val);
@@ -245,8 +247,8 @@ export class VehicleHeaderComponent implements OnInit {
 
     this.models = this.vehicleAddFormControl.controls.model.valueChanges.pipe(
       filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 2),
-      debounceTime(600),
+      filter(res => res.length > 1),
+      debounceTime(400),
       distinctUntilChanged(),
       switchMap( val => {
         return this.getModels(val);
@@ -255,8 +257,8 @@ export class VehicleHeaderComponent implements OnInit {
 
     this.subtypes = this.vehicleAddFormControl.controls.subtype.valueChanges.pipe(
       filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 2),
-      debounceTime(600),
+      filter(res => res.length > 1),
+      debounceTime(400),
       distinctUntilChanged(),
       switchMap( val => {
         return this.getSubtypes(val);
@@ -265,8 +267,8 @@ export class VehicleHeaderComponent implements OnInit {
 
     this.transmissions = this.vehicleAddFormControl.controls.transmission.valueChanges.pipe(
       filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 2),
-      debounceTime(600),
+      filter(res => res.length > 1),
+      debounceTime(400),
       distinctUntilChanged(),
       switchMap( val => {
         return this.getTransmissions(val);
@@ -275,8 +277,8 @@ export class VehicleHeaderComponent implements OnInit {
 
     this.gastypes = this.vehicleAddFormControl.controls.gas_type.valueChanges.pipe(
       filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 2),
-      debounceTime(600),
+      filter(res => res.length > 1),
+      debounceTime(400),
       distinctUntilChanged(),
       switchMap( val => {
         return this.getGasTypes(val);
@@ -285,8 +287,8 @@ export class VehicleHeaderComponent implements OnInit {
 
     this.usetypes = this.vehicleAddFormControl.controls.use_type.valueChanges.pipe(
       filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 2),
-      debounceTime(600),
+      filter(res => res.length > 1),
+      debounceTime(400),
       distinctUntilChanged(),
       switchMap( val => {
         return this.getUseTypes(val);

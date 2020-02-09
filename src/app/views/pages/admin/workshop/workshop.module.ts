@@ -11,16 +11,21 @@ import {PerfectScrollbarModule} from 'ngx-perfect-scrollbar';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {
   MatAutocompleteModule,
-  MatButtonModule,
-  MatCheckboxModule, MatDatepickerModule, MatExpansionModule,
-  MatFormFieldModule, MatIconModule,
+  MatButtonModule, MatCardModule,
+  MatCheckboxModule,
+  MatDatepickerModule,
+  MatExpansionModule,
+  MatFormFieldModule,
+  MatIconModule,
   MatInputModule,
   MatPaginatorModule,
+  MatRadioModule,
   MatSelectModule,
   MatTabsModule
 } from '@angular/material';
 import {ClientNoteComponent} from './client/client-note/client-note.component';
 import {VehicleComponent} from './vehicle/vehicle.component';
+import {ReceptionComponent} from './reception/reception.component';
 import {ClientVehicleComponent} from './client/client-vehicle/client-vehicle.component';
 import {CompanyEditComponent} from './company/company-edit/company-edit.component';
 import {CompanyNoteComponent} from './company/company-note/company-note.component';
@@ -52,18 +57,49 @@ import {FilePondModule, registerPlugin} from 'ngx-filepond';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
+
 // import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 
 registerPlugin(FilePondPluginFileValidateType);
 registerPlugin(FilePondPluginFileValidateSize);
 registerPlugin(FilePondPluginImageExifOrientation);
+
 // registerPlugin(FilePondPluginImagePreview);
 
 @NgModule({
   declarations: [
     DialogCarPhotoDialog,
-    WorkshopComponent, ClientComponent, ClientEditComponent, CompanyComponent, ClientNoteComponent, VehicleComponent,
-    ClientVehicleComponent, ClientVehicleComponent, CompanyEditComponent, CompanyNoteComponent, CompanyVehicleComponent, VehicleRepairComponent, VehicleEditComponent, VehicleListComponent, WorkHeaderComponent, WorkComponent, WorkThirdpartyComponent, WorkMaterialsComponent, WorkAccesoriesComponent, WorkQaComponent, WorkMaintenanceComponent, VehicleReceptionComponent, WorkStatusComponent, WorkTodoComponent, VehicleHistoryComponent, WorkResumeComponent, WorkDocumentsComponent, WorkPhotosComponent, VehicleResumeComponent],
+    WorkshopComponent,
+    ClientComponent,
+    ClientEditComponent,
+    CompanyComponent,
+    ClientNoteComponent,
+    VehicleComponent,
+    ClientVehicleComponent,
+    ClientVehicleComponent,
+    CompanyEditComponent,
+    CompanyNoteComponent,
+    CompanyVehicleComponent,
+    VehicleRepairComponent,
+    VehicleEditComponent,
+    VehicleListComponent,
+    WorkHeaderComponent,
+    WorkComponent,
+    WorkThirdpartyComponent,
+    WorkMaterialsComponent,
+    WorkAccesoriesComponent,
+    WorkQaComponent,
+    WorkMaintenanceComponent,
+    VehicleReceptionComponent,
+    WorkStatusComponent,
+    WorkTodoComponent,
+    VehicleHistoryComponent,
+    WorkResumeComponent,
+    WorkDocumentsComponent,
+    WorkPhotosComponent,
+    VehicleResumeComponent,
+    ReceptionComponent
+  ],
   imports: [
     CommonModule,
     NgbModule,
@@ -85,7 +121,9 @@ registerPlugin(FilePondPluginImageExifOrientation);
     MatDatepickerModule,
     SweetAlert2Module,
     FormsModule,
-    FilePondModule
+    FilePondModule,
+    MatRadioModule,
+    MatCardModule
   ],
   entryComponents: [
     DialogCarPhotoDialog

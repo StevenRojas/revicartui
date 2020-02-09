@@ -1,0 +1,97 @@
+<div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch kt_body_workshop">
+  <!--  <div class="kt-container kt-container&#45;&#45;fluid kt-grid kt-grid&#45;&#45;ver kt_body-workshop-container">-->
+  <div class="row">
+    <div class="col-12 col-sm-12 col-md-1 col-lg-1">
+
+    </div>
+    <div class="col-12 col-sm-12 col-md-10 col-lg-10">
+      <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" [ngStyle]="">
+        <div ktContentAnimate class="kt-container kt-grid__item kt-grid__item--fluid kt-container--fluid">
+          <div class="">
+            <div class="row">
+              <div class="col-12">
+
+                <div class="kt-container--fluid mr-lg-4 ml-lg-4">
+                  <kt-portlet>
+                    <kt-portlet-body>
+                      <div class="row pt-1 mt-1">
+                        <div class="col-12">
+                          <mat-form-field class="input-full-width w-100">
+                            <mat-label>Número de Placa</mat-label>
+                            <input #searchInput  [(ngModel)]="licensePlate" matInput placeholder="Número de Placa" type="text"/>
+                          </mat-form-field>
+                          <div class="row">
+
+                            <ng-container *ngFor="let clientVehicle of resultClientVehicle">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                                <mat-card class="example-card h-100">
+                                  <mat-card-header>
+                                    <div mat-card-avatar class="example-header-image"></div>
+                                    <mat-card-title>{{ clientVehicle.vehicle.license_plate }}</mat-card-title>
+                                    <mat-card-subtitle>Kilometraje: {{ clientVehicle.vehicle.mileage }}</mat-card-subtitle>
+                                  </mat-card-header>
+                                  <img mat-card-image appImagePrimary [photos]="clientVehicle.vehicle.photos">
+                                  <mat-card-content>
+                                    <p> {{ clientVehicle.client.name }} </p>
+                                    <p> Email: {{ clientVehicle.client.email }} </p>
+                                    <p> Teléfono móvil: {{ clientVehicle.client.cell_phone }} </p>
+                                  </mat-card-content>
+                                  <mat-card-actions>
+                                    <a [routerLink]="['/admin/workshop/vehicle/', clientVehicle.vehicle.id]" [queryParams]="{'q_id': clientVehicle.vehicle.id, 'client_id': clientVehicle.client.id}" class="btn btn-primary btn-sm">Mostrar detalles</a>
+                                  </mat-card-actions>
+                                </mat-card>
+                              </div>
+                            </ng-container>
+
+                            <ng-container *ngFor="let companyVehicle of resultCompanyVehicle">
+                              <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
+                                <mat-card class="example-card h-100">
+                                  <mat-card-header>
+                                    <div mat-card-avatar class="example-header-image"></div>
+                                    <mat-card-title>{{ companyVehicle.vehicle.license_plate }}</mat-card-title>
+                                    <mat-card-subtitle>Kilometraje: {{ companyVehicle.vehicle.millage }}</mat-card-subtitle>
+                                  </mat-card-header>
+                                  <img mat-card-image appImagePrimary [photos]="companyVehicle.vehicle.photos">
+                                  <mat-card-content>
+                                    <p> {{ companyVehicle.company.name }} </p>
+                                    <p> Email: {{ companyVehicle.company.email }} </p>
+                                    <p> Teléfono móvil: {{ companyVehicle.company.phone }} </p>
+                                  </mat-card-content>
+                                  <mat-card-actions>
+                                    <a [routerLink]="['/admin/workshop/vehicle/', companyVehicle.vehicle.id]" [queryParams]="{'q_id': companyVehicle.vehicle.id, 'company_id': companyVehicle.company.id}" class="btn btn-primary btn-sm">Mostrar detales</a>
+                                  </mat-card-actions>
+                                </mat-card>
+                              </div>
+                            </ng-container>
+
+                          </div>
+                          <ng-container *ngIf="messageClientVehicles && messageCompanyVehicles">
+                            <div>
+                              <div class="col-12 text-center">
+                                {{ messageClientVehicles }}
+                              </div>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="!notFoundClientVehicle && !notFoundCompanyVehicle">
+                            <div class="col-12 text-center">
+                              <br>
+                              <br>
+                              <button mat-raised-button color="primary">Agregar esta Placa</button>
+                            </div>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </kt-portlet-body>
+                  </kt-portlet>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-1 col-lg-1">
+
+    </div>
+  </div>
+</div>

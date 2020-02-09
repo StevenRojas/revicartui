@@ -5,6 +5,7 @@ import {from, Observable, of} from 'rxjs';
 // NGRX
 // State
 import {User} from '../../../../../core/auth';
+import {LoginService} from '../../../../../core/auth/_services';
 
 // import {currentUser, User} from '../../../../../core/auth';
 
@@ -26,7 +27,9 @@ export class UserProfile2Component implements OnInit {
    *
    * @param store: Store<AppState>
    */
-  constructor() {
+  constructor(
+    private loginService: LoginService
+  ) {
 
   }
 
@@ -45,6 +48,7 @@ export class UserProfile2Component implements OnInit {
    * Log out
    */
   logout() {
+    this.loginService.logout();
     // this.store.dispatch(new Logout());
   }
 

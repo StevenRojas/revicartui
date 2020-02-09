@@ -11,15 +11,19 @@
                   <kt-portlet-body [class]="'p-0 mb-0 '">
                     <div class="kt-widget26 p-4">
                       <div class="kt-widget26__content" *ngIf="vehicle.brand && vehicle.model">
-
-                        <span class="kt-widget26__number"> <img class="image-brand-logo pr-1" [src]="vehicle.brand.icon" >{{ vehicle?.brand.name }} {{ vehicle?.model.name }} <span class="kt-font-md ">{{ vehicle.year }}</span></span>
+                        <span class="kt-widget26__number"> <img class="image-brand-logo pr-1" [src]="urlImages + vehicle.brand.icon" >{{ vehicle?.brand.name }} {{ vehicle?.model.name }} <span class="kt-font-md ">{{ vehicle.year }}</span></span>
                         <span class="kt-widget26__desc kt-font-xl kt-form__heading-title">{{ vehicle.license_plate }}</span>
-                        <ng-container *ngIf="client && client?.id">
-                          <span class="kt-widget26__desc">{{ client?.name }} <{{ client?.email }}></span>
+                        <ng-container *ngFor="let owner of clientVehicleOwners">
+                          <ng-container *ngIf="owner.client && owner.client?.id">
+                            <span class="kt-widget26__desc">{{ owner.client?.name }} <{{ owner.client?.email }}></span>
+                          </ng-container>
                         </ng-container>
-                        <ng-container *ngIf="company && company?.id">
-                          <span class="kt-widget26__desc">{{ company?.name }} <{{ company?.email }}></span>
+                        <ng-container *ngFor="let owner of companyVehicleOwners">
+                          <ng-container *ngIf="owner.company && owner.company?.id">
+                            <span class="kt-widget26__desc">{{ owner.company?.name }} <{{ owner.company?.email }}></span>
+                          </ng-container>
                         </ng-container>
+
                         <ng-container *ngIf="vehicle.updated_at != ''">
                         <span class="kt-widget26__desc">
                           <i class="flaticon2-calendar-1"></i> {{ vehicle.updated_at | dateFormat: 'YYYY-MM-DD, h:mm:ss' }}
@@ -32,12 +36,22 @@
                         </ng-container>
                       </div>
                       <div class="kt-widget26__chart" style="height:auto; width: auto;">
-                        <img class="img-fluid " [src]="vehicle.photo_path">
+                        <ng-container *ngIf="vehiclePhoto">
+                          <ng-container *ngIf="vehiclePhoto.path_file == ''">
+                            <img class="img-fluid " [src]="'./assets/media/cars/default_car.png'">
+                          </ng-container>
+                          <ng-container *ngIf="vehiclePhoto.path_file != ''">
+                            <img class="img-fluid " [src]="urlImages + vehiclePhoto['path_file']" >
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="!vehiclePhoto">
+                          <img class="img-fluid " [src]="'./assets/media/cars/default_car.png'">
+                        </ng-container>
                       </div>
                       <div class="kt-widget26__content">
-                        <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent">Cambiar Foto</button></span>
-                        <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent">Cambiar Dueño</button></span>
-                        <span class="kt-widget26__desc"><i class="flaticon2-trash"></i> <button mat-button color="warn">Eliminar vehiculo</button></span>
+                        <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent" (click)="openPhotoModal($event)">Cambiar Foto</button></span>
+                        <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent" (click)="updateClient(vehicle)" >Cambiar Dueño</button></span>
+                        <span class="kt-widget26__desc"><i class="flaticon2-trash"></i> <button mat-button color="warn" (click)="openDeleteVehicleModal($event)" >Eliminar vehiculo</button></span>
                       </div>
                     </div>
                   </kt-portlet-body>
@@ -53,7 +67,7 @@
                         </ng-container>
                       </mat-tab>
                       <mat-tab label="Recepción">
-                        <kt-vehicle-reception></kt-vehicle-reception>
+                        <kt-vehicle-reception [vehicle]="vehicle"></kt-vehicle-reception>
                       </mat-tab>
                       <mat-tab label="Historial">
                         <kt-vehicle-history></kt-vehicle-history>
@@ -81,3 +95,29 @@
     </div>
   </div>
 </div>
+
+<swal
+    #photoModal
+    [swalOptions]="addPhotoModalOption"
+>
+  <div *swalPortal>
+    <file-pond #myPond
+               [options]="pondOptions"
+               [files]="pondFiles"
+               (onprocessfile)="processFile($event)">
+    </file-pond>
+    <ng-container *ngIf="photoError && photoError!=null && photoError!=''">
+      <p class="text-danger">{{photoError}}</p>
+    </ng-container>
+
+  </div>
+</swal>
+
+<swal
+  #deleteModal
+  [swalOptions]="deleteModalOption"
+>
+  <div *swalPortal>
+    Realmente desea eliminar el vehículo con Placa número: {{vehicle.license_plate}}?
+  </div>
+</swal>

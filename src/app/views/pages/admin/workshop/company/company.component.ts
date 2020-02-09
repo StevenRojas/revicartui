@@ -1,7 +1,7 @@
 import {Component, OnInit, Renderer2} from '@angular/core';
 import {LayoutConfigService, MenuOptions, OffcanvasOptions} from '../../../../../core/_base/layout';
 import {FormGroup} from '@angular/forms';
-import {Company, CompanyList, CompanyService} from '../../../../../core/admin';
+import {ClientVehicleList, Company, CompanyList, CompanyService} from '../../../../../core/admin';
 import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
@@ -205,5 +205,13 @@ export class CompanyComponent implements OnInit {
     }
   }
 
+
+  refreshVehicles() {
+    // this.clientVehicleService.allById(this.clientSelected.id, this.pagination, true).subscribe(
+    //   (vehicles: ClientVehicleList) => {
+    //     this.vehicles = vehicles.list;
+    //   }
+    // );
+  }
 
 }

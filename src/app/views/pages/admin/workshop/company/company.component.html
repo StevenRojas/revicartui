@@ -78,7 +78,7 @@
       <div ktContentAnimate class="kt-container kt-grid__item kt-grid__item--fluid kt-container--fluid">
         <div class="">
           <div class="row">
-            <div class="col-sm-12 col-md-6 col-6">
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
               <kt-company-header [companySelected]="company"
                                 (companyUpdateListRequestEmit)="updateCompanyPageList($event)"
                                 (companyAddListRequestEmit)="searchCompanyId($event)"
@@ -95,13 +95,8 @@
                 </kt-portlet-body>
               </kt-portlet>
             </div>
-            <div class="col-sm-12 col-md-6 col-6">
-              <kt-vehicle-header [companySelected]="company"></kt-vehicle-header>
-              <kt-portlet [class]="'kt-portlet--height-fluid'">
-                <kt-portlet-body>
-                  <kt-company-vehicle [companyId]="company.id"></kt-company-vehicle>
-                </kt-portlet-body>
-              </kt-portlet>
+            <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+              <kt-company-vehicle [companySelected]="company"></kt-company-vehicle>
             </div>
           </div>
         </div>

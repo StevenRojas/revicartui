@@ -48,6 +48,20 @@ export class CompanyService {
     });
   }
 
+  quickSearchResponsible(companyId: number, name: string): Observable<any> {
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.set('Content-Type', 'application/json');
+    httpHeaders.set('token', '123');
+    let params = new HttpParams();
+    params = params.set('q', name);
+    params = params.set('page', '1');
+    params = params.set('pagination', '0');
+    return this.http.get<any>(environment.api_url + 'company/' + companyId + '/responsible', {
+      params: params,
+      headers: httpHeaders
+    });
+  }
+
   get(companyId: string): Observable<Company> {
     const httpHeaders = new HttpHeaders();
     httpHeaders.set('Content-Type', 'application/json');
@@ -62,6 +76,8 @@ export class CompanyService {
     company.has_alert = company.has_alert ? true : false;
     if (company.parent) {
       company.parent = {id: company.parent.id};
+    } else {
+      delete company.parent;
     }
     return this.http.post<Company>(environment.api_url + 'company', company, {headers: httpHeaders});
   }
@@ -76,6 +92,8 @@ export class CompanyService {
     company.has_alert = company.has_alert ? true : false;
     if (company.parent) {
       company.parent = {id: company.parent.id};
+    } else {
+      delete company.parent;
     }
     return this.http.put<Company>(environment.api_url + 'company/' + company.id, company, {
       params: params,

@@ -132,4 +132,89 @@
     </mat-form-field>
   </div>
 </div>
-<button mat-button color="accent">AGREGAR TRABAJO</button>
+<button mat-button color="accent" (click)="openAddWorkModal($event)" >AGREGAR TRABAJO</button>
+
+
+<swal
+    #addWorkModal
+    [swalOptions]="addWorkModalOption"
+>
+  <div *swalPortal>
+    <form [formGroup]="addWorkFormGroup" autocomplete="off" class="kt-register__form kt-form"
+          [ngStyle]="{}">
+      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">
+        <div class="form-group" >
+          <mat-form-field class="input-full-width w-100">
+            <input type="text" placeholder="Categoría" aria-label="Categoría" matInput formControlName="work_category" [matAutocomplete]="work_category" >
+            <mat-autocomplete #work_category="matAutocomplete" [displayWith]="displayName" (optionSelected)="setCategoryOption($event)">
+              <mat-option *ngFor="let workCategory of workCategories | async" [value]="workCategory">
+                {{ workCategory.category }}, {{workCategory.section}}, {{workCategory.area}}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="isControlHasError('work_category','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">
+        <div class="form-group" >
+          <mat-form-field class="input-full-width w-100">
+            <input type="text" placeholder="Sub Categoría" aria-label="Sub categoría" matInput formControlName="work_subcategory" [matAutocomplete]="work_subcategory" >
+            <mat-autocomplete #work_subcategory="matAutocomplete" [displayWith]="displaySubCategoryName" (optionSelected)="setSubcategoryDefaultOptions($event)">
+              <mat-option *ngFor="let workSubCategory of workSubCategories | async" [value]="workSubCategory">
+                {{ workSubCategory.work }}, {{workSubCategory.default_price}} Bs.
+              </mat-option>
+            </mat-autocomplete>
+            <mat-error *ngIf="isControlHasError('work_subcategory','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-xs-6 col-6 col-md-6 col-lg-6">
+          <div class="form-group">
+            <mat-form-field class="input-full-width">
+              <mat-label>Precio</mat-label>
+              <input formControlName="price" matInput placeholder="Precio" type="number" min="0.00" max="10000.00" step="0.01" />
+              <mat-error *ngIf="isControlHasError('price','required')">
+                <strong>Este campo es requerido</strong>
+              </mat-error>
+            </mat-form-field>
+
+          </div>
+        </div>
+        <div class="col-sm-6 col-xs-6 col-6 col-md-6 col-lg-6">
+          <div class="form-group">
+            <mat-form-field class="input-full-width">
+              <mat-label>Cantidad</mat-label>
+              <input formControlName="quantity" matInput placeholder="Cantidad" type="number" min="0" max="10000" step="1" />
+              <mat-error *ngIf="isControlHasError('quantity','required')">
+                <strong>Este campo es requerido</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">
+        <div class="form-group">
+          <mat-form-field class="input-full-width w-100">
+            <mat-label>Repuesto o Accesorio</mat-label>
+            <textarea formControlName="notes" matInput placeholder="Repuesto o Accesorio" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
+            <mat-error *ngIf="isControlHasError('notes','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <ng-container *ngIf="errorMessage">
+        <div class="row">
+          <div class="col-12">
+            <p class="text-danger">{{ errorMessage }}</p>
+          </div>
+        </div>
+      </ng-container>
+    </form>
+  </div>
+</swal>

@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {Client, ClientService, ClientVehicleList, Vehicle} from '../../../../../../core/admin';
+import {Client, ClientService, ClientVehicleList, PhotoService, Vehicle} from '../../../../../../core/admin';
 import {ClientVehicleService} from '../../../../../../core/admin/_services/client-vehicle.service';
 
 @Component({
@@ -12,13 +12,11 @@ export class ClientVehicleComponent implements OnInit, OnChanges {
   public pagination = { page: 1, query: undefined, queryId: undefined, limit: 10, sort: '-id'};
   public vehicles = [];
   constructor(
-    public clientVehicleService: ClientVehicleService
+    public clientVehicleService: ClientVehicleService,
+    private photoService: PhotoService
   ) { }
 
-  ngOnInit() {
-
-
-  }
+  ngOnInit() {  }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.clientSelected.id) {
@@ -44,5 +42,9 @@ export class ClientVehicleComponent implements OnInit, OnChanges {
 
   addVehicle(vehicle) {
     this.vehicles.unshift([new Vehicle(vehicle)]);
+  }
+
+  getPrimaryPhoto() {
+    // this.photoService.getPrimary()
   }
 }

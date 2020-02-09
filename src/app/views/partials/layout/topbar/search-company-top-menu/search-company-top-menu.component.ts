@@ -42,7 +42,7 @@ export class SearchCompanyTopMenuComponent implements OnInit {
         return event.target.value;
       }),
       filter(res => res.length > 2),
-      debounceTime(1000),
+      debounceTime(400),
       distinctUntilChanged()
     ).subscribe((text) => {
       this.pagination.query = text;

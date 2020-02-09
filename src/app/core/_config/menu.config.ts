@@ -9,6 +9,25 @@ export class MenuConfig {
           alignment: 'left',
           page: '/admin/workshop',
           // translate: 'MENU.DASHBOARD',
+          toggle: 'click',
+          submenu: [
+            {
+              title: 'Reception',
+              page: '/admin/workshop/reception'
+            },
+            {
+              title: 'Vehículos',
+              page: '/admin/workshop/vehicle'
+            },
+            {
+              title: 'Clientes',
+              page: '/admin/workshop/client'
+            },
+            {
+              title: 'Empresas',
+              page: '/admin/workshop/company'
+            }
+          ]
         },
         {
           title: 'Inventarios',
@@ -43,7 +62,12 @@ export class MenuConfig {
           alignment: 'left',
           page: '/admin/workshop',
           // translate: 'MENU.DASHBOARD',
+          // toggle: 'click',
           submenu: [
+            {
+              title: 'Reception',
+              page: '/admin/workshop/reception'
+            },
             {
               title: 'Vehículos',
               page: '/admin/workshop/vehicle'

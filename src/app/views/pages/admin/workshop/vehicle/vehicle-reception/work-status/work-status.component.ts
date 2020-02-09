@@ -1,34 +1,47 @@
-import {Component, Input, OnInit, Renderer2, ViewChild} from '@angular/core';
-import {ReceptionAccessoryService, VehicleService} from '../../../../../../../core/admin';
+import {Component, ElementRef, Inject, Input, OnChanges, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {FileService, PhotoService, ReceptionAccessoryService, ReceptionPhotoService, VehicleService} from '../../../../../../../core/admin';
 import {isNumeric} from 'rxjs/internal-compatibility';
 import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
-import {SweetAlertOptions} from "sweetalert2";
+import {SweetAlertOptions} from 'sweetalert2';
+import {environment} from '../../../../../../../../environments/environment';
+import {MatDialog, MAT_DIALOG_DATA} from '@angular/material';
+import {DialogCarPhotoDialog} from '../../vehicle-history/work-photos/work-photos.component';
 
 @Component({
   selector: 'kt-work-status',
   templateUrl: './work-status.component.html',
   styleUrls: ['./work-status.component.scss']
 })
-export class WorkStatusComponent implements OnInit {
-  @ViewChild('addPhotoModal', {static: false}) private addPhotoModal: SwalComponent;
+export class WorkStatusComponent implements OnInit, OnChanges {
   @ViewChild('myPond', { static: false }) myPond: any;
+  @ViewChild('addPhotoModal', {static: false}) private addPhotoModal: SwalComponent;
+  @ViewChild('receptionPhotoNoteInput', {static: false}) private receptionPhotoNoteInput: ElementRef;
+  @Input() vehicleReception: any;
 
   public pondFiles = [];
-  public lastFileAdd = {};
-  public fileSubmitted = false; // Control for remove file from server or not
+  public lastFileAdd = null;
+  public lastNoteAdd = null;
 
+  public fileSubmitted = false; // Control for remove file from server or not
   public addPhotoModalOption: SweetAlertOptions;
-  @Input() vehicleReceptionId: number;
   public vehicleAccessories: any[];
+
   // Update this vars on create new
   public receptionAccessoriesIds: any[];
   public receptionAccessories: any[];
+  public receptionPhotos: any[];
+  public receptionPhotoError: string;
   public pondOptions = this.optionsFile();
 
+
+  public urlImages = environment.urlImages;
   constructor(
     private vehicleService: VehicleService,
     private receptionAccessoriesService: ReceptionAccessoryService,
-    private render: Renderer2
+    private render: Renderer2,
+    private photoService: PhotoService,
+    private receptionPhotoService: ReceptionPhotoService,
+    private dialog: MatDialog
   ) { }
 
 
@@ -43,26 +56,53 @@ export class WorkStatusComponent implements OnInit {
       cancelButtonClass: 'btn btn-secondary btn-elevate',
       showLoaderOnConfirm: true,
       focusCancel: true,
-      // preConfirm: () =>  this.addClient()
+      preConfirm: () =>  this.addPhoto()
     };
     this.vehicleAccessories = [];
-    this.receptionAccessoriesIds = [];
-    this.receptionAccessories = [];
-    if (this.vehicleReceptionId) {
-      this.receptionAccessoriesService.all(this.vehicleReceptionId).subscribe(
-        (receptionAccessories: any[]) => {
-          Object.keys(receptionAccessories).forEach((key) => {
-            this.receptionAccessoriesIds.push(receptionAccessories[key].vehicle_accesory);
-            this.receptionAccessories.push(receptionAccessories[key]);
-          });
-          this.getAccessories();
-        }
-      );
-    } else {
-      this.getAccessories();
+    this.getAccessories();
+
+  }
+
+  /**
+   * Update the view and controls
+   * @param changes
+   */
+  ngOnChanges(changes) {
+    if (this.vehicleReception && this.vehicleReception.id) {
+      this.receptionAccessoriesIds = [];
+      this.receptionAccessories = [];
+      this.loadReceptionAccessories();
+      this.receptionPhotos = [];
+      this.loadReceptionPhotos();
     }
   }
 
+  public loadReceptionPhotos() {
+    this.receptionPhotoService.all(this.vehicleReception.id).subscribe(
+      (receptionPhotosObj) => {
+        this.receptionPhotos = receptionPhotosObj;
+      }
+    );
+  }
+
+  /**
+   * Load the current accessories listed for all vehicles
+   */
+  public loadReceptionAccessories() {
+    this.receptionAccessoriesService.all(this.vehicleReception.id).subscribe(
+      (receptionAccessories: any[]) => {
+        Object.keys(receptionAccessories).forEach((key) => {
+          this.receptionAccessoriesIds.push(receptionAccessories[key].vehicle_accesory);
+          this.receptionAccessories.push(receptionAccessories[key]);
+        });
+        this.getAccessories();
+      }
+    );
+  }
+
+  /**
+   * ACCESSORIES CRUD CONTROL
+   */
   getAccessories() {
     this.vehicleService.accesories().subscribe(
       (vehicleAccessories) => {
@@ -71,14 +111,20 @@ export class WorkStatusComponent implements OnInit {
     );
   }
 
-  updateAccessory(event, receptionAccessoryKey, elQuantity, vehicleAccesoryId) {
+  /**
+   * Create or remove accessorie using checkbox control
+   * @param event
+   * @param receptionAccessoryKey
+   * @param elQuantity
+   * @param vehicleAccesoryId
+   */
+  createOrRemoveAccessory(event, receptionAccessoryKey, elQuantity, vehicleAccesoryId) {
     if (receptionAccessoryKey === -1) {
       if (!event.checked) {
-
         this.render.setValue(elQuantity, '1');
         elQuantity.value = 1;
       } else {
-        this.createAccessory(this.vehicleReceptionId, parseInt(vehicleAccesoryId, 10), parseInt(elQuantity.value, 10));
+        this.createAccessory(this.vehicleReception.id, parseInt(vehicleAccesoryId, 10), parseInt(elQuantity.value, 10));
       }
     } else {
       if (!event.checked) {
@@ -87,13 +133,19 @@ export class WorkStatusComponent implements OnInit {
     }
   }
 
+  /**
+   * Update Category using enter or tab keyword on input field
+   * @param quantity
+   * @param receptionAccessoryKey
+   * @param elChecked
+   */
   updateAccessoryInput(quantity: number, receptionAccessoryKey, elChecked) {
     if (elChecked.checked) {
       // Update
       if (isNumeric(quantity)) {
         this.receptionAccessoriesService.update(
           parseInt(this.receptionAccessories[receptionAccessoryKey]['id'], 10),
-          this.vehicleReceptionId,
+          this.vehicleReception.id,
           quantity).subscribe(
           (receptionAccessory) => {
             console.log(receptionAccessory);
@@ -103,6 +155,12 @@ export class WorkStatusComponent implements OnInit {
     }
   }
 
+  /**
+   * Prepare request for create accessory
+   * @param vehicleReceptionId
+   * @param vehicleAccessoryId
+   * @param quantity
+   */
   createAccessory(vehicleReceptionId: number, vehicleAccessoryId: number, quantity: number) {
     console.log(vehicleReceptionId, vehicleAccessoryId, quantity)
     this.receptionAccessoriesService.add(vehicleReceptionId, vehicleAccessoryId, quantity).subscribe(
@@ -113,9 +171,13 @@ export class WorkStatusComponent implements OnInit {
     );
   }
 
+  /**
+   * Prepare request for remove accessorie, fire when uncheck the checkbox
+   * @param receptionAccessoryKey
+   */
   removeAccessory(receptionAccessoryKey) {
     this.receptionAccessoriesService.remove(parseInt(this.receptionAccessories[receptionAccessoryKey]['id'], 10),
-      this.vehicleReceptionId).subscribe(
+      this.vehicleReception.id).subscribe(
       (result) => {
         delete this.receptionAccessoriesIds[receptionAccessoryKey];
         delete this.receptionAccessories[receptionAccessoryKey];
@@ -123,16 +185,82 @@ export class WorkStatusComponent implements OnInit {
     );
   }
 
+  /**
+   * PHOTO CRUD CONTROL
+   */
+  /**
+   * Fire Open modal for add new reception_photo row
+   * @param event
+   */
   openAddPhotoModal(event: any) {
     this.addPhotoModal.fire().then((result) => {
       if (result.value) {
-        // TODO send result
+        // After press "Ok" button
       } else {
-        alert('Close modal');
+        this.lastFileAdd = null;
+        this.lastNoteAdd = null;
+        // After press "Cancel" button or leave from modal
       }
     });
   }
 
+
+  public addPhoto() {
+    // if (this.lastFileAdd) {
+    const response = this.photoService.post(this.vehicleReception.vehicle, this.lastFileAdd, false);
+    this.lastNoteAdd = this.receptionPhotoNoteInput.nativeElement.value;
+    if(this.lastNoteAdd || this.lastFileAdd) {
+      return new Promise((resolve, reject) => {
+        if(this.lastFileAdd && this.lastFileAdd != null && this.lastFileAdd != '') {
+          response.subscribe(
+            (photoObj) => {
+              this.receptionPhotoService.add(photoObj.id, this.vehicleReception.id, this.lastNoteAdd).subscribe(
+                (receptionPhotoObj) => {
+                  this.receptionPhotos = [receptionPhotoObj, ...this.receptionPhotos];
+                }
+              );
+              resolve();
+            },
+            error => reject()
+          )
+        } else {
+          this.receptionPhotoService.add(null, this.vehicleReception.id, this.lastNoteAdd).subscribe(
+            (receptionPhotoObj) => {
+              this.receptionPhotos = [receptionPhotoObj, ...this.receptionPhotos];
+            }
+          );
+        }
+
+      });
+    } else {
+      this.receptionPhotoError = "Debe al menos o subir una Foto o agregar una Nota";
+      return false;
+    }
+
+    // } else {
+    //   return new Promise((resolve, reject) => {
+    //     // this.receptionPhotoError = "Es necesario agregar una fotografia"
+    //     reject();
+    //   });
+    // }
+    // const controls = this.clientAddFormControl.controls;
+    // // check form
+    // if (this.clientAddFormControl.invalid) {
+    //   Object.keys(controls).forEach(controlName =>
+    //     controls[controlName].markAsTouched()
+    //   );
+    //   return false;
+    // }
+    // const response = this.clientService.post(this.clientAddFormControl.getRawValue());
+    // return new Promise((resolve, reject) => {
+    //   response.subscribe(
+    //     (client) => {
+    //       this.addListRequest(client);
+    //       resolve();
+    //     }
+    //   );
+    // });
+  }
   /**
    * Configuration uploader
    *  @return configuration filepond
@@ -149,27 +277,23 @@ export class WorkStatusComponent implements OnInit {
       server: {
         // ADD endpoit for upload photo
           process: (fieldName, file, metadata, load, error, progress, abort) => {
-          // this.jobDetailService.createFile(this.jobId, file).subscribe(
-          //   createFileResponse => {
-          //     const formData = new FormData();
-          //     formData.append('asset', file, file.name);
-          //     const request = new XMLHttpRequest();
-          //     request.open('POST', createFileResponse.upload_url);
-          //     request.upload.onprogress = (e) => {
-          //       progress(e.lengthComputable, e.loaded, e.total);
-          //     };
-          //     request.onload = () => {
-          //       this.requestOnLoad(load, request, error);
-          //     };
-          //     request.send(formData);
-          //     return {
-          //       abort: () => {
-          //         request.abort();
-          //         abort();
-          //       }
-          //     };
-          //   }
-          // );
+            const formData = new FormData();
+            formData.append('file', file, file.name);
+            const request = new XMLHttpRequest();
+            request.open('POST', environment.api_url + 'file/upload');
+            request.upload.onprogress = (e) => {
+              progress(e.lengthComputable, e.loaded, e.total);
+            };
+            request.onload = () => {
+              this.requestOnLoad(load, request, error);
+            };
+            request.send(formData);
+            return {
+              abort: () => {
+                request.abort();
+                abort();
+              }
+            };
         },
         revert: false
       },
@@ -180,14 +304,23 @@ export class WorkStatusComponent implements OnInit {
     };
   }
 
+  private requestOnLoad(load: any, request: any, error: any) {
+    if (request.status >= 200 && request.status < 300) {
+      this.lastFileAdd = request.responseText;
+      load(request.responseText);
+    } else {
+      error('The service isn`t available');
+    }
+  }
+
   /**
    * Remove File after upload document
    * @param event filepond event
    */
   public processFile(event: any) {
-    setTimeout(() => {
-      this.myPond.removeFile(event.file.id);
-    }, 1000);
+    // setTimeout(() => {
+    //   this.myPond.removeFile(event.file.id);
+    // }, 1000);
   }
 
     public removeFile(fileId) {
@@ -195,4 +328,14 @@ export class WorkStatusComponent implements OnInit {
       alert('File removed');
     }
   }
+
+  public openDialog(picture: string) {
+    this.dialog.open(DialogCarPhotoDialog, {
+      data: {
+        picture: picture
+      },
+      maxHeight: '750px'
+    });
+  }
+
 }

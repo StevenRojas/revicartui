@@ -1,23 +1,45 @@
 <div class="kt-container--fluid mr-lg-5 ml-lg-5">
   <kt-portlet>
     <kt-portlet-body>
+      <div class="row pt-1 mt-1">
+        <div class="col-12">
+          <mat-radio-group [(ngModel)]="ownerSelected" (change)="loadList()">
+            <mat-radio-button class="example-margin" value="client">
+              Cliente Regular
+            </mat-radio-button>
+            <mat-radio-button class="example-margin" value="company">
+              Compañia o Empresa
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+    </kt-portlet-body>
+  </kt-portlet>
+
+  <kt-portlet>
+    <kt-portlet-body>
       <div class="kt-subheader kt-grid__item">
         <div class="kt-container">
           <div class="kt-subheader__main">
-            <kt-search-vehicle-top-menu></kt-search-vehicle-top-menu>
-            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <kt-context-menu-vehicle></kt-context-menu-vehicle>
-            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
-            <kt-vehicle-header [type]="'button'" [onlyVehicle]="true">
+            <ng-container *ngIf="ownerSelected">
+              <kt-search-vehicle-top-menu [owner]="ownerSelected"></kt-search-vehicle-top-menu>
+<!--              <span class="kt-subheader__separator kt-subheader__separator&#45;&#45;v"></span>-->
+            </ng-container>
 
-            </kt-vehicle-header>
+<!--            <kt-context-menu-vehicle></kt-context-menu-vehicle>-->
+            <span class="kt-subheader__separator kt-subheader__separator--v"></span>
+<!--            <kt-vehicle-header [type]="'button'" [onlyVehicle]="true">-->
+
+<!--            </kt-vehicle-header>-->
           </div>
         </div>
       </div>
       <div class="kt-widget5">
         <ng-container *ngIf="list">
-          <ng-container *ngFor="let vehicle of list.list">
-            <ng-container [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{item: vehicle}"></ng-container>
+          <ng-container *ngIf="list.list">
+            <ng-container  *ngFor="let vehicle of list.list">
+              <ng-container [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{item: vehicle}"></ng-container>
+            </ng-container>
           </ng-container>
         </ng-container>
         <!--  TODO PAGINATION THERE-->
@@ -30,16 +52,16 @@
   <div class="kt-widget5__item">
     <div class="kt-widget5__content">
       <div class="kt-widget5__pic">
-        <img class="kt-widget7__img" [attr.src]="item.photo_path" alt="">
-        <span class="text-black-50 text-center font-weight-bold kt-font-lg position-relative d-block"> {{ item.license_plate }}</span>
+        <img class="kt-widget7__img" [photos]="item.vehicle.photos" alt="" appImagePrimary>
+        <span class="text-black-50 text-center font-weight-bold kt-font-lg position-relative d-block"> {{ item.vehicle.license_plate }}</span>
       </div>
       <div class="kt-widget5__section">
-        <a href="javascript:;" [attr.href]="item.url" class="kt-widget5__title">{{item.brand.name}} {{item.model.name}} {{item.year}} ({{item.color}})</a>
+        <a href="javascript:;" class="kt-widget5__title">{{item.vehicle.brand.name}} {{item.vehicle.model.name}} {{item.vehicle.year}} ({{item.vehicle.color}})</a>
         <ng-container *ngIf="item?.client">
           <p class="kt-widget5__desc">{{item.client.name}}</p>
         </ng-container>
-        <ng-container *ngIf="item?.companies">
-          <p class="kt-widget5__desc">{{item.companies[0].name}}</p>
+        <ng-container *ngIf="item?.company">
+          <p class="kt-widget5__desc">{{item.company.name}}</p>
         </ng-container>
         <div class="row">
           <div class="col-6" *ngFor="let work of item.work_todo">
@@ -54,7 +76,14 @@
       <div class="kt-widget5__stats text-center">
         <span class="kt-widget5__sales">{{item.updated_at | dateFormat: 'YYYY-MM-DD, h:mm:ss'}}</span>
         <span class="kt-widget5__number">{{item.work_status.status}}</span>
-        <a [routerLink]="['/admin/workshop/vehicle/', item.id]" [queryParams]="{'q_id': item.id, 'client_id': item.client.id}" class="btn btn-primary btn-sm">Details</a>
+        <ng-container *ngIf="ownerSelected=='client'">
+          <a [routerLink]="['/admin/workshop/vehicle/', item.vehicle.id]" [queryParams]="{'q_id': item.vehicle.id, 'client_id': item.client.id}" class="btn btn-primary btn-sm">Details</a>
+        </ng-container>
+        <ng-container *ngIf="ownerSelected=='company'">
+          {{item.vehicle.id | json}}
+          {{item.company.id | json}}
+          <a [routerLink]="['/admin/workshop/vehicle/', item.vehicle.id]" [queryParams]="{'q_id': item.vehicle.id, 'company_id': item.company.id}" class="btn btn-primary btn-sm">Details</a>
+        </ng-container>
       </div>
     </div>
   </div>

@@ -26,8 +26,8 @@ export class WorkPhotosComponent implements OnInit {
 @Component({
   selector: 'dialog-car-photo-dialog',
   template: `    
-      <div mat-dialog-content>
-          <img [src]="data.picture" class="img-fluid" />
+      <div mat-dialog-content >
+          <img [src]="data.picture" class="img-fluid"/>
       </div>
 	`,
 })

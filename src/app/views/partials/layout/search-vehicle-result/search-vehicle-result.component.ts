@@ -10,13 +10,15 @@ import {Vehicle} from '../../../../core/admin';
 })
 export class SearchVehicleResultComponent {
   // Public properties
-  @Input() data: Vehicle[];
+  @Input() owner: string;
+  @Input() data: any[];
   @Input() noRecordText: string;
   @Output() emitVehicleSelected = new EventEmitter<Vehicle>();
 
   public constructor() {}
 
   vehicleSelected(vehicle: Vehicle) {
+
     this.emitVehicleSelected.next(vehicle);
   }
 }

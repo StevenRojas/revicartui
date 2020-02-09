@@ -35,7 +35,31 @@ export class VehicleService {
       headers: httpHeaders
     });
   }
+  allByOwner(pagination: VehiclePagination, detail: boolean, owner: string): Observable<VehicleList> {
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.set('Content-Type', 'application/json');
+    httpHeaders.set('token', '123');
+    let params = new HttpParams()
+    params = params.set('page', pagination.page.toString());
+    if (pagination.queryId) {
+      params = params.set('q_id', pagination.queryId);
+    }
+    if (pagination.query) {
+      params = params.set('q', pagination.query);
+    }
+    if (detail) {
+      params = params.set('entity_detail', '1');
+    }
 
+    let url = environment.api_url + 'client-vehicle';
+    if (owner === 'company') {
+      url = environment.api_url + 'company-vehicle'
+    }
+    return this.http.get<VehicleList>(url, {
+      params: params,
+      headers: httpHeaders
+    });
+  }
   get(vehicleId: number): Observable<Vehicle> {
     const httpHeaders = new HttpHeaders();
     httpHeaders.set('Content-Type', 'application/json');
