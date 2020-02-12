@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Vehicle, VehicleList, VehicleService} from '../../../../../../core/admin';
+import {Vehicle, VehicleList, VehicleReceptionService, VehicleService} from '../../../../../../core/admin';
 
 @Component({
   selector: 'kt-vehicle-list',
@@ -11,7 +11,8 @@ export class VehicleListComponent implements OnInit {
   public ownerSelected = 'client';
   public pagination = { page: 1, query: undefined, queryId: undefined, limit: 10, sort: 'updated_at'};
   constructor(
-    private vehicleService: VehicleService
+    private vehicleService: VehicleService,
+    private vehicleReceptionService: VehicleReceptionService
   ) { }
 
   ngOnInit() {
@@ -19,6 +20,11 @@ export class VehicleListComponent implements OnInit {
   }
 
   loadList() {
+    this.vehicleReceptionService.getAllVehicles().subscribe(
+      (vehicles) => {
+        console.log(vehicles);
+      }
+    );
     this.list = new VehicleList();
     this.list.clear();
     this.vehicleService.allByOwner(this.pagination, true, this.ownerSelected).subscribe(

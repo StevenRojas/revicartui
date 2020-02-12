@@ -12,9 +12,6 @@ export class ClientService {
     private http: HttpClient
   ) { }
   all(pagination: ClientPagination): Observable<ClientList> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
     let params = new HttpParams()
     params = params.set('page', pagination.page.toString());
     if(pagination.queryId) {
@@ -25,7 +22,7 @@ export class ClientService {
     }
     return this.http.get<ClientList>(environment.api_url + 'client', {
       params: params,
-      headers: httpHeaders
+      headers: new HttpHeaders({})
     });
   }
 
@@ -33,7 +30,7 @@ export class ClientService {
     const httpHeaders = new HttpHeaders();
     httpHeaders.set('Content-Type', 'application/json');
     httpHeaders.set('token', '123');
-    return this.http.get<Client>(environment.api_url + 'client/' + clientId);
+    return this.http.get<Client>(environment.api_url + 'client/' + clientId, { headers: new HttpHeaders({}) });
   }
 
   post(client: any): Observable<Client> {

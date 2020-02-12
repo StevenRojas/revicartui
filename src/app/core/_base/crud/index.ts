@@ -7,6 +7,5 @@ export { HttpExtenstionsModel } from './models/http-extentsions-model';
 // Utils
 export { HttpUtilsService } from './utils/http-utils.service';
 export { TypesUtilsService } from './utils/types-utils.service';
-export { InterceptService } from './utils/intercept.service';
 export { LocalStoreService } from './utils/local-store.service'
-// export { LayoutUtilsService, MessageType } from './utils/layout-utils.service';
+export { JwtInterceptorService } from './utils/jwt.interceptor.service';

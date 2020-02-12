@@ -12,7 +12,6 @@ import { TranslateModule } from '@ngx-translate/core';
 // import { StoreModule } from '@ngrx/store';
 // import { EffectsModule } from '@ngrx/effects';
 // CRUD
-import { InterceptService } from '../../../core/_base/crud/';
 // Module components
 import { AuthComponent } from './auth.component';
 import { LoginComponent } from './login/login.component';
@@ -22,6 +21,7 @@ import { AuthCodeComponent } from './auth-code/auth-code.component';
 import { AuthNoticeComponent } from './auth-notice/auth-notice.component';
 // Auth
 import { AuthGuard, AuthService } from '../../../core/auth';
+import {JwtInterceptorService} from '../../../core/_base/crud';
 
 const routes: Routes = [
 	{
@@ -69,14 +69,6 @@ const routes: Routes = [
 		// StoreModule.forFeature('auth', authReducer),
 		// EffectsModule.forFeature([AuthEffects])
 	],
-	providers: [
-		InterceptService,
-		{
-			provide: HTTP_INTERCEPTORS,
-			useClass: InterceptService,
-			multi: true
-		},
-	],
 	exports: [AuthComponent],
 	declarations: [
 		AuthComponent,
@@ -85,7 +77,14 @@ const routes: Routes = [
 		// RegisterComponent,
 		// ForgotPasswordComponent,
 		AuthNoticeComponent
-	]
+	],
+  providers:[
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: JwtInterceptorService,
+    //   multi: true
+    // }
+  ]
 })
 
 export class AuthModule {

@@ -2,7 +2,7 @@
 import {BrowserModule, HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
 import {APP_INITIALIZER, NgModule} from '@angular/core';
 import {TranslateModule} from '@ngx-translate/core';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {GestureConfig, MatProgressSpinnerModule} from '@angular/material';
 import {OverlayModule} from '@angular/cdk/overlay';
@@ -44,6 +44,7 @@ import { AuthModule } from './views/pages/auth/auth.module';
 
 // Admin
 import {AdminModule} from './views/pages/admin/admin.module';
+import {JwtInterceptorService} from './core/_base/crud';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -85,6 +86,11 @@ export function initializeLayoutConfig(appConfig: LayoutConfigService) {
     AuthModule.forRoot()
   ],
   providers: [
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: JwtInterceptorService,
+    //   multi: true
+    // },
     LayoutConfigService,
     LayoutRefService,
     MenuAsideService,
@@ -108,7 +114,7 @@ export function initializeLayoutConfig(appConfig: LayoutConfigService) {
     {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: GestureConfig
-    },
+    }
   ],
   bootstrap: [AppComponent]
 })
