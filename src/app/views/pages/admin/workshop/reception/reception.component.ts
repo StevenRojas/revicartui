@@ -3,6 +3,7 @@ import {fromEvent, Observable} from 'rxjs';
 import {debounceTime, filter, map} from 'rxjs/operators';
 import {ClientVehicleService} from '../../../../../core/admin/_services/client-vehicle.service';
 import {CompanyVehicleService} from '../../../../../core/admin/_services/company-vehicle.service';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'kt-reception',
@@ -23,7 +24,8 @@ export class ReceptionComponent implements OnInit {
   public messageCompanyVehicles: string;
   constructor(
     private clientVehicle: ClientVehicleService,
-    private companyVehicle: CompanyVehicleService
+    private companyVehicle: CompanyVehicleService,
+    private router: Router
   ) {
     this.notFoundClientVehicle = true;
     this.notFoundCompanyVehicle = true;
@@ -79,4 +81,8 @@ export class ReceptionComponent implements OnInit {
     this.resultClientVehicle = [];
   }
 
+  showVehicle(vehicle) {
+    console.log(vehicle)
+    this.router.navigate(['admin/workshop/vehicle/' + vehicle.id], { queryParams:  {'q_id': vehicle.id}});
+  }
 }

@@ -80,7 +80,7 @@
                             <div class="col-12 text-center">
                               <br>
                               <br>
-                              <button mat-raised-button color="primary">Agregar Veh&iacute;culo</button>
+                              <kt-vehicle-header [type]="'button'" [onlyVehicle]="true" (vehicleAddListRequestEmit)="showVehicle($event)" [searchLicencePlate]="licensePlate" ></kt-vehicle-header>
                             </div>
                           </ng-container>
                         </div>

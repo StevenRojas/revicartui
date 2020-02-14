@@ -24,6 +24,7 @@ import {CompanyVehicleService} from '../../../../../core/admin/_services/company
 })
 
 export class VehicleHeaderComponent implements OnInit {
+  @Input() searchLicencePlate: string;
   @Input() vehicleSelected: Vehicle;
   @Input() clientSelected: Client;
   @Input() companySelected: Company;
@@ -160,7 +161,6 @@ export class VehicleHeaderComponent implements OnInit {
   }
 
   openAddVehicleModal(event: any) {
-    console.log(this.companySelected)
     this.addVehicleModal.fire().then((result) => {
       if (result.value) {
         // TODO Message for confirm creation
@@ -216,6 +216,12 @@ export class VehicleHeaderComponent implements OnInit {
       ]),
       ]
     });
+
+    console.log(this.searchLicencePlate)
+    if (this.searchLicencePlate) {
+
+      this.vehicleAddFormControl.controls['license_plate'].setValue(this.searchLicencePlate);
+    }
   }
 
   /**
