@@ -8,6 +8,10 @@ import {ReceptionComponent} from './reception/reception.component';
 
 const routes: Routes = [
   {
+    path: '',
+    component: ReceptionComponent
+  },
+  {
     path: 'client',
     component: ClientComponent
   },

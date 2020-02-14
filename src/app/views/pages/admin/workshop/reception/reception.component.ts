@@ -24,7 +24,7 @@ export class ReceptionComponent implements OnInit {
   constructor(
     private clientVehicle: ClientVehicleService,
     private companyVehicle: CompanyVehicleService
-  ) { 
+  ) {
     this.notFoundClientVehicle = true;
     this.notFoundCompanyVehicle = true;
     this.resultCompanyVehicle = [];
@@ -57,7 +57,7 @@ export class ReceptionComponent implements OnInit {
       );
       this.companyVehicle.quickSearch(text).subscribe(
         (result) => {
-          
+
           this.resultCompanyVehicle = result;
           if(this.resultCompanyVehicle.length === 0) {
             this.messageCompanyVehicles = "No se encontraron resultados relacionados";
@@ -66,6 +66,17 @@ export class ReceptionComponent implements OnInit {
         }
       )
     });
+
+  }
+
+  clearSearch() {
+    this.licensePlate = "";
+    this.notFoundClientVehicle = true;
+    this.notFoundCompanyVehicle = true;
+    this.messageClientVehicles = null;
+    this.messageCompanyVehicles = null;
+    this.resultCompanyVehicle = [];
+    this.resultClientVehicle = [];
   }
 
 }

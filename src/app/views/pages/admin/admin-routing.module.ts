@@ -4,6 +4,11 @@ import {WorkshopComponent} from './workshop/workshop.component';
 
 const routes: Routes = [
   {
+    path: '',
+    component: WorkshopComponent,
+    loadChildren: () => import('./workshop/workshop.module').then(m => m.WorkshopModule),
+  },
+  {
     path: 'workshop',
     component: WorkshopComponent,
     loadChildren: () => import('./workshop/workshop.module').then(m => m.WorkshopModule),

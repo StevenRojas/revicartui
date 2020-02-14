@@ -15,9 +15,9 @@ export class VehicleReceptionService {
 
   getAllVehicles(): Observable<any[]> {
     let params = new HttpParams();
-    params = params.set('status', 'r,s')
-    params = params.set('q', name);
+    params = params.set('status', 'r,s');
     params = params.set('page', '1');
+    params = params.set('entity_detail', '1');
     params = params.set('pagination', '0');
     return this.http.get<any[]>(environment.api_url + 'vehicle-reception', { params: params });
   }

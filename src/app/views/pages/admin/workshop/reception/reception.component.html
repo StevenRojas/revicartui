@@ -18,7 +18,10 @@
                         <div class="col-12">
                           <mat-form-field class="input-full-width w-100">
                             <mat-label>Número de Placa</mat-label>
-                            <input #searchInput  [(ngModel)]="licensePlate" matInput placeholder="Número de Placa" type="text"/>
+                            <input #searchInput [(ngModel)]="licensePlate" matInput placeholder="Número de Placa" type="text"/>
+                            <button mat-button *ngIf="licensePlate" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+                              <mat-icon>close</mat-icon>
+                            </button>
                           </mat-form-field>
                           <div class="row">
 
@@ -26,19 +29,20 @@
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
                                 <mat-card class="example-card h-100">
                                   <mat-card-header>
-                                    <div mat-card-avatar class="example-header-image"></div>
                                     <mat-card-title>{{ clientVehicle.vehicle.license_plate }}</mat-card-title>
                                     <mat-card-subtitle>Kilometraje: {{ clientVehicle.vehicle.mileage }}</mat-card-subtitle>
                                   </mat-card-header>
-                                  <img mat-card-image appImagePrimary [photos]="clientVehicle.vehicle.photos">
+                                  <img class="reception-image-car" mat-card-image appImagePrimary [photos]="clientVehicle.vehicle.photos">
                                   <mat-card-content>
                                     <p> {{ clientVehicle.client.name }} </p>
                                     <p> Email: {{ clientVehicle.client.email }} </p>
                                     <p> Teléfono móvil: {{ clientVehicle.client.cell_phone }} </p>
                                   </mat-card-content>
-                                  <mat-card-actions>
-                                    <a [routerLink]="['/admin/workshop/vehicle/', clientVehicle.vehicle.id]" [queryParams]="{'q_id': clientVehicle.vehicle.id, 'client_id': clientVehicle.client.id}" class="btn btn-primary btn-sm">Mostrar detalles</a>
-                                  </mat-card-actions>
+<!--                                  <mat-card-footer>-->
+                                    <mat-card-actions>
+                                      <a [routerLink]="['/admin/workshop/vehicle/', clientVehicle.vehicle.id]" [queryParams]="{'q_id': clientVehicle.vehicle.id, 'client_id': clientVehicle.client.id}" class="btn btn-primary btn-sm">Mostrar detalles</a>
+                                    </mat-card-actions>
+<!--                                  </mat-card-footer>-->
                                 </mat-card>
                               </div>
                             </ng-container>
@@ -76,7 +80,7 @@
                             <div class="col-12 text-center">
                               <br>
                               <br>
-                              <button mat-raised-button color="primary">Agregar esta Placa</button>
+                              <button mat-raised-button color="primary">Agregar Veh&iacute;culo</button>
                             </div>
                           </ng-container>
                         </div>
