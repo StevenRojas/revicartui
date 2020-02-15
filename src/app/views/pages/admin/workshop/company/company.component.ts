@@ -1,8 +1,10 @@
-import {Component, OnInit, Renderer2} from '@angular/core';
+import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {LayoutConfigService, MenuOptions, OffcanvasOptions} from '../../../../../core/_base/layout';
 import {FormGroup} from '@angular/forms';
 import {ClientVehicleList, Company, CompanyList, CompanyService} from '../../../../../core/admin';
 import {ActivatedRoute, Router} from '@angular/router';
+import {fromEvent} from 'rxjs';
+import {debounceTime, map} from 'rxjs/operators';
 
 @Component({
   selector: 'kt-company',
@@ -10,7 +12,11 @@ import {ActivatedRoute, Router} from '@angular/router';
   styleUrls: ['./company.component.scss']
 })
 export class CompanyComponent implements OnInit {
-
+  @ViewChild('searchInput', {static: true}) searchInput: ElementRef;
+  public icon = 'flaticon2-search-1';
+  public stringSearch: string;
+  public loadingSearch: boolean;
+  public useSVG: boolean;
   public insideTm: any;
   public outsideTm: any;
   public menuCanvasOptions: OffcanvasOptions = {
@@ -50,6 +56,7 @@ export class CompanyComponent implements OnInit {
   // Search Vars
   public query = {q: '', q_id: ''};
   public forceSearch = '';
+
   constructor(
     private render: Renderer2,
     private companyService: CompanyService,
@@ -68,6 +75,33 @@ export class CompanyComponent implements OnInit {
         this.getList(queryParams);
       });
     });
+
+
+
+    fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+      map((event: any) => {
+        return event.target.value;
+      }),
+      // filter(res => res.length > 1),
+      debounceTime(350),
+      // distinctUntilChanged()
+    ).subscribe((text) => {
+      this.pagination.page = 1;
+      this.pagination.limit = 10;
+      this.pagination.query = text;
+      this.companyService.all(this.pagination, true).subscribe(
+        (list: CompanyList) => {
+          if (list) {
+            this.list = list;
+            this.company = this.list.list[0];
+            // if (queryParams.q_id) {
+            //   this.forceSearch = this.client.name;
+            // }
+          }
+        }
+      );
+    });
+
   }
 
   changePage(paginator: any) {
@@ -86,24 +120,24 @@ export class CompanyComponent implements OnInit {
       this.company = company;
     }
   }
-
-  searchCompanyClear(clear: boolean) {
-    this.searchList = null;
-    this.router.navigate(['/admin/workshop/company'],
-      {queryParams: {}});
-    if (this.list.list.length === 1) {
-      this.pagination.queryId = null;
-      this.companyService.all(this.pagination, true).subscribe(
-        (list: CompanyList) => {
-          if (list) {
-            this.list = list;
-            this.company = this.list.list[0];
-          }
-        });
-    } else {
-      this.company = this.list.list[0];
-    }
-  }
+  //
+  // searchCompanyClear(clear: boolean) {
+  //   this.searchList = null;
+  //   this.router.navigate(['/admin/workshop/company'],
+  //     {queryParams: {}});
+  //   if (this.list.list.length === 1) {
+  //     this.pagination.queryId = null;
+  //     this.companyService.all(this.pagination, true).subscribe(
+  //       (list: CompanyList) => {
+  //         if (list) {
+  //           this.list = list;
+  //           this.company = this.list.list[0];
+  //         }
+  //       });
+  //   } else {
+  //     this.company = this.list.list[0];
+  //   }
+  // }
 
   public getList(queryParams) {
     if (queryParams.page) {
@@ -118,7 +152,7 @@ export class CompanyComponent implements OnInit {
           this.list = list;
           this.company = this.list.list[0];
           if (queryParams.q_id) {
-            this.forceSearch = this.company.name;
+            this.stringSearch = this.company.name;
           }
         }
       }
@@ -155,10 +189,16 @@ export class CompanyComponent implements OnInit {
     );
   }
 
+  /**
+   * Search Company Id After Create new Company
+   * @param client
+   */
   searchCompanyId(company: Company) {
     this.router.navigate(['/admin/workshop/company'],
       { queryParams : { q_id : company.id}});
   }
+
+
 
   /**
    * Use for fixed left aside menu, to show menu on mouseenter event.
@@ -205,13 +245,24 @@ export class CompanyComponent implements OnInit {
     }
   }
 
-
-  refreshVehicles() {
-    // this.clientVehicleService.allById(this.clientSelected.id, this.pagination, true).subscribe(
-    //   (vehicles: ClientVehicleList) => {
-    //     this.vehicles = vehicles.list;
-    //   }
-    // );
+  clearSearch(e) {
+    this.searchList = null;
+    this.router.navigate(['/admin/workshop/company'], { queryParams: {} });
+    this.stringSearch = null;
+    // if (this.list.list.length === 1) {
+    this.pagination.queryId = null;
+    this.pagination.page = 1;
+    this.pagination.query = null;
+    this.companyService.all(this.pagination, true).subscribe(
+      (list: CompanyList) => {
+        if (list) {
+          this.list = list;
+          this.company = this.list.list[0];
+        }
+      });
+    // } else {
+    //   this.client = this.list.list[0];
+    // }
   }
 
 }

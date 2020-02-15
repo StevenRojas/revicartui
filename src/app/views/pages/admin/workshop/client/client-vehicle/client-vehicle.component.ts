@@ -19,7 +19,7 @@ export class ClientVehicleComponent implements OnInit, OnChanges {
   ngOnInit() {  }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.clientSelected.id) {
+    if (this.clientSelected && this.clientSelected.id) {
       this.loadVehicles();
     }
   }

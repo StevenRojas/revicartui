@@ -2,13 +2,15 @@
   <div class="kt-container kt-container--fluid kt-grid kt-grid--ver kt_body-workshop-container">
     <div class="ng-star-inserted">
       <div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch" id="kt_body">
-        <div [ngClass]="{'kt-container kt-container--fluid kt-grid kt-grid--ver': true}" [ngStyle]="{'margin-right': '5px'}">
+        <div [ngClass]="{'kt-container kt-container--fluid kt-grid kt-grid--ver': true}"
+             [ngStyle]="{'margin-right': '5px'}">
           <!-- begin:: Aside Left -->
           <!--        <button class="kt-aside-close" id="kt_aside_close_btn"><i class="la la-close"></i></button>-->
           <!-- BEGIN: Aside Menu -->
           <button class="kt-aside-close" id="kt_aside_close_btn"><i class="la la-close"></i></button>
           <div ktOffcanvas [options]="menuCanvasOptions"
-               class="kt-aside kt-aside--fixed kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop" id="kt_aside"
+               class="kt-aside kt-aside--fixed kt-grid__item kt-grid kt-grid--desktop kt-grid--hor-desktop"
+               id="kt_aside"
                [ngStyle]="{'padding-top': '0px'}">
             <div class="kt-aside-menu-wrapper kt-portlet--height-fluid kt-grid__item kt-grid__item--fluid"
                  id="kt_aside_menu_wrapper">
@@ -25,23 +27,56 @@
                   </kt-portlet-header>
                   <!--                Client options::END-->
                   <!--                Client search::START-->
-                  <kt-portlet-client-header [ngStyle]="{'z-index': 1}">
-                    <ng-container ktPortletTools>
-                      <kt-search-client-top-menu
-                        [searchString]="forceSearch"
-                        (emitClientSelected)="searchClientSelected($event)"
-                        (emitClientClear)="searchClientClear($event)"
-                      ></kt-search-client-top-menu>
-                    </ng-container>
-                  </kt-portlet-client-header>
+                  <div class="kt-portlet__head">
+                    <div class="kt-header__topbar-item kt-header__topbar-item--search">
+                      <div class="kt-header__topbar-wrapper mt-3">
+                        <div class="kt-header-toolbar">
+                          <div class="kt-quick-search kt-quick-search--inline kt-quick-search--result-compact" id="kt_quick_search_default">
+                            <div class="kt-quick-search__form">
+                              <div [ngClass]="{'kt-spinner kt-spinner--input kt-spinner--sm kt-spinner--brand kt-spinner--right': loadingSearch}" class="input-group">
+                                <div class="input-group-prepend">
+                                  	<span class="input-group-text">
+                                      <i *ngIf="true" [ngClass]="icon"></i>
+<!--                                      <span *ngIf="useSVG" [inlineSVG]="icon" class="kt-svg-icon"></span>-->
+                                    </span>
+                                </div>
+                                <input #searchInput class="form-control kt-quick-search__input" [(ngModel)]="stringSearch" placeholder="Buscar Cliente..." type="text"/>
+                                <div class="input-group-append">
+                                <span class="input-group-text">
+                                  <i (click)="clearSearch($event)" [hidden]="!stringSearch" [ngStyle]="{'display': 'flex'}" class="la la-close kt-quick-search__close"></i>
+                                </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+
+                  <!--                  <kt-portlet-client-header [ngStyle]="{'z-index': 1}">-->
+                  <!--                    <ng-container ktPortletTools>-->
+                  <!--                      <kt-search-client-top-menu-->
+                  <!--                        [searchString]="forceSearch"-->
+                  <!--                        (emitClientSelected)="searchClientSelected($event)"-->
+                  <!--                        (emitClientClear)="searchClientClear($event)"-->
+                  <!--                      ></kt-search-client-top-menu>-->
+                  <!--                    </ng-container>-->
+                  <!--                  </kt-portlet-client-header>-->
                   <!--                Client search::END-->
                   <!--                Client List::START-->
                   <ng-container *ngIf="list.list">
                     <kt-portlet-client-body>
                       <ng-container>
-                        <kt-widget-client-list [data]="searchList?searchList:list" (clientSelectedEmit)="getClient($event)" [clientSelected]="client?.id" >
+                        <kt-widget-client-list [data]="searchList?searchList:list"
+                                               (clientSelectedEmit)="getClient($event)" [clientSelected]="client?.id">
                           <ng-template #actionTemplate let-item="item">
-                            <span class="kt-widget4__number" [ngStyle]="{'width': '0rem'}" [ngClass]="item.valueColor">1</span>
+                            <span class="kt-widget4__number" [ngStyle]="{'width': '0rem'}"
+                                  [ngClass]="item.valueColor"></span>
                           </ng-template>
                         </kt-widget-client-list>
                       </ng-container>
@@ -95,7 +130,7 @@
               </kt-portlet>
             </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
-              <kt-client-vehicle [clientSelected]="client" ></kt-client-vehicle>
+              <kt-client-vehicle [clientSelected]="client"></kt-client-vehicle>
             </div>
           </div>
         </div>

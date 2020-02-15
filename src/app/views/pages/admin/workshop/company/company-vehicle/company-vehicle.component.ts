@@ -1,5 +1,5 @@
 import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
-import {ClientVehicleList, Company, PhotoService} from '../../../../../../core/admin';
+import {ClientVehicleList, Company, PhotoService, Vehicle} from '../../../../../../core/admin';
 import {CompanyVehicleService} from '../../../../../../core/admin/_services/company-vehicle.service';
 import {CompanyVehicleList} from '../../../../../../core/admin/_models/company-vehicle-list';
 
@@ -21,7 +21,7 @@ export class CompanyVehicleComponent implements OnInit, OnChanges {
   ngOnInit() { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (this.companySelected.id) {
+    if (this.companySelected.id && this.companySelected.id) {
       this.loadVehicles();
     }
   }
@@ -42,4 +42,11 @@ export class CompanyVehicleComponent implements OnInit, OnChanges {
     );
   }
 
+  addVehicle(vehicle) {
+    this.vehicles.unshift([new Vehicle(vehicle)]);
+  }
+
+  getPrimaryPhoto() {
+    // this.photoService.getPrimary()
+  }
 }

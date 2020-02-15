@@ -63,7 +63,7 @@
         <span class="text-black-50 text-center font-weight-bold kt-font-lg position-relative d-block"> {{ item.vehicle.license_plate }}</span>
       </div>
       <div class="kt-widget5__section">
-        <a href="javascript:;" class="kt-widget5__title">{{item.vehicle.brand.name}} {{item.vehicle.model.name}} {{item.vehicle.year}} ({{item.vehicle.color}})</a>
+        <a href="javascript:;" class="kt-widget5__title">{{item.vehicle.brand.name}} {{item.vehicle.model.name}} {{item.vehicle.year}} <span *ngIf="item.vehicle.color">({{item.vehicle.color}})</span></a>
 <!--        <ng-container *ngIf="item?.client">-->
 <!--          <p class="kt-widget5__desc">{{item.client.name}}</p>-->
 <!--        </ng-container>-->

@@ -1,8 +1,10 @@
-import {Component, OnInit, Renderer2} from '@angular/core';
+import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {Client, ClientList, ClientService, CompanyList} from '../../../../../core/admin';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MenuOptions, OffcanvasOptions, LayoutConfigService} from '../../../../../core/_base/layout';
 import {FormGroup} from '@angular/forms';
+import {fromEvent} from 'rxjs';
+import {debounceTime, filter, map} from 'rxjs/operators';
 
 @Component({
   selector: 'kt-client',
@@ -10,7 +12,11 @@ import {FormGroup} from '@angular/forms';
   styleUrls: ['./client.component.scss']
 })
 export class ClientComponent implements OnInit {
-
+  @ViewChild('searchInput', {static: true}) searchInput: ElementRef;
+  public icon = 'flaticon2-search-1';
+  public stringSearch: string;
+  public loadingSearch: boolean;
+  public useSVG: boolean;
   public insideTm: any;
   public outsideTm: any;
   public menuCanvasOptions: OffcanvasOptions = {
@@ -69,6 +75,33 @@ export class ClientComponent implements OnInit {
         this.getList(queryParams);
       });
     });
+
+
+
+    fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
+      map((event: any) => {
+        return event.target.value;
+      }),
+      // filter(res => res.length > 1),
+      debounceTime(350),
+      // distinctUntilChanged()
+    ).subscribe((text) => {
+      this.pagination.page = 1;
+      this.pagination.limit = 10;
+      this.pagination.query = text;
+      this.clientService.all(this.pagination).subscribe(
+        (list: ClientList) => {
+          if (list) {
+            this.list = list;
+            this.client = this.list.list[0];
+            // if (queryParams.q_id) {
+            //   this.forceSearch = this.client.name;
+            // }
+          }
+        }
+      );
+    });
+
   }
 
   changePage(paginator: any) {
@@ -88,23 +121,23 @@ export class ClientComponent implements OnInit {
     }
   }
 
-  searchClientClear(clear: boolean) {
-    this.searchList = null;
-    this.router.navigate(['/admin/workshop/client'],
-      {queryParams: {}});
-    if (this.list.list.length === 1) {
-      this.pagination.queryId = null;
-      this.clientService.all(this.pagination).subscribe(
-        (list: ClientList) => {
-          if (list) {
-            this.list = list;
-            this.client = this.list.list[0];
-          }
-        });
-    } else {
-      this.client = this.list.list[0];
-    }
-  }
+  // searchClientClear(clear: boolean) {
+  //   this.searchList = null;
+  //   this.router.navigate(['/admin/workshop/client'],
+  //     {queryParams: {}});
+  //   if (this.list.list.length === 1) {
+  //     this.pagination.queryId = null;
+  //     this.clientService.all(this.pagination).subscribe(
+  //       (list: ClientList) => {
+  //         if (list) {
+  //           this.list = list;
+  //           this.client = this.list.list[0];
+  //         }
+  //       });
+  //   } else {
+  //     this.client = this.list.list[0];
+  //   }
+  // }
   public getList(queryParams) {
     if (queryParams.page) {
       this.pagination.page = queryParams.page;
@@ -118,7 +151,7 @@ export class ClientComponent implements OnInit {
           this.list = list;
           this.client = this.list.list[0];
           if (queryParams.q_id) {
-            this.forceSearch = this.client.name;
+            this.stringSearch = this.client.name;
           }
         }
       }
@@ -155,7 +188,13 @@ export class ClientComponent implements OnInit {
     );
   }
 
+  /**
+   * Search Client Id After Create new Client
+   * @param client
+   */
   searchClientId(client: Client) {
+    // console.log(client)
+    // this.stringSearch = client.name;
     this.router.navigate(['/admin/workshop/client'],
       { queryParams : { q_id : client.id}});
   }
@@ -205,6 +244,26 @@ export class ClientComponent implements OnInit {
         }
       }, 100);
     }
+  }
+
+  clearSearch(e) {
+    this.searchList = null;
+    this.router.navigate(['/admin/workshop/client'], { queryParams: {} });
+    this.stringSearch = null;
+    // if (this.list.list.length === 1) {
+    this.pagination.queryId = null;
+    this.pagination.page = 1;
+    this.pagination.query = null;
+    this.clientService.all(this.pagination).subscribe(
+      (list: ClientList) => {
+        if (list) {
+          this.list = list;
+          this.client = this.list.list[0];
+        }
+      });
+    // } else {
+    //   this.client = this.list.list[0];
+    // }
   }
 
 }

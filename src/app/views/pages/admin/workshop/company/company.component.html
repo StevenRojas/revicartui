@@ -23,19 +23,49 @@
                       <kt-context-menu-company></kt-context-menu-company>
                     </ng-container>
                   </kt-portlet-header>
-                  <!--                Company options::END-->
-                  <!--                Company search::START-->
-                  <kt-portlet-client-header [ngStyle]="{'z-index': 1}">
-                    <ng-container ktPortletTools>
-                      <kt-search-company-top-menu
-                        [searchString]="forceSearch"
-                        (emitCompanySelected)="searchCompanySelected($event)"
-                        (emitCompanyClear)="searchCompanyClear($event)"
-                      ></kt-search-company-top-menu>
-                    </ng-container>
-                  </kt-portlet-client-header>
-                  <!--                Company search::END-->
-                  <!--                Company List::START-->
+                  <!--                Client options::END-->
+                  <!--                Client search::START-->
+                  <div class="kt-portlet__head">
+                    <div class="kt-header__topbar-item kt-header__topbar-item--search">
+                      <div class="kt-header__topbar-wrapper mt-3">
+                        <div class="kt-header-toolbar">
+                          <div class="kt-quick-search kt-quick-search--inline kt-quick-search--result-compact" id="kt_quick_search_default">
+                            <div class="kt-quick-search__form">
+                              <div [ngClass]="{'kt-spinner kt-spinner--input kt-spinner--sm kt-spinner--brand kt-spinner--right': loadingSearch}" class="input-group">
+                                <div class="input-group-prepend">
+                                  	<span class="input-group-text">
+                                      <i *ngIf="true" [ngClass]="icon"></i>
+                                    </span>
+                                </div>
+                                <input #searchInput class="form-control kt-quick-search__input" [(ngModel)]="stringSearch" placeholder="Buscar Empresa..." type="text"/>
+                                <div class="input-group-append">
+                                <span class="input-group-text">
+                                  <i (click)="clearSearch($event)" [hidden]="!stringSearch" [ngStyle]="{'display': 'flex'}" class="la la-close kt-quick-search__close"></i>
+                                </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+
+                  <!--                  <kt-portlet-client-header [ngStyle]="{'z-index': 1}">-->
+                  <!--                    <ng-container ktPortletTools>-->
+                  <!--                      <kt-search-client-top-menu-->
+                  <!--                        [searchString]="forceSearch"-->
+                  <!--                        (emitClientSelected)="searchClientSelected($event)"-->
+                  <!--                        (emitClientClear)="searchClientClear($event)"-->
+                  <!--                      ></kt-search-client-top-menu>-->
+                  <!--                    </ng-container>-->
+                  <!--                  </kt-portlet-client-header>-->
+                  <!--                Client search::END-->
+                  <!--                Client List::START-->
                   <ng-container *ngIf="list.list">
                     <kt-portlet-client-body>
                       <ng-container>
