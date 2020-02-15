@@ -25,58 +25,39 @@
                           </mat-form-field>
                           <div class="row">
 
-                            <ng-container *ngFor="let clientVehicle of resultClientVehicle">
+                            <ng-container *ngFor="let clientVehicle of resultVehicle">
                               <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
                                 <mat-card class="example-card h-100">
                                   <mat-card-header>
-                                    <mat-card-title>{{ clientVehicle.vehicle.license_plate }}</mat-card-title>
-                                    <mat-card-subtitle>Kilometraje: {{ clientVehicle.vehicle.mileage }}</mat-card-subtitle>
+                                    <mat-card-title>{{ clientVehicle.license_plate }}</mat-card-title>
+                                    <mat-card-subtitle>Kilometraje: {{ clientVehicle.mileage }}</mat-card-subtitle>
                                   </mat-card-header>
-                                  <img class="reception-image-car" mat-card-image appImagePrimary [photos]="clientVehicle.vehicle.photos">
+                                  <img class="reception-image-car" mat-card-image appImagePrimary [photos]="clientVehicle.photos">
                                   <mat-card-content>
-                                    <p> {{ clientVehicle.client.name }} </p>
-                                    <p> Email: {{ clientVehicle.client.email }} </p>
-                                    <p> Teléfono móvil: {{ clientVehicle.client.cell_phone }} </p>
+<!--                                    <p> {{ clientVehicle.client.name }} </p>-->
+<!--                                    <p> Email: {{ clientVehicle.client.email }} </p>-->
+<!--                                    <p> Teléfono móvil: {{ clientVehicle.client.cell_phone }} </p>-->
                                   </mat-card-content>
 <!--                                  <mat-card-footer>-->
                                     <mat-card-actions>
-                                      <a [routerLink]="['/admin/workshop/vehicle/', clientVehicle.vehicle.id]" [queryParams]="{'q_id': clientVehicle.vehicle.id, 'client_id': clientVehicle.client.id}" class="btn btn-primary btn-sm">Mostrar detalles</a>
+                                      <a [routerLink]="['/admin/workshop/vehicle/', clientVehicle.id]" [queryParams]="{'q_id': clientVehicle.id}" class="btn btn-primary btn-sm">Mostrar detalles</a>
                                     </mat-card-actions>
 <!--                                  </mat-card-footer>-->
                                 </mat-card>
                               </div>
                             </ng-container>
 
-                            <ng-container *ngFor="let companyVehicle of resultCompanyVehicle">
-                              <div class="col-12 col-sm-6 col-md-6 col-lg-4 col-xl-3 mt-3">
-                                <mat-card class="example-card h-100">
-                                  <mat-card-header>
-                                    <div mat-card-avatar class="example-header-image"></div>
-                                    <mat-card-title>{{ companyVehicle.vehicle.license_plate }}</mat-card-title>
-                                    <mat-card-subtitle>Kilometraje: {{ companyVehicle.vehicle.millage }}</mat-card-subtitle>
-                                  </mat-card-header>
-                                  <img mat-card-image appImagePrimary [photos]="companyVehicle.vehicle.photos">
-                                  <mat-card-content>
-                                    <p> {{ companyVehicle.company.name }} </p>
-                                    <p> Email: {{ companyVehicle.company.email }} </p>
-                                    <p> Teléfono móvil: {{ companyVehicle.company.phone }} </p>
-                                  </mat-card-content>
-                                  <mat-card-actions>
-                                    <a [routerLink]="['/admin/workshop/vehicle/', companyVehicle.vehicle.id]" [queryParams]="{'q_id': companyVehicle.vehicle.id, 'company_id': companyVehicle.company.id}" class="btn btn-primary btn-sm">Mostrar detales</a>
-                                  </mat-card-actions>
-                                </mat-card>
-                              </div>
-                            </ng-container>
+
 
                           </div>
-                          <ng-container *ngIf="messageClientVehicles && messageCompanyVehicles">
+                          <ng-container *ngIf="messageVehicles">
                             <div>
                               <div class="col-12 text-center">
-                                {{ messageClientVehicles }}
+                                {{ messageVehicles }}
                               </div>
                             </div>
                           </ng-container>
-                          <ng-container *ngIf="!notFoundClientVehicle && !notFoundCompanyVehicle">
+                          <ng-container *ngIf="!notFoundVehicle">
                             <div class="col-12 text-center">
                               <br>
                               <br>

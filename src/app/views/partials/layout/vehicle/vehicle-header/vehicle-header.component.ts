@@ -107,12 +107,28 @@ export class VehicleHeaderComponent implements OnInit {
     const controls = this.vehicleAddFormControl.controls;
     // check form
     if (this.vehicleAddFormControl.invalid) {
+
       Object.keys(controls).forEach(controlName =>
-        controls[controlName].markAsTouched()
+          controls[controlName].markAsTouched()
       );
       return false;
     }
-    const response = this.vehicleService.post(this.vehicleAddFormControl.getRawValue());
+    let postObj = this.vehicleAddFormControl.getRawValue();
+    console.log(postObj)
+    Object.keys(postObj).forEach(controlName => {
+      if(['brand', 'model', 'subtype', 'transmission', 'gas_type', 'use_type'].indexOf(controlName) >= 0) {
+        if(postObj[controlName]['id'] == undefined || postObj[controlName]['id'] == null) {
+          delete postObj[controlName];
+        }
+      }
+      if(['year'].indexOf(controlName) >= 0) {
+        if(typeof postObj[controlName] != 'number') {
+          delete postObj[controlName];
+        }
+      }
+    });
+    console.log(postObj)
+    const response = this.vehicleService.post(postObj);
     return new Promise((resolve, reject) => {
       response.subscribe(
         (vehicle) => {
@@ -191,29 +207,17 @@ export class VehicleHeaderComponent implements OnInit {
       ],
       year: ['', Validators.compose([])
       ],
-      brand: ['', Validators.compose([
-        Validators.required
-      ]),
+      brand: ['', Validators.compose([]),
       ],
-      model: ['', Validators.compose([
-        Validators.required
-      ]),
+      model: ['', Validators.compose([]),
       ],
-      subtype: ['', Validators.compose([
-        Validators.required
-      ]),
+      subtype: ['', Validators.compose([]),
       ],
-      transmission: ['', Validators.compose([
-        Validators.required
-      ]),
+      transmission: ['', Validators.compose([]),
       ],
-      gas_type: ['', Validators.compose([
-        Validators.required
-      ]),
+      gas_type: ['', Validators.compose([]),
       ],
-      use_type: ['', Validators.compose([
-        Validators.required
-      ]),
+      use_type: ['', Validators.compose([]),
       ]
     });
 

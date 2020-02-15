@@ -10,10 +10,10 @@ export class LayoutConfig {
         'background-image': './assets/media/misc/bg-1.jpg',
       },
       logo: {
-        dark: './assets/media/logos/logo-light.svg',
-        light: './assets/media/logos/logo-dark.png',
-        brand: './assets/media/logos/logo-light.png',
-        green: './assets/media/logos/logo-light.png',
+        dark: './assets/media/logos/revicart-logo.png',
+        light: './assets/media/logos/revicart-logo.png',
+        brand: './assets/media/logos/revicart-logo.png',
+        green: './assets/media/logos/revicart-logo.png',
       },
     },
     // == Page Splash Screen loading
