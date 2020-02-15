@@ -83,7 +83,7 @@
 
     <div class="kt-widget5__content">
       <div class="kt-widget5__stats text-center">
-        <span class="kt-widget5__sales">{{item.updated_at | dateFormat: 'YYYY-MM-DD, h:mm:ss'}}</span>
+        <span class="kt-widget5__sales">{{item.updated_at | dateFormat: 'LL'}}</span>
         <ng-container *ngIf="item.vehicle_reception_status">
           <span class="kt-widget5__number">{{item.vehicle_reception_status.name}}</span>
         </ng-container>

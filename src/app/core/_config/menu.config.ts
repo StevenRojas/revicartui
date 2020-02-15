@@ -12,7 +12,7 @@ export class MenuConfig {
           toggle: 'click',
           submenu: [
             {
-              title: 'Reception',
+              title: 'Recepción',
               page: '/admin/workshop/reception'
             },
             {
@@ -65,7 +65,7 @@ export class MenuConfig {
           // toggle: 'click',
           submenu: [
             {
-              title: 'Reception',
+              title: 'Recepción',
               page: '/admin/workshop/reception'
             },
             {

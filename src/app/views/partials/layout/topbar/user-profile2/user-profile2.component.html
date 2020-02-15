@@ -1,7 +1,7 @@
 <div *ngIf="user$ | async as _user" class="kt-header__topbar-item kt-header__topbar-item--user" ngbDropdown
      placement="bottom-right">
   <div class="kt-header__topbar-wrapper" ngbDropdownToggle>
-    <span *ngIf="greeting" class="kt-header__topbar-welcome">Hi,</span>
+    <span *ngIf="greeting" class="kt-header__topbar-welcome">Bienvenido,</span>
     <span *ngIf="greeting" class="kt-header__topbar-username">{{_user.name}}</span>
     <span *ngIf="badge" class="kt-header__topbar-icon"><b>{{_user.name|firstLetter}}</b></span>
     <img *ngIf="avatar" src="./assets/media/users/default.jpg" alt="Pic">

@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import { AuthService, User, AuthNoticeService } from 'src/app/core/auth';
 import { LocalStoreService } from 'src/app/core/_base/crud';
 import { LoginService } from 'src/app/core/auth/_services';
+import {environment} from '../../../../../environments/environment';
 
 @Component({
   selector: 'app-auth-code',
@@ -31,7 +32,10 @@ export class AuthCodeComponent implements OnInit {
           this.loginService.login(queryParams.code, 'google').subscribe(
             (result) => {
               if (result.token) {
-                this.localStoreService.setItem('token', result.token);
+                this.localStoreService.setItem(environment.TOKEN_NAME, result.token);
+                this.localStoreService.setItem('user_name', result.user_name);
+                this.localStoreService.setItem('user_email', result.user_email);
+                this.localStoreService.setItem('user_id', result.user_id);
                 this.authService.setUser(result.token);
                 // this.user.token = result.token;
                 this.router.navigate(['admin/workshop/reception']);

@@ -6,6 +6,7 @@ import {from, Observable, of} from 'rxjs';
 // State
 import {User} from '../../../../../core/auth';
 import {LoginService} from '../../../../../core/auth/_services';
+import {LocalStoreService} from '../../../../../core/_base/crud';
 
 // import {currentUser, User} from '../../../../../core/auth';
 
@@ -28,7 +29,8 @@ export class UserProfile2Component implements OnInit {
    * @param store: Store<AppState>
    */
   constructor(
-    private loginService: LoginService
+    private loginService: LoginService,
+    private localStorage: LocalStoreService
   ) {
 
   }
@@ -54,7 +56,8 @@ export class UserProfile2Component implements OnInit {
 
   getUser(): Observable<User> {
     const user = new User();
-    user.default();
+    user.name = this.localStorage.getItem('user_name');
+    user.email = this.localStorage.getItem('user_email');
     return of(user);
   }
 }

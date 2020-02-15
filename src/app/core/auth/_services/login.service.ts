@@ -70,6 +70,7 @@ export class LoginService {
     this.token = null;
     this.isLogged = false;
     localStorage.removeItem(environment.TOKEN_NAME);
+    localStorage.clear();
     this.router.navigate(['/login']);
   }
 
