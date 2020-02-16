@@ -1,12 +1,12 @@
 <div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch kt_body_workshop">
   <!--  <div class="kt-container kt-container&#45;&#45;fluid kt-grid kt-grid&#45;&#45;ver kt_body-workshop-container">-->
   <div class="row">
-    <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+    <div class="col-12 col-12 col-sm-12 col-md-12 col-lg-12">
       <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" [ngStyle]="">
         <div ktContentAnimate class="kt-container kt-grid__item kt-grid__item--fluid kt-container--fluid">
           <div class="">
             <div class="row">
-              <div class="col-sm-12 col-md-4 col-4">
+              <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3">
                 <kt-portlet [class]="'kt-portlet--height-fluid'">
                   <kt-portlet-body [class]="'p-0 mb-0 '">
                     <div class="kt-widget26 p-4">
@@ -50,14 +50,14 @@
                       </div>
                       <div class="kt-widget26__content">
                         <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent" (click)="openPhotoModal($event)">Cambiar Foto</button></span>
-                        <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent" (click)="updateClient(vehicle)" >Cambiar Dueño</button></span>
+                        <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent" (click)="updateOwner($event)" >Cambiar Dueño</button></span>
                         <span class="kt-widget26__desc"><i class="flaticon2-trash"></i> <button mat-button color="warn" (click)="openDeleteVehicleModal($event)" >Eliminar vehiculo</button></span>
                       </div>
                     </div>
                   </kt-portlet-body>
                 </kt-portlet>
               </div>
-              <div class="col-sm-12 col-md-8 col-8">
+              <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9">
                 <kt-portlet [class]="'kt-portlet--height-fluid'">
                   <kt-portlet-body [class]="'p-5 mb-3 '">
                     <mat-tab-group  [selectedIndex]=0>
@@ -121,3 +121,81 @@
     Realmente desea eliminar el vehículo con Placa número: {{vehicle.license_plate}}?
   </div>
 </swal>
+
+<swal
+  #changeOwnerModal
+  [swalOptions]="changeOwnerModalOption"
+>
+  <div *swalPortal >
+    Este veh&iacute;culo <b>"{{vehicle.license_plate}}"</b> ahora pertenecer&aacute;
+    <span *ngIf="ownerSelected && ownerSelected.type">
+      <span *ngIf="ownerSelected.type=='company'">
+        <span *ngIf="ownerSelected.owner.name"> a la compañia:<b>{{ ownerSelected.owner.name }}</b></span>
+      </span>
+      <span *ngIf="ownerSelected.type=='client'">
+        <span *ngIf="ownerSelected.owner.name"> al cliente <b>{{ ownerSelected.owner.name }}</b></span>
+      </span>
+    </span>
+    <span *ngIf="!ownerSelected"> ... </span>
+    <div class="kt-portlet__head">
+      <div class="kt-header__topbar-item kt-header__topbar-item--search">
+        <div class="kt-header__topbar-wrapper mt-3">
+          <div class="kt-header-toolbar">
+            <div class="kt-quick-search kt-quick-search--inline kt-quick-search--result-compact" id="kt_quick_search_default">
+              <div class="kt-quick-search__form">
+                <div [ngClass]="{'kt-spinner kt-spinner--input kt-spinner--sm kt-spinner--brand kt-spinner--right': loadingOwnerSearch}" class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">
+                      <i *ngIf="true" [ngClass]="iconOwner"></i>
+                    </span>
+                  </div>
+                  <input id="search_input" class="form-control kt-quick-search__input" [(ngModel)]="stringOwnerSearch" placeholder="Buscar Cliente o Empresa..." type="text" (keyup)="findOwner($event)"/>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i (click)="clearOwnerSearch($event)" [hidden]="!stringOwnerSearch" [ngStyle]="{'display': 'flex'}" class="la la-close kt-quick-search__close"></i>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="ownerSelectedError">
+      <div class="col-12">
+        <p class="text-danger">
+          {{ ownerSelectedError }}
+        </p>
+      </div>
+    </div>
+    <mat-radio-group>
+      <div class="m-2 p-1">
+        <ng-container *ngIf="clientList && clientList.length != 0">
+          <div class="row">
+            <div class="col-12 kt-align-left mb-2">
+              <h5>Clientes:</h5>
+            </div>
+            <div class="col-12 kt-align-left" *ngFor="let client of clientList">
+              <mat-radio-button (change)="setLastOwner(client, 'client')" name="owner" value="client_{{client.id}}"><span>{{ client.name }}</span> <span *ngIf="client.email"><{{ client.email }}></span></mat-radio-button>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="companyList && companyList.length != 0">
+          <div class="row">
+            <div class="col-12 kt-align-left mb-2 mt-3">
+              <h5>Compañias:</h5>
+            </div>
+            <div class="col-12 kt-align-left" *ngFor="let company of companyList">
+              <mat-radio-button (change)="setLastOwner(company, 'company')"  name="owner" value="company_{{company.id}}"><span *ngIf="company.parent" >(Sucursal) </span><span>{{ company.name }}</span> <span *ngIf="company.email"><{{ company.email }}></span></mat-radio-button>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="companyList && clientList && companyList.length == 0 && clientList.length == 0">
+          <p>Sin resultados</p>
+        </ng-container>
+      </div>
+    </mat-radio-group>
+  </div>
+</swal>
+

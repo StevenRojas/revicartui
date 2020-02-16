@@ -16,7 +16,6 @@ export class ClientComponent implements OnInit {
   public icon = 'flaticon2-search-1';
   public stringSearch: string;
   public loadingSearch: boolean;
-  public useSVG: boolean;
   public insideTm: any;
   public outsideTm: any;
   public menuCanvasOptions: OffcanvasOptions = {
@@ -261,9 +260,6 @@ export class ClientComponent implements OnInit {
           this.client = this.list.list[0];
         }
       });
-    // } else {
-    //   this.client = this.list.list[0];
-    // }
   }
 
 }

@@ -1,4 +1,4 @@
-import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {LayoutConfigService, MenuOptions, OffcanvasOptions} from '../../../../../../core/_base/layout';
 import {FormGroup} from '@angular/forms';
 import {
@@ -11,13 +11,15 @@ import {
   VehicleList,
   VehicleService
 } from '../../../../../../core/admin';
-import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
+import {BeforeOpenEvent, SwalComponent} from '@sweetalert2/ngx-sweetalert2';
 import {ActivatedRoute, Router} from '@angular/router';
 import * as moment from 'moment';
 import {environment} from '../../../../../../../environments/environment';
 import {SweetAlertOptions} from "sweetalert2";
 import {CompanyVehicleService} from '../../../../../../core/admin/_services/company-vehicle.service';
 import {ClientVehicleService} from '../../../../../../core/admin/_services/client-vehicle.service';
+import {fromEvent} from 'rxjs';
+import {debounceTime, map} from 'rxjs/operators';
 
 @Component({
   selector: 'kt-vehicle-resume',
@@ -38,6 +40,23 @@ export class VehicleResumeComponent implements OnInit {
   @ViewChild('deleteModal', {static: false}) private deleteModal: SwalComponent;
   public deleteModalOption: SweetAlertOptions;
 
+  @ViewChild('changeOwnerModal', {static: false}) private changeOwnerModal: SwalComponent;
+  public changeOwnerModalOption: SweetAlertOptions;
+
+  /**
+   * Search owner vars
+   */
+  public stringOwnerSearch: string;
+  public iconOwner = 'flaticon2-search-1';
+  public loadingOwnerSearch: boolean;
+  public setTimeoutSearch: any;
+  public ownerSelected: any;
+  public ownerSelectedError: string;
+  /**
+   * Search Lists
+   */
+  public clientList: any[];
+  public companyList: any[];
 
   public insideTm: any;
   public outsideTm: any;
@@ -91,7 +110,6 @@ export class VehicleResumeComponent implements OnInit {
   public pagination = { page: 1, query: undefined, queryId: undefined, limit: 10, sort: 'vehicle.id'};
   // Search Vars
   public query = { q: '', q_id: '' };
-  // @ViewChild('historyModal', {static: false}) private historyModal: SwalComponent;
   public works = [];
   // public client: Client;
   // public company: Company;
@@ -118,42 +136,12 @@ export class VehicleResumeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.addPhotoModalOption = {
-      title: 'Cambiar Foto',
-      showCancelButton: true,
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#5d78ff',
-      confirmButtonText: 'Cambiar',
-      confirmButtonClass: 'btn btn-primary btn-elevate',
-      cancelButtonClass: 'btn btn-secondary btn-elevate',
-      showLoaderOnConfirm: true,
-      focusCancel: true,
-      preConfirm: () =>  this.updatePhoto()
-    };
-    this.deleteModalOption = {
-      title: 'Eliminar Vehiculo',
-      showCancelButton: true,
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#5d78ff',
-      confirmButtonText: 'Eliminar',
-      confirmButtonClass: 'btn btn-danger btn-elevate',
-      cancelButtonClass: 'btn btn-secondary btn-elevate',
-      showLoaderOnConfirm: true,
-      focusCancel: true,
-      preConfirm: () =>  this.deleteVehicle()
-    };
-
+    this.loadConfigurationModals();
     this.route.params.subscribe(params => {
       this.activatedRoute.queryParams.subscribe(queryParams => {
         if (queryParams.page) {
           this.pagination.page = queryParams.page;
         }
-        // if (queryParams.company_id) {
-        //   this.getCompany(queryParams.company_id);
-        // }
-        // if (queryParams.client_id) {
-        //   this.getClient(queryParams.client_id);
-        // }
         if (queryParams.q_id) { // id car
           this.pagination.queryId = queryParams.q_id;
           this.getSingleVehicle(queryParams.q_id);
@@ -382,9 +370,21 @@ export class VehicleResumeComponent implements OnInit {
     }
   }
 
-  public updateClient(vehicle: Vehicle) {
-
+  public updateOwner(event: any) {
+    this.changeOwnerModal.fire().then((result) => {
+      if (result.value) {
+        // After press "Ok" button
+        this.pagination.queryId = this.vehicle.id;
+        this.getSingleVehicle(this.vehicle.id);
+        this.getClientOwner(this.vehicle.id);
+        this.getCompanyOwner(this.vehicle.id);
+      } else {
+        this.lastFileAdd = null;
+        // After press "Cancel" button or leave from modal
+      }
+    });
   }
+
   public deleteVehicle() {
     if (this.vehicle) {
       let response = this.vehicleService.delete(this.vehicle.id); // Create new
@@ -400,6 +400,58 @@ export class VehicleResumeComponent implements OnInit {
       this.photoError = 'El vehículo seleccionado es inválido';
       return false;
     }
+  }
+
+  public changeOwner() {
+    if(!this.ownerSelected) {
+      this.ownerSelectedError = 'Necesita Seleccionar un nuevo propietario';
+      return false;
+    }
+    if (this.ownerSelected.type == 'client') {
+      let response = this.clientVehicleService.post(
+        {
+          client: {
+            id: this.ownerSelected.owner.id
+          },
+          vehicle: {
+            id: this.vehicle.id
+          }
+        }
+      ); // Create new
+      return new Promise((resolve, reject) => {
+        response.subscribe(
+          (response) => {
+            // this.router.navigate(['admin/workshop/vehicle/' + this.vehicle.id], { queryParams: {'q_id': this.vehicle.id}})
+            resolve();
+          },
+          error => reject()
+        )
+      });
+    }
+
+    if (this.ownerSelected.type == 'company') {
+      let response = this.companyVehicleService.post(
+        {
+          company: {
+            id: this.ownerSelected.owner.id
+          },
+          vehicle: {
+            id: this.vehicle.id
+          }
+        }
+      ); // Create new
+      return new Promise((resolve, reject) => {
+        response.subscribe(
+          (response) => {
+            // this.router.navigate(['admin/workshop/vehicle/' + this.vehicle.id], { queryParams: {'q_id': this.vehicle.id}})
+            resolve();
+          },
+          error => reject()
+        )
+      });
+    }
+    this.ownerSelectedError = 'Propietario Inválido';
+    return false;
   }
 
   /**
@@ -457,8 +509,100 @@ export class VehicleResumeComponent implements OnInit {
       this.lastFileAdd = request.responseText;
       load(request.responseText);
     } else {
-      error('The service isn`t available');
+      error('El servicio no esta Disponible en este momento');
     }
   }
 
+  private loadConfigurationModals() {
+    this.addPhotoModalOption = {
+      title: 'Cambiar Foto',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#5d78ff',
+      confirmButtonText: 'Cambiar',
+      confirmButtonClass: 'btn btn-primary btn-elevate',
+      cancelButtonClass: 'btn btn-secondary btn-elevate',
+      showLoaderOnConfirm: true,
+      focusCancel: true,
+      preConfirm: () =>  this.updatePhoto()
+    };
+    this.deleteModalOption = {
+      title: 'Eliminar Vehiculo',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#6a6cf8',
+      confirmButtonText: 'Eliminar',
+      confirmButtonClass: 'btn btn-danger btn-elevate',
+      cancelButtonClass: 'btn btn-secondary btn-elevate',
+      showLoaderOnConfirm: true,
+      focusCancel: true,
+      preConfirm: () =>  this.deleteVehicle()
+    };
+
+    this.changeOwnerModalOption = {
+      title: 'Cambiar de Propietario',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#5d78ff',
+      confirmButtonText: 'Cambiar',
+      confirmButtonClass: 'btn btn-primary btn-elevate',
+      cancelButtonClass: 'btn btn-secondary btn-elevate',
+      showLoaderOnConfirm: true,
+      focusCancel: true,
+      preConfirm: () =>  this.changeOwner()
+    };
+
+
+  }
+
+  public clearOwnerSearch($event: MouseEvent) {
+    clearTimeout(this.setTimeoutSearch);
+    this.clientList = [];
+    this.companyList = [];
+    this.stringOwnerSearch = null;
+    this.ownerSelected = null;
+    this.ownerSelectedError = null;
+    return;
+  }
+
+  findOwner(event: any) {
+    const text  = event.target.value;
+    this.ownerSelected = null;
+    this.ownerSelectedError = null;
+    if(!text || text == "") {
+      clearTimeout(this.setTimeoutSearch);
+      this.clientList = [];
+      this.companyList = [];
+      return;
+    }
+
+    if(this.setTimeoutSearch) {
+      clearTimeout(this.setTimeoutSearch);
+    }
+    this.setTimeoutSearch = setTimeout(
+      () => {
+        let pagination = { page: 1, query: text, queryId: undefined, limit: 10, sort: 'name'};
+
+        this.clientService.all(pagination).subscribe(
+          (clients) => {
+            this.clientList = clients.list;
+          }
+        );
+
+        this.companyService.all(pagination, false).subscribe(
+          (companies) => {
+            this.companyList = companies.list;
+          }
+        );
+      }, 500
+    );
+
+  }
+
+  setLastOwner(owner: any, type: string) {
+    this.ownerSelected = {
+      'owner': owner,
+      'type': type
+    };
+  }
 }

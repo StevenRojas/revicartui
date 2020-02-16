@@ -21,7 +21,7 @@ export class VehicleListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-   this.loadList();
+    this.loadList();
     fromEvent(this.searchInput.nativeElement, 'keyup').pipe(
       map((event: any) => {
         return event.target.value;
@@ -44,18 +44,6 @@ export class VehicleListComponent implements OnInit {
         this.tempList = vehicles;
       }
     );
-    // this.list = new VehicleList();
-    // this.list.clear();
-    // this.vehicleService.allByOwner(this.pagination, true, this.ownerSelected).subscribe(
-    //   (vehicles: VehicleList) => {
-    //     for (let count = 0; count < vehicles.list.length; count++) {
-    //       vehicles.list[count].work_todo = [];
-    //       vehicles.list[count].work_status = {};
-    //       vehicles.list[count].work_status.status = 'En proceso';
-    //     }
-    //     this.list = vehicles;
-    //   }
-    // );
   }
 
   clearSearch() {
