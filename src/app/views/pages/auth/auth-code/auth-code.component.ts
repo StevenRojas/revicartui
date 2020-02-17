@@ -46,7 +46,7 @@ export class AuthCodeComponent implements OnInit {
               //   }, 4000);
             },
             error => {
-              this.errorMsg = 'Credenciales Inv&acute;lidas';
+              this.errorMsg = 'Credenciales Inv&aacute;lidas';
               this.authNoticeService.setNotice(this.errorMsg, 'info');
               setTimeout(() => {
                 this.router.navigate(['/auth/login']);
