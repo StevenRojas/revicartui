@@ -17,7 +17,7 @@ import {
   MatExpansionModule,
   MatFormFieldModule,
   MatIconModule,
-  MatInputModule,
+  MatInputModule, MatMenuModule,
   MatPaginatorModule,
   MatRadioModule,
   MatSelectModule,
@@ -123,7 +123,8 @@ registerPlugin(FilePondPluginImageExifOrientation);
     FormsModule,
     FilePondModule,
     MatRadioModule,
-    MatCardModule
+    MatCardModule,
+    MatMenuModule
   ],
   entryComponents: [
     DialogCarPhotoDialog

@@ -21,12 +21,55 @@
       <div class="kt-subheader kt-grid__item">
         <div class="kt-container">
           <div class="kt-subheader__main w-100">
-            <mat-form-field class="search-form-field w-100">
-              <input #searchInput matInput type="text" class="w-100" placeholder="Ingrese el número de placa" [(ngModel)]="stringSearh"/>
-              <button mat-button *ngIf="stringSearh" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
-                <mat-icon>close</mat-icon>
-              </button>
-            </mat-form-field>
+            <div class="row w-100">
+              <div class="col-10">
+                <mat-form-field class="search-form-field w-100">
+                  <input #searchInput matInput type="text" class="w-100" placeholder="Ingrese el número de placa" [(ngModel)]="stringSearh"/>
+                  <button mat-button *ngIf="stringSearh" matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-form-field>
+              </div>
+              <div class="col-2 kt-align-right">
+
+                <button mat-button [matMenuTriggerFor]="options"><i class="fa fa-cog"></i></button>
+                <mat-menu #options="matMenu">
+                  <button mat-menu-item [matMenuTriggerFor]="order">Ordenar</button>
+                  <button mat-menu-item [matMenuTriggerFor]="filter">Filtrar</button>
+                </mat-menu>
+                <mat-menu #order="matMenu">
+                  <button mat-menu-item [matMenuTriggerFor]="order_license_plate">N&uacute;mero de placa</button>
+<!--                  <button mat-menu-item [matMenuTriggerFor]="order_status">Estado</button>-->
+                  <button mat-menu-item [matMenuTriggerFor]="order_date">Fecha</button>
+                </mat-menu>
+                <mat-menu #filter="matMenu">
+<!--                  <button mat-menu-item>N&uacute;mero de Placa</button>-->
+<!--                  <button mat-menu-item>Kilometraje</button>-->
+                  <button mat-menu-item [matMenuTriggerFor]="filter_status">Estado</button>
+                </mat-menu>
+                <mat-menu #order_status="matMenu">
+                  <button mat-menu-item>En Recepci&oacute;n</button>
+                  <button mat-menu-item>En Taller</button>
+                  <button mat-menu-item>En Proceso</button>
+                  <button mat-menu-item>En Espera</button>
+                </mat-menu>
+                <mat-menu #filter_status="matMenu">
+                  <button mat-menu-item>En Recepci&oacute;n</button>
+                  <button mat-menu-item>En Taller</button>
+                  <button mat-menu-item>En Proceso</button>
+                  <button mat-menu-item>En Espera</button>
+                </mat-menu>
+                <mat-menu #order_license_plate="matMenu">
+                  <button mat-menu-item (click)="setOrder('license_plate')">Acendente</button>
+                  <button mat-menu-item (click)="setOrder('-license_plate')">Desendente</button>
+                </mat-menu>
+                <mat-menu #order_date="matMenu">
+                  <button mat-menu-item (click)="setOrder('updated_at')">Acendente</button>
+                  <button mat-menu-item (click)="setOrder('-updated_at')">Desendente</button>
+                </mat-menu>
+              </div>
+            </div>
+
 <!--            <ng-container *ngIf="ownerSelected">-->
 
 <!--              <kt-search-vehicle-top-menu [owner]="ownerSelected"></kt-search-vehicle-top-menu>-->

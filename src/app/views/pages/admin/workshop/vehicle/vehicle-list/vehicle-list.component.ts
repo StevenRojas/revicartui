@@ -38,7 +38,7 @@ export class VehicleListComponent implements OnInit {
   }
 
   loadList() {
-    this.vehicleReceptionService.getAllVehicles().subscribe(
+    this.vehicleReceptionService.getAllVehicles(this.pagination).subscribe(
       (vehicles) => {
         this.list = vehicles;
         this.tempList = vehicles;
@@ -50,6 +50,12 @@ export class VehicleListComponent implements OnInit {
     console.log(this.tempList)
     this.stringSearh = '';
     this.list = this.tempList;
+  }
+
+  setOrder(sort: string) {
+    this.stringSearh = '';
+    this.pagination.sort = sort;
+    this.loadList();
   }
 
 }
