@@ -253,8 +253,10 @@ export class WorkTodoComponent implements OnInit, OnChanges {
   removeTodoItem(categoryKey, subCategoryKey, workTodoId: any) {
     this.workTodoService.delete(this.vehicleReception.id, workTodoId).subscribe(
       (response) => {
-        console.log(response);
-        delete this.workTodoList[categoryKey]['todos'][subCategoryKey];
+        this.workTodoList[categoryKey]['todos'].splice(subCategoryKey, 1);
+        if (this.workTodoList[categoryKey]['todos'].length == 0) {
+          this.workTodoList[categoryKey]['todos'] = [];
+        }
         this.reCalculateSubTotal();
       }
     )
