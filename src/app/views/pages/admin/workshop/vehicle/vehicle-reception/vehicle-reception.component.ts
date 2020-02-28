@@ -26,6 +26,7 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
   public loadVehicleReception() {
     this.vehicleReceptionServices.getLastReception(this.vehicle.id).subscribe(
       (vehicleReceptionObj) => {
+        // console.log(vehicleReceptionObj)
         if (vehicleReceptionObj && Object.keys(vehicleReceptionObj).length > 0) {
           this.vehicleReception = vehicleReceptionObj[0];
         }

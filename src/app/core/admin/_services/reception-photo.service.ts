@@ -13,22 +13,22 @@ export class ReceptionPhotoService {
     private http: HttpClient
   ) { }
   all(vehicleReceptionId: number): Observable<any> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
+    // const httpHeaders = new HttpHeaders();
+    // httpHeaders.set('Content-Type', 'application/json');
+    // httpHeaders.set('token', '123');
     let params = new HttpParams()
     params = params.set('sort', '-id');
     return this.http.get(
       environment.api_url + 'reception/' + vehicleReceptionId + '/photo',
-      { params: params, headers: httpHeaders }
+      { params: params}
     )
   }
 
 
   add(photoId: number, vehicleReceptionId: number, notes: string): Observable<any> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
+    // const httpHeaders = new HttpHeaders();
+    // httpHeaders.set('Content-Type', 'application/json');
+    // httpHeaders.set('token', '123');
     let receptionPhotoObj = {
       'vehicle_reception': {
         'id': vehicleReceptionId
@@ -42,8 +42,7 @@ export class ReceptionPhotoService {
     }
     return this.http.post(
       environment.api_url + 'reception/' + vehicleReceptionId + '/photo',
-      receptionPhotoObj,
-      { headers: httpHeaders }
+      receptionPhotoObj
     );
   }
 }

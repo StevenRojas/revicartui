@@ -14,39 +14,29 @@ export class PhotoService {
   ) { }
 
   getPrimary(vehicleId): Observable<any> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
     let params = new HttpParams();
     params = params.set('sort', 'is_primary');
     return this.http.get<any>(environment.api_url + 'vehicle/' + vehicleId + '/photo',
-      { headers: httpHeaders, params: params }
+      { params: params }
       );
   }
 
 
-  post(vehicle: any, file: any, isPrimary: boolean): Observable<any> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
+  post(vehicleId: any, file: any, isPrimary: boolean): Observable<any> {
     return this.http.post(
-      environment.api_url + 'vehicle/' + vehicle['id'] + '/photo',
+      environment.api_url + 'vehicle/' + vehicleId + '/photo',
       {
         'vehicle': {
-          'id': vehicle.id.toString()
+          'id': vehicleId.toString()
         },
         'filename': file,
         'path_file': file,
         'is_primary': isPrimary
-      },
-      { headers: httpHeaders }
+      }
     );
   }
 
   put(photo_id: number, vehicle: any, file: any, isPrimary: boolean): Observable<any> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
     return this.http.put(
       environment.api_url + 'vehicle/' + vehicle['id'] + '/photo/' + photo_id,
       {
@@ -56,8 +46,7 @@ export class PhotoService {
         'filename': file,
         'path_file': file,
         'is_primary': isPrimary
-      },
-      { headers: httpHeaders }
+      }
     );
   }
 }

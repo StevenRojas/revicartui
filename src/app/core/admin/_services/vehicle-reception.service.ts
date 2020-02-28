@@ -26,6 +26,7 @@ export class VehicleReceptionService {
   getLastReception(vehicleId: number): Observable<any> {
     let params = new HttpParams();
     params = params.set('sort', '-id');
+    params = params.set('entity_detail', '1');
     // TODO Filder for work_status, this is the new table
     return this.http.get<any>(environment.api_url + 'vehicle/' + vehicleId + '/reception');
   }
