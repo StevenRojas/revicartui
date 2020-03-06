@@ -339,6 +339,7 @@ export class WorkStatusComponent implements OnInit, OnChanges {
     }
   }
  public removeReceptionPhotoItem(receptionPhoto: any, key: number) {
-    this.receptionPhotos.slice(key, 1);
+    console.log(receptionPhoto, key)
+    this.receptionPhotos.splice(key, 1);
  }
 }

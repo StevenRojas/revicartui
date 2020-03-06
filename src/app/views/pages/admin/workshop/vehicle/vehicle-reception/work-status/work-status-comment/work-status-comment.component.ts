@@ -52,23 +52,30 @@ export class WorkStatusCommentComponent implements OnInit {
           console.log(response)
         }
       );
-      this.deletePhotoModalOption = {
-        title: 'Eliminar Comentario',
-        showCancelButton: true,
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#5d78ff',
-        confirmButtonText: 'Agregar',
-        confirmButtonClass: 'btn btn-primary btn-elevate',
-        cancelButtonClass: 'btn btn-secondary btn-elevate',
-        showLoaderOnConfirm: true,
-        type: 'question',
-        focusCancel: true,
-        preConfirm: () =>  this.deletePhoto()
-      };
     });
+
+    this.deletePhotoModalOption = {
+      title: 'Advertencia',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#5d78ff',
+      confirmButtonText: 'Eliminar',
+      confirmButtonClass: 'btn btn-primary btn-elevate',
+      cancelButtonClass: 'btn btn-secondary btn-elevate',
+      showLoaderOnConfirm: true,
+      type: 'warning',
+      focusCancel: true,
+      preConfirm: () =>  this.removeReceptionPhoto()
+    };
   }
   public openDeleteModal() {
-
+    this.deletePhotoModal.fire().then((result) => {
+      if (result.value) {
+        // After press "Ok" button
+      } else {
+        // After press "Cancel" button or leave from modal
+      }
+    });
   }
   public openDialog(picture: string) {
     this.dialog.open(DialogCarPhotoDialog, {

@@ -3,7 +3,7 @@
     <div class="kt-widget5__pic">
       <!--                  TODO validate if photo object exist-->
       <div class="text-center" [ngStyle]="{'position': 'relative', 'display': 'contents'}">
-        <button mat-icon-button class="mr-1 text-black-50" (click)="removeReceptionPhoto()">
+        <button mat-icon-button class="mr-1 text-black-50" (click)="openDeleteModal()">
           <i class="fa flaticon2-trash text-danger"></i>
         </button>
         <button mat-icon-button class="mr-1 text-black-50">
@@ -17,7 +17,6 @@
     </div>
   </div>
   <div class="kt-widget5__content">
-
     <mat-form-field [ngStyle]="{'width': '100%'}">
       <textarea #commentText matInput [value]="receptionPhoto.notes" placeholder="Notas" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
     </mat-form-field>
@@ -29,6 +28,6 @@
   [swalOptions]="deletePhotoModalOption"
 >
   <div *swalPortal>
-
+  <p>Desea eliminar el comentario?</p>
   </div>
 </swal>
