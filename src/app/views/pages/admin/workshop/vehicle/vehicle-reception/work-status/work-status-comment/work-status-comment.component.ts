@@ -6,6 +6,8 @@ import {ReceptionPhotoService} from '../../../../../../../../core/admin';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {animate, style, transition, trigger} from '@angular/animations';
+import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
+import {SweetAlertOptions} from "sweetalert2";
 
 @Component({
   selector: 'kt-work-status-comment',
@@ -27,8 +29,10 @@ export class WorkStatusCommentComponent implements OnInit {
   @Input() receptionPhoto: any;
   @Input() vehicleReceptionId: any;
   public urlImages = environment.urlImages;
-  @Output() removeReceptionPhotoEmitter = new EventEmitter<any>()
+  @Output() removeReceptionPhotoEmitter = new EventEmitter<any>();
   @ViewChild('commentText', {static: true}) commentText: ElementRef;
+  @ViewChild('deletePhotoModal', {static: false}) private deletePhotoModal: SwalComponent;
+  public deletePhotoModalOption: SweetAlertOptions;
   public status: string;
   constructor(
     private dialog: MatDialog,
@@ -43,23 +47,29 @@ export class WorkStatusCommentComponent implements OnInit {
       debounceTime(500),
       distinctUntilChanged()
     ).subscribe((text) => {
-      console.log(text)
       this.receptionPhotoService.update(this.vehicleReceptionId, this.receptionPhoto.id, text).subscribe(
         (response) => {
           console.log(response)
         }
       );
-      // this.workSubCategoryService.put(this.receptionId, this.worktodo.worktodo_id, {
-      //   'quantity': parseInt(text)
-      // }).subscribe(
-      //   (response) => {
-      //     this.worktodo.quantity = response.quantity;
-      //     this.emitUpdate(this.worktodo);
-      //   }
-      // )
+      this.deletePhotoModalOption = {
+        title: 'Eliminar Comentario',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#5d78ff',
+        confirmButtonText: 'Agregar',
+        confirmButtonClass: 'btn btn-primary btn-elevate',
+        cancelButtonClass: 'btn btn-secondary btn-elevate',
+        showLoaderOnConfirm: true,
+        type: 'question',
+        focusCancel: true,
+        preConfirm: () =>  this.deletePhoto()
+      };
     });
   }
+  public openDeleteModal() {
 
+  }
   public openDialog(picture: string) {
     this.dialog.open(DialogCarPhotoDialog, {
       data: {
@@ -75,5 +85,9 @@ export class WorkStatusCommentComponent implements OnInit {
         this.removeReceptionPhotoEmitter.emit(this.receptionPhoto);
       }
     );
+  }
+
+  public deletePhoto() {
+
   }
 }
