@@ -8,7 +8,7 @@
         <div class="col-11">
           <mat-form-field class="input-full-width w-100 p-0 m-0">
             <!--            <input type="text" placeholder="Sub Categoría" aria-label="Sub categoría" matInput formControlName="work_subcategory"  >-->
-            <mat-select [(value)]="workTodoSelected" (opened)="getSubcategories()" placeholder="Sub Categoría" (selectionChange)="setSubcategoryDefaultOptions($event)" formControlName="work_subcategory" >
+            <mat-select [(value)]="workTodoSelected" (opened)="getSubcategories()" placeholder="" (selectionChange)="setSubcategoryDefaultOptions($event)" formControlName="work_subcategory" >
               <mat-option *ngFor="let workSubCategory of subcategoryList" [value]="workSubCategory">
                 {{ workSubCategory.work }} <span *ngIf="workSubCategory.price"><b>, {{ workSubCategory.price }} Bs.</b></span>
               </mat-option>

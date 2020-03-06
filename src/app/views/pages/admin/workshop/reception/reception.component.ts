@@ -41,10 +41,14 @@ export class ReceptionComponent implements OnInit {
       map((event: any) => {
         return event.target.value;
       }),
-      filter(res => res.length > 1),
+      // filter(res => res.length > 1),
       debounceTime(200),
       // distinctUntilChanged()
     ).subscribe((text) => {
+      if (!text) {
+        this.resultVehicle = [];
+        return;
+      }
       this.notFoundVehicle = true;
       this.messageVehicles = null;
       this.pagination.query = text;
@@ -53,6 +57,7 @@ export class ReceptionComponent implements OnInit {
       this.vehicleService.all(this.pagination, true).subscribe(
         (vehicles) => {
           if(vehicles.list.length === 0) {
+            this.resultVehicle = [];
             this.messageVehicles = "No se encontraron resultados relacionados";
             this.notFoundVehicle = false;
             return;

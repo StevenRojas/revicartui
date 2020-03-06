@@ -21,6 +21,7 @@ import {ClientVehicleService} from '../../../../../../core/admin/_services/clien
 import {fromEvent} from 'rxjs';
 import {debounceTime, map} from 'rxjs/operators';
 import {AuthService} from '../../../../../../core/auth/_services';
+import {LocalStoreService} from '../../../../../../core/_base/crud';
 
 @Component({
   selector: 'kt-vehicle-resume',
@@ -116,6 +117,10 @@ export class VehicleResumeComponent implements OnInit {
   // public company: Company;
   public clientVehicleOwners: any[];
   public companyVehicleOwners: any[];
+  /**
+   * Tab display by default
+   */
+  public defaultTab = 0;
 
   constructor(
     private router: Router,
@@ -129,12 +134,19 @@ export class VehicleResumeComponent implements OnInit {
     private layoutConfigService: LayoutConfigService,
     private companyVehicleService: CompanyVehicleService,
     private clientVehicleService: ClientVehicleService,
-    private authService: AuthService
+    private authService: AuthService,
+    private localStoreService: LocalStoreService
   ) {
     this.list = new VehicleList();
     this.vehicle = new Vehicle();
     // this.client = new Client();
     // this.company = new Company();
+    const defaultTab = this.localStoreService.getItem('vehicle_resume_reception_tab');
+    if (defaultTab == null) {
+      this.localStoreService.setItem('vehicle_resume_reception_tab', 0);
+    } else {
+      this.defaultTab = defaultTab;
+    }
   }
 
   ngOnInit() {
@@ -152,6 +164,7 @@ export class VehicleResumeComponent implements OnInit {
         } else {
           this.getVehicles();
         }
+
       });
     });
   }
@@ -613,5 +626,10 @@ export class VehicleResumeComponent implements OnInit {
       'owner': owner,
       'type': type
     };
+  }
+
+  public setDefaultTab(event: any) {
+    this.defaultTab = event;
+    this.localStoreService.setItem('vehicle_resume_reception_tab', this.defaultTab);
   }
 }

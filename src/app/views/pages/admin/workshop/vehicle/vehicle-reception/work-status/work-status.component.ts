@@ -338,14 +338,7 @@ export class WorkStatusComponent implements OnInit, OnChanges {
       alert('File removed');
     }
   }
-
-  public openDialog(picture: string) {
-    this.dialog.open(DialogCarPhotoDialog, {
-      data: {
-        picture: picture
-      },
-      maxHeight: '750px'
-    });
-  }
-
+ public removeReceptionPhotoItem(receptionPhoto: any, key: number) {
+    this.receptionPhotos.slice(key, 1);
+ }
 }

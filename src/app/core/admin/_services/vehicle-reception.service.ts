@@ -45,4 +45,20 @@ export class VehicleReceptionService {
       params: params
     });
   }
+
+  approve(receptionId: any): Observable<any> {
+    return this.http.patch<any>(environment.api_url + 'reception/' + receptionId + '/start', {});
+  }
+
+  start(vehicleId: any): Observable<any> {
+    return this.http.post<any>(environment.api_url + 'vehicle/' + vehicleId + '/reception', {
+      vehicle: {
+        'id': vehicleId
+      }
+    })
+  }
+
+  cancel(receptionId: any, notes: {}): Observable<any> {
+    return this.http.patch<any>(environment.api_url + 'reception/' + receptionId + '/cancel', notes);
+  }
 }

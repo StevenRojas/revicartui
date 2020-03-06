@@ -6,8 +6,41 @@
         <div ktContentAnimate class="kt-container kt-grid__item kt-grid__item--fluid kt-container--fluid">
           <ng-container *ngIf="vehicleReception">
             <div class="">
+              <div class="col-12">
+
+              </div>
               <div class="row">
                 <div class="col-12">
+                  <div class="row">
+                    <div class="col-5">
+                      <h4>Estado del Vehículo</h4>
+                    </div>
+                    <div class="col-7 text-right">
+                      <div class="row">
+                        <div class="col-9 col-md-9">
+                          <h4>{{ vehicleReception.updated_at | dateFormat: 'LL' }}</h4>
+                        </div>
+                        <div class="col-1 col-md-1">
+                          <button mat-icon-button class="text-black-50" [ngStyle]="{'bottom' : '10px'}">
+                            <i class="fa flaticon2-printer text-primary"></i>
+                          </button>
+                        </div>
+                        <div class="col-1 col-md-1">
+                          <button mat-icon-button class="text-black-50" [ngStyle]="{'bottom' : '10px'}" (click)="openApproveReceptionModal()">
+                            <i class="fa flaticon2-check-mark text-success"></i>
+                          </button>
+                        </div>
+                        <div class="col-1 col-md-1">
+                          <button mat-icon-button class="text-black-50" (click)="openCancelReceptionModal()" [ngStyle]="{'bottom' : '10px'}">
+                            <i class="fa flaticon2-cancel text-danger"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                  </div>
                   <kt-work-status [vehicleReception]="vehicleReception"></kt-work-status>
                 </div>
               </div>
@@ -21,7 +54,7 @@
           <ng-container *ngIf="!vehicleReception">
             <div class="row">
               <div class="col-12 text-center">
-                <button mat-stroked-button color="primary">Comenzar con la recepción del auto</button>
+                <button mat-stroked-button color="primary" (click)="startReception()">Comenzar con la recepción del auto</button>
               </div>
             </div>
           </ng-container>
@@ -31,4 +64,34 @@
   </div>
 </div>
 
+<swal
+  #cancelReceptionModal
+  [swalOptions]="cancelReceptionModalOption"
+>
+  <div *swalPortal>
+    <form [formGroup]="cancelFormGroup" autocomplete="off" class="kt-register__form kt-form">
+      <div class="row">
+        <div class="col-12">
+          <p>Esta seguro que desea cancelar la recepci&oacute;n?</p>
+          <br>
+          <mat-form-field class="input-full-width w-100 pr-1">
+            <mat-label>Motivo de la cancelaci&oacute;n</mat-label>
+            <textarea  formControlName="notes" matInput placeholder="Motivo de la cancelaci&oacute;n" type="text" ></textarea>
+            <mat-error *ngIf="isControlHasError('notes','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </div>
+</swal>
 
+<swal
+  #approveReceptionModal
+  [swalOptions]="approveReceptionModalOption"
+>
+  <div *swalPortal>
+    <p>Desea aprobar este formulario y pasarlo a la seccion de Reparaci&oacute;n?</p>
+  </div>
+</swal>

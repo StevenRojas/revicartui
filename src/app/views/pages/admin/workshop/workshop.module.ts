@@ -58,6 +58,7 @@ import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import { WorkTodoItemComponent } from './vehicle/vehicle-reception/work-todo/work-todo-item/work-todo-item.component';
+import { WorkStatusCommentComponent } from './vehicle/vehicle-reception/work-status/work-status-comment/work-status-comment.component';
 
 // import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 
@@ -100,7 +101,8 @@ registerPlugin(FilePondPluginImageExifOrientation);
     WorkPhotosComponent,
     VehicleResumeComponent,
     ReceptionComponent,
-    WorkTodoItemComponent
+    WorkTodoItemComponent,
+    WorkStatusCommentComponent
   ],
   imports: [
     CommonModule,

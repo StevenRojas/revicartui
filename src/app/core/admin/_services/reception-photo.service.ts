@@ -45,4 +45,14 @@ export class ReceptionPhotoService {
       receptionPhotoObj
     );
   }
+
+  update(vehicleReceptionId: any, receptionPhotoId: any, notes: string): Observable<any> {
+    return this.http.patch<any>(environment.api_url + 'reception/' + vehicleReceptionId + '/photo/' + receptionPhotoId, {
+      'notes': notes
+    });
+  }
+
+  delete(vehicleReceptionId: any, receptionPhotoId: any): Observable<any> {
+    return this.http.delete<any>(environment.api_url + 'reception/' + vehicleReceptionId + '/photo/' + receptionPhotoId);
+  }
 }

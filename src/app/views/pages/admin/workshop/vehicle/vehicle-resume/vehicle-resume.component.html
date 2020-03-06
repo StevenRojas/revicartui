@@ -60,7 +60,7 @@
               <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9">
                 <kt-portlet [class]="'kt-portlet--height-fluid'">
                   <kt-portlet-body [class]="'p-5 mb-3 '">
-                    <mat-tab-group  [selectedIndex]=0>
+                    <mat-tab-group  [selectedIndex]="defaultTab" (selectedIndexChange)="setDefaultTab($event)">
                       <mat-tab label="Detalles">
                         <ng-container *ngIf="vehicle.id">
                           <kt-vehicle-edit [vehicle]="vehicle" (vehicleUpdateEmit)="updateVehicleInList($event)" ></kt-vehicle-edit>

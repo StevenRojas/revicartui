@@ -73,7 +73,7 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
       ]
     });
     this.bindValues();
-    console.log(this.worktodo)
+    // console.log(this.worktodo)
   }
 
   removeWorkTodo() {
