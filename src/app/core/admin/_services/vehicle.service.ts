@@ -16,9 +16,6 @@ export class VehicleService {
 
 
   all(pagination: VehiclePagination, detail: boolean): Observable<VehicleList> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
     let params = new HttpParams()
     params = params.set('page', pagination.page.toString());
     if (pagination.queryId) {
@@ -31,14 +28,10 @@ export class VehicleService {
       params = params.set('entity_detail', '1');
     }
     return this.http.get<VehicleList>(environment.api_url + 'vehicle', {
-      params: params,
-      headers: httpHeaders
+      params: params
     });
   }
   allByOwner(pagination: VehiclePagination, detail: boolean, owner: string): Observable<VehicleList> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
     let params = new HttpParams()
     params = params.set('page', pagination.page.toString());
     if (pagination.queryId) {
@@ -56,22 +49,15 @@ export class VehicleService {
       url = environment.api_url + 'company-vehicle'
     }
     return this.http.get<VehicleList>(url, {
-      params: params,
-      headers: httpHeaders
+      params: params
     });
   }
   get(vehicleId: number): Observable<Vehicle> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
-    return this.http.get<Vehicle>(environment.api_url + 'vehicle/' + vehicleId, {headers: httpHeaders});
+    return this.http.get<Vehicle>(environment.api_url + 'vehicle/' + vehicleId);
   }
 
 
   post(vehicle: any): Observable<Vehicle> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
     if(vehicle.year) {
       vehicle.year = parseInt(vehicle.year, 10);
     }
@@ -79,36 +65,21 @@ export class VehicleService {
       vehicle.mileage = parseInt(vehicle.mileage, 10);
     }
     // vehicle.has_alert = vehicle.has_alert ? 1 : 0;
-    return this.http.post<Vehicle>(environment.api_url + 'vehicle', vehicle, {headers: httpHeaders});
+    return this.http.post<Vehicle>(environment.api_url + 'vehicle', vehicle);
   }
 
   put(vehicle: Vehicle): Observable<Vehicle> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
     if (vehicle.year) {
       vehicle.year = parseInt(vehicle.year, 10);
     }
-    return this.http.put<Vehicle>(environment.api_url + 'vehicle/' + vehicle.id, vehicle, {headers: httpHeaders});
+    return this.http.put<Vehicle>(environment.api_url + 'vehicle/' + vehicle.id, vehicle);
   }
 
   delete(vehicleId: any) {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
-    // return this.http.delete(environment.api_url + 'vehicle/' + vehicleId, {headers: httpHeaders})
-    //   .toPromise()
-    //   .then( res => true)
-    //   .catch( err => false)
-    return this.http.delete(environment.api_url + 'vehicle/' + vehicleId, {headers: httpHeaders});
+    return this.http.delete(environment.api_url + 'vehicle/' + vehicleId);
   }
 
   accesories(): Observable<any> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
-    return this.http.get<any>(environment.api_url + 'vehicle/enum/accessory', {
-      headers: httpHeaders
-    });
+    return this.http.get<any>(environment.api_url + 'vehicle/enum/accessory');
   }
 }

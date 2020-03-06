@@ -29,10 +29,10 @@ export class VehicleEditComponent implements OnInit, OnChanges {
   public vehicleFormControl: FormGroup;
   public brands: Observable<any[]>;
   public models: Observable<any[]>;
-  public subtypes: Observable<any[]>;
-  public transmissions: Observable<any[]>;
-  public gastypes: Observable<any[]>;
-  public usetypes: Observable<any[]>;
+  public subtypes: any[];
+  public transmissions: any[];
+  public gastypes: any[];
+  public usetypes: any[];
   constructor(
     private fb: FormBuilder,
     private brandService: BrandService,
@@ -69,37 +69,23 @@ export class VehicleEditComponent implements OnInit, OnChanges {
         Validators.maxLength(10)
       ])
       ],
-      mileage: ['', Validators.compose([
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(20)
-      ])
+      mileage: ['', Validators.compose([])
       ],
       year: ['', Validators.compose([])
       ],
-      brand: ['', Validators.compose([
-        Validators.required
-      ]),
+      brand: ['', Validators.compose([]),
       ],
-      model: ['', Validators.compose([
-        Validators.required
-      ]),
+      model: ['', Validators.compose([]),
       ],
       subtype: ['', Validators.compose([
         Validators.required
       ]),
       ],
-      transmission: ['', Validators.compose([
-        Validators.required
-      ]),
+      transmission: ['', Validators.compose([]),
       ],
-      gas_type: ['', Validators.compose([
-        Validators.required
-      ]),
+      gas_type: ['', Validators.compose([]),
       ],
-      use_type: ['', Validators.compose([
-        Validators.required
-      ]),
+      use_type: ['', Validators.compose([]),
       ]
     });
     this.loadVehicle();
@@ -107,17 +93,21 @@ export class VehicleEditComponent implements OnInit, OnChanges {
 
   loadVehicle() {
     if (this.vehicle.id) {
-      this.vehicleFormControl.get('id').setValue(this.vehicle.id);
+      this.vehicleFormControl.patchValue({
+        'id': this.vehicle.id
+      });
     }
-    this.vehicleFormControl.get('license_plate').setValue(this.vehicle.license_plate);
-    this.vehicleFormControl.get('mileage').setValue(this.vehicle.mileage);
-    this.vehicleFormControl.get('year').setValue(this.vehicle.year);
-    this.vehicleFormControl.get('brand').setValue(this.vehicle.brand);
-    this.vehicleFormControl.get('model').setValue(this.vehicle.model);
-    this.vehicleFormControl.get('subtype').setValue(this.vehicle.subtype);
-    this.vehicleFormControl.get('transmission').setValue(this.vehicle.transmission);
-    this.vehicleFormControl.get('gas_type').setValue(this.vehicle.gas_type);
-    this.vehicleFormControl.get('use_type').setValue(this.vehicle.use_type);
+    this.vehicleFormControl.patchValue({
+      'license_plate': this.vehicle.license_plate,
+      'mileage': this.vehicle.mileage,
+      'year': this.vehicle.year,
+      'brand': this.vehicle.brand,
+      'model': this.vehicle.model,
+    //   // 'subtype': this.vehicle.subtype,
+    //   'transmission': this.vehicle.transmission,
+    //   'gas_type': this.vehicle.gas_type,
+    //   'use_type': this.vehicle.use_type
+    });
   }
 
   bindAutocompleteFields() {
@@ -140,45 +130,41 @@ export class VehicleEditComponent implements OnInit, OnChanges {
         return this.getModels(val);
       })
     );
+    this.subtypeService.all().subscribe(
+      (subtypes) => {
+        this.subtypes = subtypes;
+        if (this.vehicle.subtype) {
+          const selected = this.subtypes.find(s => s.id == this.vehicle.subtype.id)
+          this.vehicleFormControl.get('subtype').setValue(selected);
+        }
 
-    this.subtypes = this.vehicleFormControl.controls.subtype.valueChanges.pipe(
-      filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 2),
-      debounceTime(600),
-      distinctUntilChanged(),
-      switchMap( val => {
-        return this.getSubtypes(val);
-      })
+    });
+    this.transmissionService.all().subscribe(
+      (transmissions) => {
+        this.transmissions = transmissions;
+        if (this.vehicle.transmission) {
+          const selected = this.transmissions.find(s => s.id == this.vehicle.transmission.id)
+          this.vehicleFormControl.get('transmission').setValue(selected);
+        }
+      }
     );
-
-    this.transmissions = this.vehicleFormControl.controls.transmission.valueChanges.pipe(
-      filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 2),
-      debounceTime(600),
-      distinctUntilChanged(),
-      switchMap( val => {
-        return this.getTransmissions(val);
-      })
+    this.gasTypeService.all().subscribe(
+      (gasTypes) => {
+        this.gastypes = gasTypes;
+        if (this.vehicle.gas_type) {
+          const selected = this.gastypes.find(s => s.id == this.vehicle.gas_type.id)
+          this.vehicleFormControl.get('gas_type').setValue(selected);
+        }
+      }
     );
-
-    this.gastypes = this.vehicleFormControl.controls.gas_type.valueChanges.pipe(
-      filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 2),
-      debounceTime(600),
-      distinctUntilChanged(),
-      switchMap( val => {
-        return this.getGasTypes(val);
-      })
-    );
-
-    this.usetypes = this.vehicleFormControl.controls.use_type.valueChanges.pipe(
-      filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 2),
-      debounceTime(600),
-      distinctUntilChanged(),
-      switchMap( val => {
-        return this.getUseTypes(val);
-      })
+    this.useTypeService.all().subscribe(
+      (useTypes) => {
+        this.usetypes = useTypes;
+        if (this.vehicle.use_type) {
+          const selected = this.usetypes.find(s => s.id == this.vehicle.use_type.id)
+          this.vehicleFormControl.get('use_type').setValue(selected);
+        }
+      }
     );
   }
 
@@ -188,22 +174,6 @@ export class VehicleEditComponent implements OnInit, OnChanges {
 
   getModels(name) {
     return this.modelService.quickSearch(name);
-  }
-
-  getSubtypes(name) {
-    return this.subtypeService.quickSearch(name);
-  }
-
-  getTransmissions(name) {
-    return this.transmissionService.quickSearch(name);
-  }
-
-  getGasTypes(name) {
-    return this.gasTypeService.quickSearch(name);
-  }
-
-  getUseTypes(name) {
-    return this.useTypeService.quickSearch(name);
   }
 
   displayName(obj: any): string|undefined {
@@ -224,7 +194,20 @@ export class VehicleEditComponent implements OnInit, OnChanges {
     }
 
     this.loading = true;
-    this.vehicleService.put(this.vehicleFormControl.getRawValue()).subscribe(
+    let putObj = this.vehicleFormControl.getRawValue();
+    Object.keys(putObj).forEach(controlName => {
+      if(['brand', 'model', 'subtype', 'transmission', 'gas_type', 'use_type'].indexOf(controlName) >= 0) {
+        if(putObj[controlName]['id'] == undefined || putObj[controlName]['id'] == null) {
+          delete putObj[controlName];
+        }
+      }
+      if(['year', 'mileage'].indexOf(controlName) >= 0) {
+        if(typeof putObj[controlName] != 'number') {
+          delete putObj[controlName];
+        }
+      }
+    });
+    this.vehicleService.put(putObj).subscribe(
       (vehicle: Vehicle) => {
         this.updatedVechicle(vehicle as Vehicle);
         setTimeout(() => {

@@ -1,0 +1,56 @@
+<form [formGroup]="updateWorkFormGroup" autocomplete="off" class="kt-register__form kt-form">
+  <div class="row">
+    <div class="col-6 col-sm-7 col-md-7 col-lg-8">
+      <div class="row">
+        <div class="col-1">
+<!--          TODO SET icon for inform about an update-->
+        </div>
+        <div class="col-11">
+          <mat-form-field class="input-full-width w-100 p-0 m-0">
+            <!--            <input type="text" placeholder="Sub Categoría" aria-label="Sub categoría" matInput formControlName="work_subcategory"  >-->
+            <mat-select [(value)]="workTodoSelected" (opened)="getSubcategories()" placeholder="" (selectionChange)="setSubcategoryDefaultOptions($event)" formControlName="work_subcategory" >
+              <mat-option *ngFor="let workSubCategory of subcategoryList" [value]="workSubCategory">
+                {{ workSubCategory.work }} <span *ngIf="workSubCategory.price"><b>, {{ workSubCategory.price }} Bs.</b></span>
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="isControlHasError('work_subcategory','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-1 col-sm-1 col-md-1 col-lg-1">
+      <div class="row">
+        <div class="col-12 mt-2 text-center">
+          <button mat-icon-button class="mr-1 text-black-50" (click)="removeWorkTodo()">
+            <i class="fa flaticon2-trash text-danger"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-5 col-sm-4 col-md-4 col-lg-3">
+      <div class="row">
+        <div class="col-4">
+          <mat-form-field class="input-full-width w-100 pr-1">
+            <mat-label>Cantidad</mat-label>
+            <input #quantityInput formControlName="quantity" [value]="worktodo.quantity" matInput placeholder="Cantidad" type="number" min="0" max="10000" step="1" />
+            <mat-error *ngIf="isControlHasError('quantity','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-8">
+          <mat-form-field class="input-full-width w-100 pr-1">
+            <mat-label>Precio</mat-label>
+            <input #priceInput formControlName="price" [value]="worktodo.price" matInput placeholder="Precio" type="number" min="0.00" max="10000.00" step="0.5" />
+            <span matSuffix>&nbsp;Bs.</span>
+            <mat-error *ngIf="isControlHasError('price','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

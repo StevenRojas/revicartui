@@ -13,6 +13,15 @@ export class UseTypeService {
     private http: HttpClient
   ) { }
 
+  all(): Observable<Company[]> {
+    let params = new HttpParams();
+    params = params.set('page', '1');
+    params = params.set('pagination', '0');
+    return this.http.get<Company[]>(environment.api_url + 'vehicle/enum/usetype', {
+      params: params
+    });
+  }
+
   quickSearch(name: string): Observable<Company[]> {
     const httpHeaders = new HttpHeaders();
     httpHeaders.set('Content-Type', 'application/json');

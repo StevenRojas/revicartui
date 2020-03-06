@@ -14,16 +14,24 @@ export class WorkSubCategoryService {
   ) { }
 
   quickSearch(name: string, workCategoryId: number): Observable<any[]> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
     let params = new HttpParams();
     params = params.set('q', name);
     params = params.set('page', '1');
     params = params.set('pagination', '0');
     return this.http.get<any[]>(environment.api_url + 'work-category/' + workCategoryId + '/work-sub-category' , {
-      params: params,
-      headers: httpHeaders
+      params: params
     });
+  }
+
+  all(workCategoryId: string, vehicleId: any, vehicleSubTypeId: any): Observable<any[]> {
+    let params = new HttpParams();
+    params = params.set('vehicle_id', vehicleId);
+    params = params.set('vehicle_subtype_id', vehicleSubTypeId);
+    return this.http.get<any[]>(environment.api_url + 'work-category/' + workCategoryId + '/work-sub-category', {
+      params: params
+    });
+  }
+  put(receptionId: any, id: string, body: {}): Observable<any> {
+    return this.http.put<any>(environment.api_url + 'reception/' + receptionId + '/worktodo/' + id, body);
   }
 }

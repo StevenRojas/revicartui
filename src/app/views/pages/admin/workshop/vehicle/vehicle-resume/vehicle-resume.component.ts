@@ -20,6 +20,8 @@ import {CompanyVehicleService} from '../../../../../../core/admin/_services/comp
 import {ClientVehicleService} from '../../../../../../core/admin/_services/client-vehicle.service';
 import {fromEvent} from 'rxjs';
 import {debounceTime, map} from 'rxjs/operators';
+import {AuthService} from '../../../../../../core/auth/_services';
+import {LocalStoreService} from '../../../../../../core/_base/crud';
 
 @Component({
   selector: 'kt-vehicle-resume',
@@ -115,6 +117,10 @@ export class VehicleResumeComponent implements OnInit {
   // public company: Company;
   public clientVehicleOwners: any[];
   public companyVehicleOwners: any[];
+  /**
+   * Tab display by default
+   */
+  public defaultTab = 0;
 
   constructor(
     private router: Router,
@@ -127,12 +133,20 @@ export class VehicleResumeComponent implements OnInit {
     private companyService: CompanyService,
     private layoutConfigService: LayoutConfigService,
     private companyVehicleService: CompanyVehicleService,
-    private clientVehicleService: ClientVehicleService
+    private clientVehicleService: ClientVehicleService,
+    private authService: AuthService,
+    private localStoreService: LocalStoreService
   ) {
     this.list = new VehicleList();
     this.vehicle = new Vehicle();
     // this.client = new Client();
     // this.company = new Company();
+    const defaultTab = this.localStoreService.getItem('vehicle_resume_reception_tab');
+    if (defaultTab == null) {
+      this.localStoreService.setItem('vehicle_resume_reception_tab', 0);
+    } else {
+      this.defaultTab = defaultTab;
+    }
   }
 
   ngOnInit() {
@@ -150,6 +164,7 @@ export class VehicleResumeComponent implements OnInit {
         } else {
           this.getVehicles();
         }
+
       });
     });
   }
@@ -193,7 +208,7 @@ export class VehicleResumeComponent implements OnInit {
       (owners) => {
         if (owners) {
           this.companyVehicleOwners = owners;
-          console.log(this.companyVehicleOwners)
+          // console.log(this.companyVehicleOwners)
         }
       }
     );
@@ -204,7 +219,7 @@ export class VehicleResumeComponent implements OnInit {
       (owners) => {
         if (owners) {
           this.clientVehicleOwners = owners;
-          console.log(this.clientVehicleOwners)
+          // console.log(this.clientVehicleOwners)
         }
       }
     );
@@ -262,7 +277,7 @@ export class VehicleResumeComponent implements OnInit {
   }
 
   searchVehicleId($event: Vehicle) {
-    console.log($event);
+    // console.log($event);
   }
 
   /**
@@ -351,7 +366,7 @@ export class VehicleResumeComponent implements OnInit {
 
   public updatePhoto() {
     if (this.lastFileAdd) {
-      let response = this.photoService.post(this.vehicle, this.lastFileAdd, true); // Create new
+      let response = this.photoService.post(this.vehicle.id, this.lastFileAdd, true); // Create new
       if (this.vehiclePhoto) { // Object type Photo seee python schemas
         response = this.photoService.put(this.vehiclePhoto['id'], this.vehicle, this.lastFileAdd, true); // Update
       }
@@ -459,6 +474,7 @@ export class VehicleResumeComponent implements OnInit {
    *  @return configuration filepond
    */
   public optionsFile() {
+    const token = this.authService.getUser();
     return {
       class: 'poi-file_uploader',
       multiple: false,
@@ -468,12 +484,18 @@ export class VehicleResumeComponent implements OnInit {
       maxFileSize: '5MB',
       allowRevert: false,
       server: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          token: token
+        },
         // ADD endpoit for upload photo
         process: (fieldName, file, metadata, load, error, progress, abort) => {
           const formData = new FormData();
           formData.append('file', file, file.name);
           const request = new XMLHttpRequest();
           request.open('POST', environment.api_url + 'file/upload');
+          request.setRequestHeader('Authorization', `Bearer ${token}`);
+          request.setRequestHeader('token', token);
           request.upload.onprogress = (e) => {
             progress(e.lengthComputable, e.loaded, e.total);
           };
@@ -604,5 +626,10 @@ export class VehicleResumeComponent implements OnInit {
       'owner': owner,
       'type': type
     };
+  }
+
+  public setDefaultTab(event: any) {
+    this.defaultTab = event;
+    this.localStoreService.setItem('vehicle_resume_reception_tab', this.defaultTab);
   }
 }

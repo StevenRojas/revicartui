@@ -13,13 +13,24 @@ export class WorkTodoService {
     private http: HttpClient
   ) { }
 
+    all(receptionId: number): Observable<any[]> {
+      return this.http.get<any[]>( environment.api_url + 'reception/' + receptionId + '/worktodo');
+    }
+
     post(receptionId: number, work: any): Observable<any> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
     work.vehicle_reception = {
       id: receptionId
-    }
-    return this.http.post<any >(environment.api_url + 'reception/' + receptionId + '/worktodo', work, {headers: httpHeaders});
+    };
+    work.work_category = {
+      id: work.work_category.id.toString()
+    };
+    work.work_subcategory = {
+      id: work.work_subcategory.id
+    };
+    return this.http.post<any>(environment.api_url + 'reception/' + receptionId + '/worktodo', work);
+  }
+
+  delete(receptionId: number, workTodoId: number): Observable<any> {
+    return this.http.delete<any>(environment.api_url + 'reception/' + receptionId + '/worktodo/' + workTodoId);
   }
 }

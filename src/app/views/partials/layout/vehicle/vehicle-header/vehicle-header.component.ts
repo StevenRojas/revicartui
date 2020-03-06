@@ -44,10 +44,10 @@ export class VehicleHeaderComponent implements OnInit {
   public deleteModalOption: SweetAlertOptions;
   public brands: Observable<any[]>;
   public models: Observable<any[]>;
-  public subtypes: Observable<any[]>;
-  public transmissions: Observable<any[]>;
-  public gastypes: Observable<any[]>;
-  public usetypes: Observable<any[]>;
+  public subtypes: any[];
+  public transmissions: any[];
+  public gastypes: any[];
+  public usetypes: any[];
 
   constructor(
     private vehicleService: VehicleService,
@@ -114,20 +114,18 @@ export class VehicleHeaderComponent implements OnInit {
       return false;
     }
     let postObj = this.vehicleAddFormControl.getRawValue();
-    console.log(postObj)
     Object.keys(postObj).forEach(controlName => {
       if(['brand', 'model', 'subtype', 'transmission', 'gas_type', 'use_type'].indexOf(controlName) >= 0) {
         if(postObj[controlName]['id'] == undefined || postObj[controlName]['id'] == null) {
           delete postObj[controlName];
         }
       }
-      if(['year'].indexOf(controlName) >= 0) {
+      if(['year', 'mileage'].indexOf(controlName) >= 0) {
         if(typeof postObj[controlName] != 'number') {
           delete postObj[controlName];
         }
       }
     });
-    console.log(postObj)
     const response = this.vehicleService.post(postObj);
     return new Promise((resolve, reject) => {
       response.subscribe(
@@ -177,6 +175,7 @@ export class VehicleHeaderComponent implements OnInit {
   }
 
   openAddVehicleModal(event: any) {
+    this.loadEnums();
     this.addVehicleModal.fire().then((result) => {
       if (result.value) {
         // TODO Message for confirm creation
@@ -199,11 +198,7 @@ export class VehicleHeaderComponent implements OnInit {
         Validators.maxLength(10)
       ])
       ],
-      mileage: ['', Validators.compose([
-        Validators.required,
-        Validators.minLength(1),
-        Validators.maxLength(20)
-      ])
+      mileage: ['', Validators.compose([])
       ],
       year: ['', Validators.compose([])
       ],
@@ -211,7 +206,9 @@ export class VehicleHeaderComponent implements OnInit {
       ],
       model: ['', Validators.compose([]),
       ],
-      subtype: ['', Validators.compose([]),
+      subtype: ['', Validators.compose([
+        Validators.required
+      ]),
       ],
       transmission: ['', Validators.compose([]),
       ],
@@ -264,46 +261,6 @@ export class VehicleHeaderComponent implements OnInit {
         return this.getModels(val);
       })
     );
-
-    this.subtypes = this.vehicleAddFormControl.controls.subtype.valueChanges.pipe(
-      filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 1),
-      debounceTime(400),
-      distinctUntilChanged(),
-      switchMap( val => {
-        return this.getSubtypes(val);
-      })
-    );
-
-    this.transmissions = this.vehicleAddFormControl.controls.transmission.valueChanges.pipe(
-      filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 1),
-      debounceTime(400),
-      distinctUntilChanged(),
-      switchMap( val => {
-        return this.getTransmissions(val);
-      })
-    );
-
-    this.gastypes = this.vehicleAddFormControl.controls.gas_type.valueChanges.pipe(
-      filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 1),
-      debounceTime(400),
-      distinctUntilChanged(),
-      switchMap( val => {
-        return this.getGasTypes(val);
-      })
-    );
-
-    this.usetypes = this.vehicleAddFormControl.controls.use_type.valueChanges.pipe(
-      filter(res => res !== null && res !== '' && res !== undefined),
-      filter(res => res.length > 1),
-      debounceTime(400),
-      distinctUntilChanged(),
-      switchMap( val => {
-        return this.getUseTypes(val);
-      })
-    );
   }
 
   getBrands(name) {
@@ -337,5 +294,27 @@ export class VehicleHeaderComponent implements OnInit {
     this.vehicleAddFormControl.reset();
     this.clientSelected = undefined;
     this.companySelected = undefined;
+  }
+  loadEnums() {
+
+    this.subtypeService.all().subscribe(
+      (subtypes) => {
+        this.subtypes = subtypes;
+      });
+    this.transmissionService.all().subscribe(
+      (transmissions) => {
+        this.transmissions = transmissions;
+      }
+    );
+    this.gasTypeService.all().subscribe(
+      (gasTypes) => {
+        this.gastypes = gasTypes;
+      }
+    );
+    this.useTypeService.all().subscribe(
+      (useTypes) => {
+        this.usetypes = useTypes;
+      }
+    );
   }
 }

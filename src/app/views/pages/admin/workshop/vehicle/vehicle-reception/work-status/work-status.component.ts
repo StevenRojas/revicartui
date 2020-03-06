@@ -6,6 +6,7 @@ import {SweetAlertOptions} from 'sweetalert2';
 import {environment} from '../../../../../../../../environments/environment';
 import {MatDialog, MAT_DIALOG_DATA} from '@angular/material';
 import {DialogCarPhotoDialog} from '../../vehicle-history/work-photos/work-photos.component';
+import {AuthService} from '../../../../../../../core/auth/_services';
 
 @Component({
   selector: 'kt-work-status',
@@ -19,7 +20,7 @@ export class WorkStatusComponent implements OnInit, OnChanges {
   @Input() vehicleReception: any;
 
   public pondFiles = [];
-  public lastFileAdd = null;
+  public lastFileAdd = [];
   public lastNoteAdd = null;
 
   public fileSubmitted = false; // Control for remove file from server or not
@@ -41,7 +42,8 @@ export class WorkStatusComponent implements OnInit, OnChanges {
     private render: Renderer2,
     private photoService: PhotoService,
     private receptionPhotoService: ReceptionPhotoService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private authService: AuthService
   ) { }
 
 
@@ -197,7 +199,7 @@ export class WorkStatusComponent implements OnInit, OnChanges {
       if (result.value) {
         // After press "Ok" button
       } else {
-        this.lastFileAdd = null;
+        this.lastFileAdd = [];
         this.lastNoteAdd = null;
         // After press "Cancel" button or leave from modal
       }
@@ -207,11 +209,12 @@ export class WorkStatusComponent implements OnInit, OnChanges {
 
   public addPhoto() {
     // if (this.lastFileAdd) {
+    console.log(this.vehicleReception)
     const response = this.photoService.post(this.vehicleReception.vehicle, this.lastFileAdd, false);
     this.lastNoteAdd = this.receptionPhotoNoteInput.nativeElement.value;
     if(this.lastNoteAdd || this.lastFileAdd) {
       return new Promise((resolve, reject) => {
-        if(this.lastFileAdd && this.lastFileAdd != null && this.lastFileAdd != '') {
+        if(this.lastFileAdd && this.lastFileAdd != null && this.lastFileAdd.length == 0) {
           response.subscribe(
             (photoObj) => {
               this.receptionPhotoService.add(photoObj.id, this.vehicleReception.id, this.lastNoteAdd).subscribe(
@@ -266,21 +269,28 @@ export class WorkStatusComponent implements OnInit, OnChanges {
    *  @return configuration filepond
    */
   public optionsFile() {
+    const token = this.authService.getUser();
     return {
       class: 'poi-file_uploader',
-      multiple: false,
+      multiple: true,
       labelIdle: 'Arrastre y suelte los archivos aquí o puede  <a class="link"> buscarlos </a>',
       acceptedFileTypes: 'image/*',
-      instantUpload: false,
+      instantUpload: true,
       maxFileSize: '5MB',
       allowRevert: false,
       server: {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            token: token
+          },
         // ADD endpoit for upload photo
           process: (fieldName, file, metadata, load, error, progress, abort) => {
             const formData = new FormData();
             formData.append('file', file, file.name);
             const request = new XMLHttpRequest();
             request.open('POST', environment.api_url + 'file/upload');
+            request.setRequestHeader('Authorization', `Bearer ${token}`);
+            request.setRequestHeader('token', token);
             request.upload.onprogress = (e) => {
               progress(e.lengthComputable, e.loaded, e.total);
             };
@@ -306,7 +316,7 @@ export class WorkStatusComponent implements OnInit, OnChanges {
 
   private requestOnLoad(load: any, request: any, error: any) {
     if (request.status >= 200 && request.status < 300) {
-      this.lastFileAdd = request.responseText;
+      this.lastFileAdd.push(request.responseText);
       load(request.responseText);
     } else {
       error('The service isn`t available');
@@ -328,14 +338,7 @@ export class WorkStatusComponent implements OnInit, OnChanges {
       alert('File removed');
     }
   }
-
-  public openDialog(picture: string) {
-    this.dialog.open(DialogCarPhotoDialog, {
-      data: {
-        picture: picture
-      },
-      maxHeight: '750px'
-    });
-  }
-
+ public removeReceptionPhotoItem(receptionPhoto: any, key: number) {
+    this.receptionPhotos.slice(key, 1);
+ }
 }

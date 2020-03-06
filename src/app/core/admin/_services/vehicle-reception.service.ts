@@ -26,6 +26,7 @@ export class VehicleReceptionService {
   getLastReception(vehicleId: number): Observable<any> {
     let params = new HttpParams();
     params = params.set('sort', '-id');
+    params = params.set('entity_detail', '1');
     // TODO Filder for work_status, this is the new table
     return this.http.get<any>(environment.api_url + 'vehicle/' + vehicleId + '/reception');
   }
@@ -43,5 +44,21 @@ export class VehicleReceptionService {
     return this.http.get<any[]>(environment.api_url + 'brand', {
       params: params
     });
+  }
+
+  approve(receptionId: any): Observable<any> {
+    return this.http.patch<any>(environment.api_url + 'reception/' + receptionId + '/start', {});
+  }
+
+  start(vehicleId: any): Observable<any> {
+    return this.http.post<any>(environment.api_url + 'vehicle/' + vehicleId + '/reception', {
+      vehicle: {
+        'id': vehicleId
+      }
+    })
+  }
+
+  cancel(receptionId: any, notes: {}): Observable<any> {
+    return this.http.patch<any>(environment.api_url + 'reception/' + receptionId + '/cancel', notes);
   }
 }
