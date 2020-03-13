@@ -59,12 +59,12 @@
         <div class="row">
           <div class="col-12">
             <mat-form-field class="input-full-width w-100 p-0 m-0">
-              <!--            <input type="text" placeholder="Categoría" aria-label="Categoría" matInput formControlName="work_category" >-->
-              <mat-select placeholder="Categoría" (selectionChange)="setCategoryOption($event)" formControlName="work_category" >
-                <mat-option *ngFor="let workCategory of workCategories | async" [value]="workCategory">
+              <input type="text" placeholder="Categoría" aria-label="Categoría" matInput formControlName="work_category" [matAutocomplete]="work_category">
+              <mat-autocomplete autoActiveFirstOption #work_category="matAutocomplete"  [displayWith]="displayName" (optionSelected)="setCategoryOption($event)">
+                <mat-option *ngFor="let workCategory of workCategoriesFiltered | async" [value]="workCategory">
                   {{ workCategory.category }}<span *ngIf="workCategory.section">, {{workCategory.section}}</span><span *ngIf="workCategory.area">, {{workCategory.area}}</span>
                 </mat-option>
-              </mat-select>
+              </mat-autocomplete>
               <mat-error *ngIf="isControlHasError('work_category','required')">
                 <strong>Este campo es requerido</strong>
               </mat-error>
@@ -75,12 +75,12 @@
           <div class="col-1"></div>
           <div class="col-11">
             <mat-form-field class="input-full-width w-100 p-0 m-0">
-              <!--            <input type="text" placeholder="Sub Categoría" aria-label="Sub categoría" matInput formControlName="work_subcategory"  >-->
-              <mat-select  placeholder="Sub Categoría" (selectionChange)="setSubcategoryDefaultOptions($event)" formControlName="work_subcategory" >
-                <mat-option *ngFor="let workSubCategory of workSubCategories | async" [value]="workSubCategory">
+              <input type="text" placeholder="Sub Categoría" aria-label="Sub categoría" matInput formControlName="work_subcategory" [matAutocomplete]="work_subcategory" >
+              <mat-autocomplete autoActiveFirstOption #work_subcategory="matAutocomplete" [displayWith]="displaySubCategoryName" (optionSelected)="setSubcategoryDefaultOptions($event)"  >
+                <mat-option *ngFor="let workSubCategory of workSubCategoriesFiltered | async" [value]="workSubCategory">
                   {{ workSubCategory.work }}, <b>{{workSubCategory.price}} Bs.</b>
                 </mat-option>
-              </mat-select>
+              </mat-autocomplete>
               <mat-error *ngIf="isControlHasError('work_subcategory','required')">
                 <strong>Este campo es requerido</strong>
               </mat-error>
@@ -91,15 +91,16 @@
       <div class="col-1">
         <div class="row">
           <div class="col-12 mt-2 text-center">
-            <button mat-icon-button class="mr-1 text-black-50" (click)="cancelTodoWork()">
-              <i class="flaticon2-cancel text-danger"></i>
-            </button>
-          </div>
-          <div class="col-12 mt-2 text-center">
             <button mat-icon-button class="mr-1 text-black-50" (click)="saveTodoWork()">
               <i class="fa flaticon2-check-mark text-success"></i>
             </button>
           </div>
+          <div class="col-12 mt-2 text-center">
+            <button mat-icon-button class="mr-1 text-black-50" (click)="cancelTodoWork()">
+              <i class="flaticon2-cancel text-danger"></i>
+            </button>
+          </div>
+
         </div>
       </div>
       <div class="col-3">
@@ -152,81 +153,81 @@
     [swalOptions]="addWorkModalOption"
 >
   <div *swalPortal>
-    <form [formGroup]="addWorkFormGroup" autocomplete="off" class="kt-register__form kt-form"
-          [ngStyle]="{}">
-      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">
-        <div class="form-group" >
-          <mat-form-field class="input-full-width w-100">
-<!--            <input type="text" placeholder="Categoría" aria-label="Categoría" matInput formControlName="work_category" >-->
-            <mat-select placeholder="Categoría" (selectionChange)="setCategoryOption($event)" formControlName="work_category" >
-              <mat-option *ngFor="let workCategory of workCategories | async" [value]="workCategory">
-                {{ workCategory.category }}<span *ngIf="workCategory.section">, {{workCategory.section}}</span><span *ngIf="workCategory.area">, {{workCategory.area}}</span>
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="isControlHasError('work_category','required')">
-              <strong>Este campo es requerido</strong>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">
-        <div class="form-group" >
-          <mat-form-field class="input-full-width w-100">
-<!--            <input type="text" placeholder="Sub Categoría" aria-label="Sub categoría" matInput formControlName="work_subcategory"  >-->
-            <mat-select  placeholder="Sub Categoría" (selectionChange)="setSubcategoryDefaultOptions($event)" formControlName="work_subcategory" >
-              <mat-option *ngFor="let workSubCategory of workSubCategories | async" [value]="workSubCategory">
-                {{ workSubCategory.work }}, <b>{{workSubCategory.price}} Bs.</b>
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="isControlHasError('work_subcategory','required')">
-              <strong>Este campo es requerido</strong>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6 col-xs-6 col-6 col-md-6 col-lg-6">
-          <div class="form-group">
-            <mat-form-field class="input-full-width">
-              <mat-label>Precio</mat-label>
-              <input formControlName="price" matInput placeholder="Precio" type="number" min="0.00" max="10000.00" step="0.01" />
-              <mat-error *ngIf="isControlHasError('price','required')">
-                <strong>Este campo es requerido</strong>
-              </mat-error>
-            </mat-form-field>
-
-          </div>
-        </div>
-        <div class="col-sm-6 col-xs-6 col-6 col-md-6 col-lg-6">
-          <div class="form-group">
-            <mat-form-field class="input-full-width">
-              <mat-label>Cantidad</mat-label>
-              <input formControlName="quantity" matInput placeholder="Cantidad" type="number" min="0" max="10000" step="1" />
-              <mat-error *ngIf="isControlHasError('quantity','required')">
-                <strong>Este campo es requerido</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-      </div>
+<!--    <form [formGroup]="addWorkFormGroup" autocomplete="off" class="kt-register__form kt-form"-->
+<!--          [ngStyle]="{}">-->
 <!--      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">-->
-<!--        <div class="form-group">-->
+<!--        <div class="form-group" >-->
 <!--          <mat-form-field class="input-full-width w-100">-->
-<!--            <mat-label>Repuesto o Accesorio</mat-label>-->
-<!--            <textarea formControlName="notes" matInput placeholder="Repuesto o Accesorio" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>-->
-<!--            <mat-error *ngIf="isControlHasError('notes','required')">-->
+<!--            <input type="text" placeholder="Categoría" aria-label="Categoría" matInput formControlName="work_category" [autocomplete]="work_category">-->
+<!--            <mat-autocomplete autoActiveFirstOption #work_category="matAutocomplete" placeholder="Categoría" (optionSelected)="setCategoryOption($event)" >-->
+<!--              <mat-option *ngFor="let workCategory of workCategoriesFiltered | async" [value]="workCategory">-->
+<!--                {{ workCategory.category }}<span *ngIf="workCategory.section">, {{workCategory.section}}</span><span *ngIf="workCategory.area">, {{workCategory.area}}</span>-->
+<!--              </mat-option>-->
+<!--            </mat-autocomplete>-->
+<!--            <mat-error *ngIf="isControlHasError('work_category','required')">-->
 <!--              <strong>Este campo es requerido</strong>-->
 <!--            </mat-error>-->
 <!--          </mat-form-field>-->
 <!--        </div>-->
 <!--      </div>-->
-      <ng-container *ngIf="errorMessage">
-        <div class="row">
-          <div class="col-12">
-            <p class="text-danger">{{ errorMessage }}</p>
-          </div>
-        </div>
-      </ng-container>
-    </form>
+<!--      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">-->
+<!--        <div class="form-group" >-->
+<!--          <mat-form-field class="input-full-width w-100">-->
+<!--&lt;!&ndash;            <input type="text" placeholder="Sub Categoría" aria-label="Sub categoría" matInput formControlName="work_subcategory"  >&ndash;&gt;-->
+<!--            <mat-select  placeholder="Sub Categoría" (selectionChange)="setSubcategoryDefaultOptions($event)" formControlName="work_subcategory" >-->
+<!--              <mat-option *ngFor="let workSubCategory of workSubCategories | async" [value]="workSubCategory">-->
+<!--                {{ workSubCategory.work }}, <b>{{workSubCategory.price}} Bs.</b>-->
+<!--              </mat-option>-->
+<!--            </mat-select>-->
+<!--            <mat-error *ngIf="isControlHasError('work_subcategory','required')">-->
+<!--              <strong>Este campo es requerido</strong>-->
+<!--            </mat-error>-->
+<!--          </mat-form-field>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="row">-->
+<!--        <div class="col-sm-6 col-xs-6 col-6 col-md-6 col-lg-6">-->
+<!--          <div class="form-group">-->
+<!--            <mat-form-field class="input-full-width">-->
+<!--              <mat-label>Precio</mat-label>-->
+<!--              <input formControlName="price" matInput placeholder="Precio" type="number" min="0.00" max="10000.00" step="0.01" />-->
+<!--              <mat-error *ngIf="isControlHasError('price','required')">-->
+<!--                <strong>Este campo es requerido</strong>-->
+<!--              </mat-error>-->
+<!--            </mat-form-field>-->
+
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="col-sm-6 col-xs-6 col-6 col-md-6 col-lg-6">-->
+<!--          <div class="form-group">-->
+<!--            <mat-form-field class="input-full-width">-->
+<!--              <mat-label>Cantidad</mat-label>-->
+<!--              <input formControlName="quantity" matInput placeholder="Cantidad" type="number" min="0" max="10000" step="1" />-->
+<!--              <mat-error *ngIf="isControlHasError('quantity','required')">-->
+<!--                <strong>Este campo es requerido</strong>-->
+<!--              </mat-error>-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--&lt;!&ndash;      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;          <mat-form-field class="input-full-width w-100">&ndash;&gt;-->
+<!--&lt;!&ndash;            <mat-label>Repuesto o Accesorio</mat-label>&ndash;&gt;-->
+<!--&lt;!&ndash;            <textarea formControlName="notes" matInput placeholder="Repuesto o Accesorio" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;            <mat-error *ngIf="isControlHasError('notes','required')">&ndash;&gt;-->
+<!--&lt;!&ndash;              <strong>Este campo es requerido</strong>&ndash;&gt;-->
+<!--&lt;!&ndash;            </mat-error>&ndash;&gt;-->
+<!--&lt;!&ndash;          </mat-form-field>&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;      </div>&ndash;&gt;-->
+<!--      <ng-container *ngIf="errorMessage">-->
+<!--        <div class="row">-->
+<!--          <div class="col-12">-->
+<!--            <p class="text-danger">{{ errorMessage }}</p>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </ng-container>-->
+<!--    </form>-->
   </div>
 </swal>

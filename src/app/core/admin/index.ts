@@ -21,6 +21,11 @@ export {ReceptionPhotoService} from './_services/reception-photo.service';
 export {WorkCategoryService} from './_services/work-category.service';
 export {WorkSubCategoryService} from './_services/work-sub-category.service';
 export {WorkTodoService} from './_services/work-todo.service';
+export {VehicleReparationService} from './_services/vehicle-reparation.service';
+export {OperatorService} from './_services/operator.service';
+export {WorkstationService} from './_services/workstation.service';
+export {WorkstatusService} from './_services/workstatus.service';
+export {StatusNoteService} from './_services/status-note.service';
 // MODELS
 
 export {Client} from './_models/client';

@@ -34,6 +34,7 @@ export class WorkStatusCommentComponent implements OnInit {
   @ViewChild('deletePhotoModal', {static: false}) private deletePhotoModal: SwalComponent;
   public deletePhotoModalOption: SweetAlertOptions;
   public status: string;
+
   constructor(
     private dialog: MatDialog,
     private receptionPhotoService: ReceptionPhotoService

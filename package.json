@@ -51,6 +51,7 @@
     "material-design-icons": "^3.0.1",
     "moment": "^2.24.0",
     "ng-inline-svg": "^8.5.1",
+    "ng-select2-component": "^7.0.6",
     "ngrx-store-freeze": "^0.2.4",
     "ngx-clipboard": "^12.2.0",
     "ngx-daterangepicker-material": "^2.1.7",

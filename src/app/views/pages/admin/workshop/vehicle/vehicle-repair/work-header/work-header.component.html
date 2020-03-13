@@ -1,33 +1,74 @@
-<div class="row">
-  <div class="col-4">
-    <h5>Operador:</h5>
-    <mat-form-field>
-      <mat-select placeholder="Operador">
-        <mat-option *ngFor="let operator of ['Operador 01', 'Operador 02', 'Operador 03', 'Operador 04']" [value]="operator">
-          {{ operator }}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-  <div class="col-4">
-    <h5>Estado:</h5>
-    <mat-form-field>
-      <mat-select placeholder="Estado">
-        <mat-option *ngFor="let status of ['--- En Espera ---', 'Estado 02', 'Estado 03', 'Estado 04']" [value]="status">
-          {{ status }}
-        </mat-option>
-      </mat-select>
-      <span matSuffix>&nbsp;<button mat-button matSuffix color="info"><i class="flaticon-chat-2"></i></button></span>
-    </mat-form-field>
-  </div>
-  <div class="col-4">
-    <div class="kt-quick-search__item-wrapper">
-      <a class="kt-quick-search__item-title" >
-        <h5 class="mt-0">Total:</h5>
-      </a>
-      <div class="kt-quick-search__item-desc mt-3 w-100 text-center">
-        <h4><b>230 Bs</b></h4>
+<ng-container *ngIf="vehicleReception">
+  <div class="row">
+    <div class="col-3">
+      <h5>Operador:</h5>
+      <mat-form-field class="d-block">
+        <mat-select [(value)]="vehicleReception.operator" placeholder="" (selectionChange)="updateOperator($event)">
+          <mat-option *ngFor="let operator of operatorEnum" [value]="operator.id">
+            {{ operator.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-3">
+      <h5>Ubicaci&oacute;n:</h5>
+      <mat-form-field class="d-block">
+        <mat-select [(value)]="vehicleReception.workstation" placeholder="" (selectionChange)="updateWorkstation($event)">
+          <mat-option *ngFor="let workstation of workStationEnum" [value]="workstation.id">
+            {{ workstation.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-3">
+      <h5>Estado:</h5>
+      <mat-form-field class="d-block">
+        <mat-select [(value)]="vehicleReception.work_status" placeholder="" (selectionChange)="updateStatus($event)">
+          <mat-option *ngFor="let status of workStatusEnum" [value]="status.id">
+            {{ status.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-1">
+      <button mat-icon-button class="mr-1 text-black-50 mt-3" color="info" (click)="openStatusHistoryModal($event)"><i class="flaticon-chat-2 text-primary"></i></button>
+    </div>
+    <div class="col-2">
+      <div class="kt-quick-search__item-wrapper">
+        <a class="kt-quick-search__item-title" >
+          <h5 class="mt-0">Total:</h5>
+        </a>
+        <div class="kt-quick-search__item-desc mt-3 w-100 text-center">
+          <h4><b>230 Bs</b></h4>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</ng-container>
+
+<swal
+  #statusHistoryModal
+  [swalOptions]="statusHistoryModalOption"
+>
+  <div *swalPortal>
+    Vehículo con Placa número: {{vehicle.license_plate}}?
+
+    <div class="row" *ngFor="let note of statusHistoryNotes">
+      <div class="col-10 text-left mb-4">
+        <div class="row">
+          <div class="col-12 text-left mb-0">
+            {{ note.updated_at | dateFormat: 'LL' }} <p class="text-info d-inline-block mb-0"> [{{ note.work_status.code }}]</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 text-left ml-4 mt-0">
+            <p class="text-black-50" [ngStyle]="{'font-size':'13px'}">{{ note.notes }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-2 text-center">
+        <button mat-icon-button class="" color="info"><i class="flaticon2-edit"></i></button>
+      </div>
+    </div>
+  </div>
+</swal>

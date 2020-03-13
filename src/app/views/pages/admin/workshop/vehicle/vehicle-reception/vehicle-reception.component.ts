@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import {Vehicle, VehicleReceptionService} from '../../../../../../core/admin';
 import {SweetAlertOptions} from "sweetalert2";
 import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
@@ -12,7 +12,9 @@ import {Router} from '@angular/router';
 })
 export class VehicleReceptionComponent implements OnInit, OnChanges {
   @Input() vehicle: Vehicle;
-  public vehicleReception: any;
+  @Input() vehicleReception: any;
+  @Output() updateVehicleReceptionEmit = new EventEmitter<any>();
+  // public vehicleReception: any;
   public reception: any;
   public cancelReceptionModalOption: SweetAlertOptions;
   public approveReceptionModalOption: SweetAlertOptions;
@@ -58,7 +60,7 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes) {
     if (this.vehicle.id) {
-      this.loadVehicleReception();
+      // this.loadVehicleReception();
     }
   }
 
@@ -69,22 +71,21 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
     });
   }
 
-  public loadVehicleReception() {
-    this.vehicleReceptionServices.getLastReception(this.vehicle.id).subscribe(
-      (vehicleReceptionObj) => {
-        // console.log(vehicleReceptionObj)
-        if (vehicleReceptionObj && Object.keys(vehicleReceptionObj).length > 0) {
-          this.vehicleReception = vehicleReceptionObj[0];
-        }
-      }
-    );
-  }
+  // public loadVehicleReception() {
+  //   this.vehicleReceptionServices.getLastReception(this.vehicle.id).subscribe(
+  //     (vehicleReceptionObj) => {
+  //       // console.log(vehicleReceptionObj)
+  //       if (vehicleReceptionObj && Object.keys(vehicleReceptionObj).length > 0) {
+  //         this.vehicleReception = vehicleReceptionObj[0];
+  //       }
+  //     }
+  //   );
+  // }
   public openCancelReceptionModal() {
     // this.addWorkFormGroup.reset();
     this.cancelReceptionModal.fire().then((result) => {
       if (result.value) {
         // After press "Ok" button
-        // this.loadVehicleReception();
       } else {
         // After press "Cancel" button or leave from modal
       }
@@ -116,7 +117,8 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
         (response) => {
           this.cancelFormGroup.reset();
           this.vehicleReception = null;
-          this.loadVehicleReception();
+          this.updateVehicleReceptionEmit.emit(true);
+          // this.loadVehicleReception();
           resolve();
         }
       );
@@ -137,7 +139,8 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
   public startReception() {
     this.vehicleReceptionServices.start(this.vehicle.id).subscribe(
       (response) => {
-        this.loadVehicleReception();
+        this.updateVehicleReceptionEmit.emit(true);
+        // this.loadVehicleReception();
       }
     )
   }

@@ -8,7 +8,7 @@ import {
   CompanyService,
   PhotoService,
   Vehicle,
-  VehicleList,
+  VehicleList, VehicleReceptionService,
   VehicleService
 } from '../../../../../../core/admin';
 import {BeforeOpenEvent, SwalComponent} from '@sweetalert2/ngx-sweetalert2';
@@ -113,34 +113,27 @@ export class VehicleResumeComponent implements OnInit {
   // Search Vars
   public query = { q: '', q_id: '' };
   public works = [];
-  // public client: Client;
-  // public company: Company;
-  public clientVehicleOwners: any[];
-  public companyVehicleOwners: any[];
-  /**
-   * Tab display by default
-   */
-  public defaultTab = 0;
 
+  public vehicleReception: any;
+  public clientVehicleOwners: any[];
   constructor(
     private router: Router,
     private render: Renderer2,
     private route: ActivatedRoute,
+    private authService: AuthService,
     private photoService: PhotoService,
     private clientService: ClientService,
     private activatedRoute: ActivatedRoute,
     private vehicleService: VehicleService,
     private companyService: CompanyService,
+    private localStoreService: LocalStoreService,
     private layoutConfigService: LayoutConfigService,
-    private companyVehicleService: CompanyVehicleService,
     private clientVehicleService: ClientVehicleService,
-    private authService: AuthService,
-    private localStoreService: LocalStoreService
+    private companyVehicleService: CompanyVehicleService,
+    private vehicleReceptionServices: VehicleReceptionService
   ) {
     this.list = new VehicleList();
     this.vehicle = new Vehicle();
-    // this.client = new Client();
-    // this.company = new Company();
     const defaultTab = this.localStoreService.getItem('vehicle_resume_reception_tab');
     if (defaultTab == null) {
       this.localStoreService.setItem('vehicle_resume_reception_tab', 0);
@@ -148,6 +141,12 @@ export class VehicleResumeComponent implements OnInit {
       this.defaultTab = defaultTab;
     }
   }
+  public companyVehicleOwners: any[];
+
+  /**
+   * Tab display by default
+   */
+  public defaultTab = 0;
 
   ngOnInit() {
     this.loadConfigurationModals();
@@ -194,13 +193,29 @@ export class VehicleResumeComponent implements OnInit {
           Object.keys(this.vehicle.photos).forEach((key) => {
             if(this.vehicle.photos[key]['is_primary']) {
               this.vehiclePhoto = this.vehicle.photos[key];
-              // Get owner
-
             }
           });
+          // Get reception
+          this.loadVehicleReception();
         }
       }
     );
+  }
+
+  public loadVehicleReception() {
+    this.vehicleReceptionServices.getLastReception(this.vehicle.id).subscribe(
+      (vehicleReceptionObj) => {
+        if (vehicleReceptionObj && Object.keys(vehicleReceptionObj).length > 0) {
+          this.vehicleReception = vehicleReceptionObj[0];
+        }
+      }
+    );
+  }
+
+  public refreshVehicleReception(event: any) {
+    if(event) {
+      this.loadVehicleReception();
+    }
   }
 
   getCompanyOwner(vehicleId: number) {

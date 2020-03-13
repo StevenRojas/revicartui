@@ -67,22 +67,40 @@
                         </ng-container>
                       </mat-tab>
                       <mat-tab label="Recepción">
-                        <kt-vehicle-reception [vehicle]="vehicle"></kt-vehicle-reception>
+                        <kt-vehicle-reception [vehicle]="vehicle" [vehicleReception]="vehicleReception" (updateVehicleReceptionEmit)="refreshVehicleReception($event)"></kt-vehicle-reception>
                       </mat-tab>
                       <mat-tab label="Historial">
                         <kt-vehicle-history></kt-vehicle-history>
                       </mat-tab>
                       <mat-tab label="Reparación">
-                        <div class="row">
-                          <div class="col-12">
-                            <kt-work-header></kt-work-header>
+                        <ng-container *ngIf="vehicleReception">
+                          <ng-container *ngIf="vehicleReception.work_status == 4">
+                            <div class="row">
+                              <div class="col-12">
+                                <kt-work-header [vehicle]="vehicle" [vehicleReception]="vehicleReception"></kt-work-header>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-12">
+                                <kt-vehicle-repair [vehicle]="vehicle" ></kt-vehicle-repair>
+                              </div>
+                            </div>
+                          </ng-container>
+                          <ng-container *ngIf="vehicleReception.work_status != 4">
+                            <div class="row">
+                              <div class="col-12 m-5 text-center">
+                                <p>Por favor, es necesario aprobar el formulario de la seccion "Recepci&oacute;n para continuar"</p>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </ng-container>
+                        <ng-container *ngIf="!vehicleReception ">
+                          <div class="row">
+                            <div class="col-12 m-5 text-center">
+                              <p>No hay acciones para este vehiculo</p>
+                            </div>
                           </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-12">
-                            <kt-vehicle-repair></kt-vehicle-repair>
-                          </div>
-                        </div>
+                        </ng-container>
                       </mat-tab>
                     </mat-tab-group>
                   </kt-portlet-body>

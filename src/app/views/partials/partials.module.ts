@@ -154,6 +154,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
     MatTooltipModule,
     MatDialogModule,
     SweetAlert2Module,
+    // Select2Module,
     // ng-bootstrap modules
     NgbDropdownModule,
     NgbTabsetModule,

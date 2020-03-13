@@ -53,7 +53,11 @@ export class VehicleService {
     });
   }
   get(vehicleId: number): Observable<Vehicle> {
-    return this.http.get<Vehicle>(environment.api_url + 'vehicle/' + vehicleId);
+    let params = new HttpParams()
+    params = params.set('entity_detail', '1');
+    return this.http.get<Vehicle>(environment.api_url + 'vehicle/' + vehicleId, {
+      params: params
+    });
   }
 
 
