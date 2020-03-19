@@ -23,7 +23,7 @@
     <div class="col-3">
       <h5>Estado:</h5>
       <mat-form-field class="d-block">
-        <mat-select [(value)]="vehicleReception.work_status" placeholder="" (selectionChange)="updateStatus($event)">
+        <mat-select [(value)]="vehicleReception.work_status" placeholder="" (valueChange)="emitChangeValue($event)">
           <mat-option *ngFor="let status of workStatusEnum" [value]="status.id">
             {{ status.name }}
           </mat-option>
@@ -39,7 +39,7 @@
           <h5 class="mt-0">Total:</h5>
         </a>
         <div class="kt-quick-search__item-desc mt-3 w-100 text-center">
-          <h4><b>230 Bs</b></h4>
+          <h4><b>{{ total }} Bs</b></h4>
         </div>
       </div>
     </div>
@@ -51,24 +51,30 @@
   [swalOptions]="statusHistoryModalOption"
 >
   <div *swalPortal>
-    Vehículo con Placa número: {{vehicle.license_plate}}?
-
-    <div class="row" *ngFor="let note of statusHistoryNotes">
-      <div class="col-10 text-left mb-4">
-        <div class="row">
-          <div class="col-12 text-left mb-0">
-            {{ note.updated_at | dateFormat: 'LL' }} <p class="text-info d-inline-block mb-0"> [{{ note.work_status.code }}]</p>
+    Vehículo con Placa número: <b>{{vehicle.license_plate}}</b>
+    <div class="history-status mt-4">
+      <div class="row" *ngFor="let note of statusHistoryNotes | keyvalue">
+        <div class="col-10 text-left mb-4">
+          <div class="row">
+            <div class="col-12 text-left mb-0">
+              {{ note.value.updated_at | dateFormat: 'LL' }} <p class="text-info d-inline-block mb-0"> [{{ note.value.work_status.code }}]</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12 text-left ml-4 mt-0">
+              <p class="text-black-50" [ngStyle]="{'font-size':'13px'}" [hidden]="displayIndex == note.key">{{ note.value.notes }}</p>
+              <mat-form-field [ngStyle]="{'width': '100%'}" [hidden]="displayIndex != note.key">
+                <textarea #commentText matInput [value]="note.value.notes" placeholder="" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
+              </mat-form-field>
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-12 text-left ml-4 mt-0">
-            <p class="text-black-50" [ngStyle]="{'font-size':'13px'}">{{ note.notes }}</p>
-          </div>
+        <div class="col-2 text-center">
+          <button mat-icon-button class="text-center" color="info" [hidden]="displayIndex == note.key" (click)="displayIndex = note.key"><i class="flaticon2-edit"></i></button>
+          <button mat-icon-button class="text-center" color="info" [hidden]="displayIndex != note.key" (click)="editStatusHistory(note.value.id, commentText.value, note.key)"><i class="flaticon2-check-mark"></i></button>
         </div>
-      </div>
-      <div class="col-2 text-center">
-        <button mat-icon-button class="" color="info"><i class="flaticon2-edit"></i></button>
       </div>
     </div>
+
   </div>
 </swal>

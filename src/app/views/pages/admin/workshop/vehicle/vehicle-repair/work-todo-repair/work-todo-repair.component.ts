@@ -1,21 +1,29 @@
-import {Component, ElementRef, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
-import {Vehicle, WorkCategoryService, WorkSubCategoryService, WorkTodoService} from '../../../../../../../core/admin';
-import {fromEvent, Observable} from 'rxjs';
-import {debounceTime, distinctUntilChanged, filter, map, startWith, switchMap} from 'rxjs/operators';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  Vehicle,
+  WorkCategoryService,
+  WorkSubCategoryService,
+  WorkTodoRepairService,
+  WorkTodoService
+} from '../../../../../../../core/admin';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Observable} from 'rxjs';
 import {SweetAlertOptions} from "sweetalert2";
 import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
-import {Form, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {map, startWith} from 'rxjs/operators';
 import {isObject} from "util";
 
 @Component({
-  selector: 'kt-work-todo',
-  templateUrl: './work-todo.component.html',
-  styleUrls: ['./work-todo.component.scss']
+  selector: 'kt-work-todo-repair',
+  templateUrl: './work-todo-repair.component.html',
+  styleUrls: ['./work-todo-repair.component.scss']
 })
-export class WorkTodoComponent implements OnInit, OnChanges {
+export class WorkTodoRepairComponent implements OnInit, OnChanges {
   @Input() vehicleReception: any;
   @Input() vehicle: Vehicle;
-  @Input() readOnlyStatus = true;
+  @Output() totalWorkTodoRepairEmit = new EventEmitter<any>();
+  @Output() updateReceptionWorkTodoSectionEmit = new EventEmitter<any>();
+
   public addWorkFormGroup: FormGroup;
   public updateWorkFormGroup: FormGroup;
   public workCategories: Observable<any[]>;
@@ -37,19 +45,20 @@ export class WorkTodoComponent implements OnInit, OnChanges {
   public workCategoryRef: any[];
   public workSubCategoryRef: any[];
   public subTotal: number;
+
   /**
    *
    * @param workCategoryService
    * @param workSubCategoryService
-   * @param workTodoService
+   * @param workTodoRepairService
    * @param fb
    */
 
   constructor(
     private workCategoryService: WorkCategoryService,
     private workSubCategoryService: WorkSubCategoryService,
-    private workTodoService: WorkTodoService,
-    private fb: FormBuilder
+    private workTodoRepairService: WorkTodoRepairService,
+    private fb: FormBuilder,
   ) { }
 
   ngOnInit() {
@@ -65,7 +74,9 @@ export class WorkTodoComponent implements OnInit, OnChanges {
       focusCancel: true,
       preConfirm: () =>  this.addWork()
     };
-    this.workTodoService.updateRepairInfoMessage.subscribe(
+
+    this.initFormControl();
+    this.workTodoRepairService.updateReceptionInfoMessage.subscribe(
       (message) => {
         switch(message) {
           case 'update':
@@ -77,7 +88,6 @@ export class WorkTodoComponent implements OnInit, OnChanges {
             break;
         }
     });
-    this.initFormControl();
   }
 
   ngOnChanges(changes) {
@@ -99,7 +109,7 @@ export class WorkTodoComponent implements OnInit, OnChanges {
   }
 
   getWorkTodos() {
-    this.workTodoService.all(this.vehicleReception.id).subscribe(
+    this.workTodoRepairService.all(this.vehicleReception.id).subscribe(
       (workTodos) => {
         this.workTodoList = this.formatTodoList(workTodos, this.workCategoryRef);
       }
@@ -128,7 +138,6 @@ export class WorkTodoComponent implements OnInit, OnChanges {
   }
   setCategoryOption(category) {
     if(category.option.value.id) {
-      // this.workSubCategories = this.workSubCategoryService.all(category.option.value.id, this.vehicle.id, this.vehicle.subtype.id);
       this.workSubCategoryService.all(category.option.value.id, this.vehicle.id, this.vehicle.subtype.id).subscribe(
         (workSubcategories) => {
           this.workSubCategoryRef = workSubcategories;
@@ -152,14 +161,13 @@ export class WorkTodoComponent implements OnInit, OnChanges {
    */
   isControlHasError(controlName: string, validationType: string): boolean {
     const control = this.addWorkFormGroup.controls[controlName];
-    // console.log(control)
     if (!control) {
       return false;
     }
-    // console.log(control)
     const result = control.hasError(validationType) && (control.dirty || control.touched);
     return result;
   }
+
 
   setSubcategoryDefaultOptions(subCategory: any) {
     this.addWorkFormGroup.controls.price.setValue(subCategory.option.value.price);
@@ -192,7 +200,7 @@ export class WorkTodoComponent implements OnInit, OnChanges {
       });
       return false;
     }
-    const response = this.workTodoService.post(this.vehicleReception.id, this.addWorkFormGroup.getRawValue());
+    const response = this.workTodoRepairService.post(this.vehicleReception.id, this.addWorkFormGroup.getRawValue());
     return new Promise((resolve, reject) => {
       response.subscribe(
         (workTodo) => {
@@ -202,9 +210,7 @@ export class WorkTodoComponent implements OnInit, OnChanges {
         }
       );
     });
-    // this.workTodoService.post();
   }
-
 
   private formatTodoList(todos: any[], categories: any[]) {
     this.subTotal = 0;
@@ -217,6 +223,7 @@ export class WorkTodoComponent implements OnInit, OnChanges {
         todosInfo.forEach((value, key) => {
           this.subTotal += value.price;
         });
+        this.totalWorkTodoRepairEmit.emit(this.subTotal);
       }
       let todo = {
         'category': value,
@@ -226,13 +233,14 @@ export class WorkTodoComponent implements OnInit, OnChanges {
     });
     return treeResult;
   }
+
   updateTodoItem(categoryKey, subCategoryKey, newTodoItem) {
     this.workTodoList[categoryKey]['todos'][subCategoryKey] = newTodoItem;
     this.reCalculateSubTotal();
   }
 
   removeTodoItem(categoryKey, subCategoryKey, workTodoId: any) {
-    this.workTodoService.delete(this.vehicleReception.id, workTodoId).subscribe(
+    this.workTodoRepairService.delete(this.vehicleReception.id, workTodoId).subscribe(
       (response) => {
         this.workTodoList[categoryKey]['todos'].splice(subCategoryKey, 1);
         if (this.workTodoList[categoryKey]['todos'].length == 0) {
@@ -250,6 +258,7 @@ export class WorkTodoComponent implements OnInit, OnChanges {
         this.subTotal += item.price;
       })
     });
+    this.totalWorkTodoRepairEmit.emit(this.subTotal)
   }
 
   /**

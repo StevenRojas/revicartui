@@ -28,10 +28,11 @@ import {SweetAlertOptions} from "sweetalert2";
 export class WorkStatusCommentComponent implements OnInit {
   @Input() receptionPhoto: any;
   @Input() vehicleReceptionId: any;
-  public urlImages = environment.urlImages;
+  @Input() readOnlyStatus = true;
   @Output() removeReceptionPhotoEmitter = new EventEmitter<any>();
   @ViewChild('commentText', {static: true}) commentText: ElementRef;
   @ViewChild('deletePhotoModal', {static: false}) private deletePhotoModal: SwalComponent;
+  public urlImages = environment.urlImages;
   public deletePhotoModalOption: SweetAlertOptions;
   public status: string;
 

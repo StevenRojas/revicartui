@@ -1,8 +1,10 @@
 import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Company, WorkSubCategoryService} from '../../../../../../../../core/admin';
+import {Company, WorkSubCategoryService, WorkTodoRepairService} from '../../../../../../../../core/admin';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
+import {SweetAlertOptions} from "sweetalert2";
 
 @Component({
   selector: 'kt-work-todo-item',
@@ -21,6 +23,7 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
   @Input() vehicleId: any;
   @Input() vehicleSubtypeId: any;
   @Input() receptionId: any;
+  @Input() readOnlyStatus = true;
   @Output() updateWorkTodoEmit = new EventEmitter<any>();
   @Output() removeWorkTodoEmit = new EventEmitter<any>();
   public updateWorkFormGroup: FormGroup;
@@ -39,9 +42,12 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
 
   @ViewChild('quantityInput', {static: true}) quantityInput: ElementRef;
   @ViewChild('priceInput', {static: true}) priceInput: ElementRef;
+  @ViewChild('deleteItemModal', {static: false}) private deleteItemModal: SwalComponent;
+  public deleteItemModalOption: SweetAlertOptions;
   constructor(
     private fb: FormBuilder,
-    private workSubCategoryService: WorkSubCategoryService
+    private workSubCategoryService: WorkSubCategoryService,
+    private workTodoRepairService: WorkTodoRepairService
   ) {
     this.workTodoSelected = {
       "default_quantity": null,
@@ -55,29 +61,52 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.initFormControl();
     this.bindUpdateValues();
+    this.deleteItemModalOption = {
+      title: 'Advertencia',
+      showCancelButton: true,
+      cancelButtonText: 'No',
+      confirmButtonColor: '#5d78ff',
+      confirmButtonText: 'S&iacute;',
+      confirmButtonClass: 'btn btn-primary btn-elevate',
+      cancelButtonClass: 'btn btn-secondary btn-elevate',
+      showLoaderOnConfirm: true,
+      type: 'warning',
+      focusCancel: true,
+      preConfirm: () =>  this.removeWorkTodo()
+    };
   }
 
   ngOnChanges(changes) {
     if (this.category.id && this.worktodo.id) {
-
+      // this.initFormControl();
+      // this.bindUpdateValues();
     }
   }
 
   initFormControl() {
+    console.log(this.readOnlyStatus)
     this.updateWorkFormGroup = this.fb.group({
-      work_subcategory: ['', Validators.compose([Validators.required])
+      work_subcategory: [{value: '', disabled: this.readOnlyStatus}, Validators.compose([Validators.required])
       ],
-      price: ['', Validators.compose([Validators.required])
+      price: [{value: '', disabled: this.readOnlyStatus}, Validators.compose([Validators.required])
       ],
-      quantity: ['', Validators.compose([Validators.required])
+      quantity: [{value: '', disabled: this.readOnlyStatus}, Validators.compose([Validators.required])
       ]
     });
     this.bindValues();
-    // console.log(this.worktodo)
   }
 
+  public openDeleteModal() {
+    this.deleteItemModal.fire().then((result) => {
+      if (result.value) {
+        // After press "Ok" button
+      } else {
+        // After press "Cancel" button or leave from modal
+      }
+    });
+  }
   removeWorkTodo() {
-    this.removeWorkTodoEmit.emit(this.worktodo.worktodo_id);
+    return this.removeWorkTodoEmit.emit(this.worktodo.worktodo_id);
   }
 
   setSubcategoryDefaultOptions(subcategory: any) {
@@ -162,7 +191,7 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
         'price': parseFloat(text)
       }).subscribe(
         (response) => {
-          this.worktodo.price = response.price
+          this.worktodo.price = response.price;
           this.emitUpdate(this.worktodo);
         }
       )
@@ -208,5 +237,6 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
 
   private emitUpdate(workTodo: any) {
     this.updateWorkTodoEmit.emit(workTodo);
+    this.workTodoRepairService.updateReceptionInfoMessage.emit('update');
   }
 }

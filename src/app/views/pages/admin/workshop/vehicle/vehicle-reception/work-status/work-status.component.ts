@@ -18,7 +18,7 @@ export class WorkStatusComponent implements OnInit, OnChanges {
   @ViewChild('addPhotoModal', {static: false}) private addPhotoModal: SwalComponent;
   @ViewChild('receptionPhotoNoteInput', {static: false}) private receptionPhotoNoteInput: ElementRef;
   @Input() vehicleReception: any;
-
+  @Input() readOnlyStatus = true;
   public pondFiles = [];
   public lastFileAdd = [];
   public lastNoteAdd = null;
@@ -208,8 +208,6 @@ export class WorkStatusComponent implements OnInit, OnChanges {
 
 
   public addPhoto() {
-    // if (this.lastFileAdd) {
-    console.log(this.vehicleReception)
     const response = this.photoService.post(this.vehicleReception.vehicle, this.lastFileAdd, false);
     this.lastNoteAdd = this.receptionPhotoNoteInput.nativeElement.value;
     if(this.lastNoteAdd || this.lastFileAdd) {
@@ -230,7 +228,9 @@ export class WorkStatusComponent implements OnInit, OnChanges {
           this.receptionPhotoService.add(null, this.vehicleReception.id, this.lastNoteAdd).subscribe(
             (receptionPhotoObj) => {
               this.receptionPhotos = [receptionPhotoObj, ...this.receptionPhotos];
-            }
+              resolve();
+            },
+            error => reject()
           );
         }
 
@@ -239,30 +239,6 @@ export class WorkStatusComponent implements OnInit, OnChanges {
       this.receptionPhotoError = "Debe al menos o subir una Foto o agregar una Nota";
       return false;
     }
-
-    // } else {
-    //   return new Promise((resolve, reject) => {
-    //     // this.receptionPhotoError = "Es necesario agregar una fotografia"
-    //     reject();
-    //   });
-    // }
-    // const controls = this.clientAddFormControl.controls;
-    // // check form
-    // if (this.clientAddFormControl.invalid) {
-    //   Object.keys(controls).forEach(controlName =>
-    //     controls[controlName].markAsTouched()
-    //   );
-    //   return false;
-    // }
-    // const response = this.clientService.post(this.clientAddFormControl.getRawValue());
-    // return new Promise((resolve, reject) => {
-    //   response.subscribe(
-    //     (client) => {
-    //       this.addListRequest(client);
-    //       resolve();
-    //     }
-    //   );
-    // });
   }
   /**
    * Configuration uploader

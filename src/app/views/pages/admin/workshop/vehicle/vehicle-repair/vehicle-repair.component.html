@@ -1,11 +1,11 @@
-<mat-accordion>
-  <mat-expansion-panel>
+<mat-accordion >
+  <mat-expansion-panel [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
         <div class="text-black-50">Trabajos Realizados</div>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <kt-work></kt-work>
+    <kt-work-todo-repair [vehicle]="vehicle" [vehicleReception]="vehicleReception" (totalWorkTodoRepairEmit)="updateTotal($event)" ></kt-work-todo-repair>
   </mat-expansion-panel>
   <mat-expansion-panel>
     <mat-expansion-panel-header>
@@ -21,7 +21,7 @@
         <div class="text-black-50">Control de Calidad</div>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <kt-work-qa></kt-work-qa>
+    <kt-work-qa [vehicle]="vehicle" [vehicleReception]="vehicleReception" [operatorEnum]="operatorEnum"></kt-work-qa>
   </mat-expansion-panel>
   <mat-expansion-panel>
     <mat-expansion-panel-header>
@@ -29,7 +29,7 @@
         <div class="text-black-50">Próximos Mantenimientos y Notas</div>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <kt-work-maintenance></kt-work-maintenance>
+    <kt-work-maintenance [vehicle]="vehicle" [vehicleReception]="vehicleReception"></kt-work-maintenance>
   </mat-expansion-panel>
 </mat-accordion>
 

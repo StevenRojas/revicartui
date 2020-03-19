@@ -62,7 +62,7 @@ export class VehicleComponent implements OnInit {
   public pagination = { page: 1, query: undefined, queryId: undefined, limit: 10, sort: 'vehicle.id'};
   // Search Vars
   public query = { q: '', q_id: '' };
-  @ViewChild('historyModal', {static: false}) private historyModal: SwalComponent;
+  // @ViewChild('historyModal', {static: false}) private historyModal: SwalComponent;
   public works = [];
   public client: Client;
   public company: Company;
@@ -234,12 +234,12 @@ export class VehicleComponent implements OnInit {
     }
   }
 
-  showHistory() {
-    this.historyModal.fire().then((result) => {
-      if (result.value) {
-      }
-    });
-  }
+  // showHistory() {
+  //   this.historyModal.fire().then((result) => {
+  //     if (result.value) {
+  //     }
+  //   });
+  // }
 
   getMomentObj(date) {
     return moment(date);

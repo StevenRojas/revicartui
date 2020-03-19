@@ -5,10 +5,10 @@
       <div class="kt-widget4">
         <div class="kt-widget4__item" [ngStyle]="{'height': '25px'}">
             <div class="kt-widget4__info">
-              <mat-checkbox #checkbox_accessory (change)="createOrRemoveAccessory($event, receptionAccessoriesIds.indexOf(vehicle_accessory.id), input_accessory_quantity, vehicle_accessory.id)" [checked]="receptionAccessoriesIds.indexOf(vehicle_accessory.id) !== -1">{{ vehicle_accessory.name }}</mat-checkbox>
+              <mat-checkbox [disabled]="readOnlyStatus" #checkbox_accessory (change)="createOrRemoveAccessory($event, receptionAccessoriesIds.indexOf(vehicle_accessory.id), input_accessory_quantity, vehicle_accessory.id)" [checked]="receptionAccessoriesIds.indexOf(vehicle_accessory.id) !== -1">{{ vehicle_accessory.name }}</mat-checkbox>
             </div>
             <mat-form-field [ngStyle]="{'width': '40px'}">
-              <input #input_accessory_quantity
+              <input [disabled]="readOnlyStatus" #input_accessory_quantity
                      (keydown.tab)="updateAccessoryInput(input_accessory_quantity.value, receptionAccessoriesIds.indexOf(vehicle_accessory.id), checkbox_accessory)"
                      (keydown.enter)="updateAccessoryInput(input_accessory_quantity.value, receptionAccessoriesIds.indexOf(vehicle_accessory.id), checkbox_accessory)" matInput placeholder="" type="number" class="example-right-align" value="{{ receptionAccessoriesIds.indexOf(vehicle_accessory.id) !== -1 ? receptionAccessories[receptionAccessoriesIds.indexOf(vehicle_accessory.id)]['quantity'] : vehicle_accessory.default_quantity }}">
             </mat-form-field>
@@ -21,14 +21,14 @@
   <div class="col-md-6 col-xl-6 pl-3 ">
     <div class="row pb-3">
       <div class="col-12">
-        <button mat-button color="accent" (click)="openAddPhotoModal($event)" >AGREGAR FOTO</button>
+        <button [disabled]="readOnlyStatus" mat-button color="accent" (click)="openAddPhotoModal($event)" >AGREGAR FOTO</button>
       </div>
     </div>
     <div class="photos_reception_container--list">
       <ng-container *ngIf="receptionPhotos">
         <div class="kt-widget5" *ngFor="let receptionPhoto of receptionPhotos | keyvalue">
           <!--          START COMMENT SECTION-->
-          <kt-work-status-comment [vehicleReceptionId]="vehicleReception.id" [receptionPhoto]="receptionPhoto.value" (removeReceptionPhotoEmitter)="removeReceptionPhotoItem($event, receptionPhoto.key)"></kt-work-status-comment>
+          <kt-work-status-comment [readOnlyStatus]="readOnlyStatus" [vehicleReceptionId]="vehicleReception.id" [receptionPhoto]="receptionPhoto.value" (removeReceptionPhotoEmitter)="removeReceptionPhotoItem($event, receptionPhoto.key)"></kt-work-status-comment>
           <!--          END COMMENT SECTION-->
         </div>
       </ng-container>

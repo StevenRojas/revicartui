@@ -5,11 +5,11 @@ import {
   Client,
   ClientService,
   Company,
-  CompanyService,
+  CompanyService, OperatorService,
   PhotoService,
   Vehicle,
   VehicleList, VehicleReceptionService,
-  VehicleService
+  VehicleService, WorkstatusService
 } from '../../../../../../core/admin';
 import {BeforeOpenEvent, SwalComponent} from '@sweetalert2/ngx-sweetalert2';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -59,11 +59,17 @@ export class VehicleResumeComponent implements OnInit {
    */
   public clientList: any[];
   public companyList: any[];
+  /**
+   * Enums
+   */
+  public operatorEnum: any[];
 
   public insideTm: any;
   public outsideTm: any;
   public urlImages = environment.urlImages;
-
+  public _workStatusAcceptedId = environment.WORK_STATUS_ACCEPTED_ID;
+  public _workStatsRejectedId = environment.WORK_STATUS_REJECTED_ID;
+  public _showReparationIdFlag = environment.SHOW_REPARATION_WHEN_ID_STATUS_UP;
 
   public menuCanvasOptions: OffcanvasOptions = {
     baseClass: 'kt-aside',
@@ -116,6 +122,8 @@ export class VehicleResumeComponent implements OnInit {
 
   public vehicleReception: any;
   public clientVehicleOwners: any[];
+  // Totals
+  public totalWorkTodo = 0;
   constructor(
     private router: Router,
     private render: Renderer2,
@@ -126,7 +134,9 @@ export class VehicleResumeComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private vehicleService: VehicleService,
     private companyService: CompanyService,
+    private operatorService: OperatorService,
     private localStoreService: LocalStoreService,
+    private workstatusService: WorkstatusService,
     private layoutConfigService: LayoutConfigService,
     private clientVehicleService: ClientVehicleService,
     private companyVehicleService: CompanyVehicleService,
@@ -166,6 +176,12 @@ export class VehicleResumeComponent implements OnInit {
 
       });
     });
+    this.operatorService.getAll().subscribe(
+      (operators) => {
+        this.operatorEnum = operators;
+      }
+    );
+
   }
 
   getVehicles() {
@@ -203,10 +219,26 @@ export class VehicleResumeComponent implements OnInit {
   }
 
   public loadVehicleReception() {
+    console.log('fired!!')
     this.vehicleReceptionServices.getLastReception(this.vehicle.id).subscribe(
       (vehicleReceptionObj) => {
         if (vehicleReceptionObj && Object.keys(vehicleReceptionObj).length > 0) {
+          console.log('update again')
           this.vehicleReception = vehicleReceptionObj[0];
+        }
+      }
+    );
+  }
+
+  public refreshFromReception(statusId: any) {
+    console.log(statusId)
+    console.log(this.vehicleReception)
+    this.workstatusService.update({
+      'id': statusId
+    }, this.vehicleReception.id).subscribe(
+      (status) => {
+        if (statusId <= environment.SHOW_REPARATION_WHEN_ID_STATUS_UP) {
+          this.loadVehicleReception();
         }
       }
     );

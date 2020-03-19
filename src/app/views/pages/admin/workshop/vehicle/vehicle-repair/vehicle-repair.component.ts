@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
 import {
   Client,
   ClientService,
@@ -22,8 +22,13 @@ import * as moment from 'moment';
 })
 export class VehicleRepairComponent implements OnInit, OnChanges {
   @Input() vehicle: Vehicle;
+  @Input() vehicleReception: any;
+  @Input() operatorEnum: any[];
+  @Output() totalEmit = new EventEmitter<any>();
   public insideTm: any;
   public outsideTm: any;
+  public total: number;
+  public totalWorkTodo: number;
   public menuCanvasOptions: OffcanvasOptions = {
     baseClass: 'kt-aside',
     overlay: true,
@@ -72,7 +77,7 @@ export class VehicleRepairComponent implements OnInit, OnChanges {
   public pagination = { page: 1, query: undefined, queryId: undefined, limit: 10, sort: 'vehicle.id'};
   // Search Vars
   public query = { q: '', q_id: '' };
-  @ViewChild('historyModal', {static: false}) private historyModal: SwalComponent;
+  // @ViewChild('historyModal', {static: false}) private historyModal: SwalComponent;
   public works = [];
   public client: Client;
   public company: Company;
@@ -247,14 +252,19 @@ export class VehicleRepairComponent implements OnInit, OnChanges {
     }
   }
 
-  showHistory() {
-    this.historyModal.fire().then((result) => {
-      if (result.value) {
-      }
-    });
-  }
+  // showHistory() {
+  //   this.historyModal.fire().then((result) => {
+  //     if (result.value) {
+  //     }
+  //   });
+  // }
 
   getMomentObj(date) {
     return moment(date);
+  }
+  updateTotal(totalWorkTodo: number) {
+    // TODO sum all totals
+    this.total = totalWorkTodo;
+    this.totalEmit.emit(this.total);
   }
 }

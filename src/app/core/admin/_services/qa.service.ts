@@ -10,14 +10,17 @@ import {tap} from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class OperatorService {
+export class QaService {
   constructor(
     private http: HttpClient
   ) { }
   public getAll(): Observable<any> {
     return this.http.get<any>(environment.api_url + 'reparation/enums/operator');
   }
-  public update(operator: any, vehicleReceptionId: any): Observable<any> {
-    return this.http.patch<any>(environment.api_url + 'reparation/operator/' + vehicleReceptionId, operator);
+  public get(vehicleReceptionId: number): Observable<any> {
+    return this.http.get<any>(environment.api_url + 'reparation/qa/' + vehicleReceptionId)
+  }
+  public update(qa: any, vehicleReceptionId: any): Observable<any> {
+    return this.http.patch<any>(environment.api_url + 'reparation/qa/' + vehicleReceptionId, qa);
   }
 }

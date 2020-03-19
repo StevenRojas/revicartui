@@ -23,7 +23,10 @@
     <div class="col-1 col-sm-1 col-md-1 col-lg-1">
       <div class="row">
         <div class="col-12 mt-2 text-center">
-          <button mat-icon-button class="mr-1 text-black-50" (click)="removeWorkTodo()">
+          <button [disabled]="readOnlyStatus" mat-icon-button class="mr-1 text-black-50" (click)="openDeleteModal()">
+            <i class="fa flaticon2-trash text-danger"></i>
+          </button>
+          <button [disabled]="readOnlyStatus" mat-icon-button class="mr-1 text-black-50" (click)="openDeleteModal()">
             <i class="fa flaticon2-trash text-danger"></i>
           </button>
         </div>
@@ -54,3 +57,12 @@
     </div>
   </div>
 </form>
+
+<swal
+  #deleteItemModal
+  [swalOptions]="deleteItemModalOption"
+>
+  <div *swalPortal>
+    <p>Desea eliminar el trabajo?</p>
+  </div>
+</swal>

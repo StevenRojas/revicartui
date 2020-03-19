@@ -4,6 +4,7 @@ import {SweetAlertOptions} from "sweetalert2";
 import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
+import {environment} from '../../../../../../../environments/environment';
 
 @Component({
   selector: 'kt-vehicle-reception',
@@ -14,12 +15,13 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
   @Input() vehicle: Vehicle;
   @Input() vehicleReception: any;
   @Output() updateVehicleReceptionEmit = new EventEmitter<any>();
-  // public vehicleReception: any;
+  @Output() goToReparationEmit = new EventEmitter<any>();
   public reception: any;
   public cancelReceptionModalOption: SweetAlertOptions;
   public approveReceptionModalOption: SweetAlertOptions;
   @ViewChild('cancelReceptionModal', {static: false}) private cancelReceptionModal: SwalComponent;
   @ViewChild('approveReceptionModal', {static: false}) private approveReceptionModal: SwalComponent;
+  public readOnlyStatus = true;
   public cancelFormGroup: FormGroup;
 
   constructor(
@@ -60,7 +62,7 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes) {
     if (this.vehicle.id) {
-      // this.loadVehicleReception();
+      this.readOnlyStatus = this.vehicleReception.work_status >= environment.WORK_STATUS_ACCEPTED_ID;
     }
   }
 
@@ -71,18 +73,7 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
     });
   }
 
-  // public loadVehicleReception() {
-  //   this.vehicleReceptionServices.getLastReception(this.vehicle.id).subscribe(
-  //     (vehicleReceptionObj) => {
-  //       // console.log(vehicleReceptionObj)
-  //       if (vehicleReceptionObj && Object.keys(vehicleReceptionObj).length > 0) {
-  //         this.vehicleReception = vehicleReceptionObj[0];
-  //       }
-  //     }
-  //   );
-  // }
   public openCancelReceptionModal() {
-    // this.addWorkFormGroup.reset();
     this.cancelReceptionModal.fire().then((result) => {
       if (result.value) {
         // After press "Ok" button
@@ -102,6 +93,9 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
     });
   }
 
+  /**
+   * Update Vehicle Reception Status and emit a update message
+   */
   public cancelReception() {
     const controls = this.cancelFormGroup.controls;
     // check form
@@ -118,18 +112,21 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
           this.cancelFormGroup.reset();
           this.vehicleReception = null;
           this.updateVehicleReceptionEmit.emit(true);
-          // this.loadVehicleReception();
           resolve();
         }
       );
     });
   }
-
+  /**
+   * Update Vehicle Reception Status and emit a update message
+   */
   public approveReception() {
     const response = this.vehicleReceptionServices.approve(this.vehicleReception.id);
     return new Promise((resolve, reject) => {
       response.subscribe(
         (response) => {
+          this.updateVehicleReceptionEmit.emit(true);
+          this.goToReparationEmit.emit(true);
           resolve();
         }
       );
