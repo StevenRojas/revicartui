@@ -1,0 +1,11 @@
+<div>
+  <h6 class="text-black-50">{{ maintenance.concept }}</h6>
+  <mat-form-field class="w-100 pb-2">
+    <input (dateChange)="updateDate($event)" [value]="itemWhen" matInput [matDatepicker]="pickerObj" placeholder="Fecha">
+    <mat-datepicker-toggle matSuffix [for]="pickerObj"></mat-datepicker-toggle>
+    <mat-datepicker #pickerObj></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field class="w-100 pb-2">
+    <input #km [value]="itemKm" matInput placeholder="Kilometraje" type="number" class="example-right-align" />
+  </mat-form-field>
+</div>
