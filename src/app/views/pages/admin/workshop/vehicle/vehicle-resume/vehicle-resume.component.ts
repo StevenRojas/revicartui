@@ -6,7 +6,7 @@ import {
   ClientService,
   Company,
   CompanyService, OperatorService,
-  PhotoService,
+  PhotoService, QaService,
   Vehicle,
   VehicleList, VehicleReceptionService,
   VehicleService, WorkstatusService
@@ -127,6 +127,7 @@ export class VehicleResumeComponent implements OnInit {
   constructor(
     private router: Router,
     private render: Renderer2,
+    private qaService: QaService,
     private route: ActivatedRoute,
     private authService: AuthService,
     private photoService: PhotoService,
@@ -181,7 +182,17 @@ export class VehicleResumeComponent implements OnInit {
         this.operatorEnum = operators;
       }
     );
-
+    this.qaService.updateStatusReceptionMessage.subscribe(
+      (newIdStatus) => {
+        this.workstatusService.update({
+          'id': newIdStatus
+        }, this.vehicleReception.id).subscribe(
+          (status) => {
+            this.loadVehicleReception();
+          }
+        );
+      }
+    );
   }
 
   getVehicles() {
@@ -231,8 +242,6 @@ export class VehicleResumeComponent implements OnInit {
   }
 
   public refreshFromReception(statusId: any) {
-    console.log(statusId)
-    console.log(this.vehicleReception)
     this.workstatusService.update({
       'id': statusId
     }, this.vehicleReception.id).subscribe(

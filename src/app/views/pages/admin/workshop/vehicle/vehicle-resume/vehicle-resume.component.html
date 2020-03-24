@@ -74,9 +74,9 @@
                                                 (goToReparationEmit)="matTabGroup.selectedIndex = 3"
                           ></kt-vehicle-reception>
                         </mat-tab>
-<!--                        <mat-tab label="Historial">-->
-<!--                          <kt-vehicle-history></kt-vehicle-history>-->
-<!--                        </mat-tab>-->
+                        <mat-tab label="Historial">
+                          <kt-vehicle-history></kt-vehicle-history>
+                        </mat-tab>
                         <mat-tab label="Reparación">
                           <ng-container *ngIf="vehicleReception">
                             <ng-container *ngIf="vehicleReception.work_status > _showReparationIdFlag">

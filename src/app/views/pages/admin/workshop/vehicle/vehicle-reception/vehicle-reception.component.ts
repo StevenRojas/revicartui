@@ -19,10 +19,14 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
   public reception: any;
   public cancelReceptionModalOption: SweetAlertOptions;
   public approveReceptionModalOption: SweetAlertOptions;
+  public printPreviewModalOption: SweetAlertOptions;
   @ViewChild('cancelReceptionModal', {static: false}) private cancelReceptionModal: SwalComponent;
   @ViewChild('approveReceptionModal', {static: false}) private approveReceptionModal: SwalComponent;
+  @ViewChild('printPreviewModal', {static: false}) private printPreviewModal: SwalComponent;
   public readOnlyStatus = true;
   public cancelFormGroup: FormGroup;
+  public withPhotos: boolean;
+  public withPrices: boolean;
 
   constructor(
     private vehicleReceptionServices: VehicleReceptionService,
@@ -56,6 +60,20 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
       showLoaderOnConfirm: true,
       focusCancel: true,
       preConfirm: () =>  this.approveReception()
+    };
+    this.initCancelFormControl();
+    this.printPreviewModalOption = {
+      title: 'Vista previa',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#5d78ff',
+      // type: 'success',
+      confirmButtonText: 'Imprimir',
+      confirmButtonClass: 'btn btn-primary btn-elevate',
+      cancelButtonClass: 'btn btn-secondary btn-elevate',
+      showLoaderOnConfirm: true,
+      focusCancel: true,
+      preConfirm: () =>  this.printReception()
     };
     this.initCancelFormControl();
   }
@@ -93,6 +111,15 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
     });
   }
 
+  public openPrintPreviewModal() {
+    this.printPreviewModal.fire().then((result) => {
+      if (result.value) {
+        // After press "Ok" button
+      } else {
+        // After press "Cancel" button or leave from modal
+      }
+    });
+  }
   /**
    * Update Vehicle Reception Status and emit a update message
    */
@@ -133,6 +160,9 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
     });
   }
 
+  public printReception() {
+    return true;
+  }
   public startReception() {
     this.vehicleReceptionServices.start(this.vehicle.id).subscribe(
       (response) => {

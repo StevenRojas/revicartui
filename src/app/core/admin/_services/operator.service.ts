@@ -18,6 +18,8 @@ export class OperatorService {
     return this.http.get<any>(environment.api_url + 'reparation/enums/operator');
   }
   public update(operator: any, vehicleReceptionId: any): Observable<any> {
-    return this.http.patch<any>(environment.api_url + 'reparation/operator/' + vehicleReceptionId, operator);
+    let params = new HttpParams();
+    params = params.set('sort', '-id');
+    return this.http.patch<any>(environment.api_url + 'reparation/operator/' + vehicleReceptionId, operator, { params: params});
   }
 }

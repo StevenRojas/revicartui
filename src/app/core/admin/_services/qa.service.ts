@@ -11,6 +11,7 @@ import {tap} from 'rxjs/operators';
   providedIn: 'root'
 })
 export class QaService {
+  public updateStatusReceptionMessage = new EventEmitter();
   constructor(
     private http: HttpClient
   ) { }
@@ -22,5 +23,8 @@ export class QaService {
   }
   public update(qa: any, vehicleReceptionId: any): Observable<any> {
     return this.http.patch<any>(environment.api_url + 'reparation/qa/' + vehicleReceptionId, qa);
+  }
+  public history(qaId: number): Observable<any> {
+    return this.http.get<any>(environment.api_url + 'reparation/qa/' + qaId + '/history-rejected');
   }
 }

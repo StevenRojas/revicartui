@@ -57,7 +57,7 @@
         <div class="col-10 text-left mb-4">
           <div class="row">
             <div class="col-12 text-left mb-0">
-              {{ note.value.updated_at | dateFormat: 'LL' }} <p class="text-info d-inline-block mb-0"> [{{ note.value.work_status.code }}]</p>
+              {{ note.value.updated_at | dateFormat: 'LL' }} <p class="text-info d-inline-block mb-0"> [{{ note.value.work_status.name | uppercase }}]</p>
             </div>
           </div>
           <div class="row">

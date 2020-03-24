@@ -1,5 +1,12 @@
 import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
-import {OperatorService, StatusNoteService, Vehicle, VehicleReparationService, WorkstationService} from '../../../../../../../core/admin';
+import {
+  OperatorService,
+  QaService,
+  StatusNoteService,
+  Vehicle,
+  VehicleReparationService,
+  WorkstationService
+} from '../../../../../../../core/admin';
 import {WorkstatusService} from '../../../../../../../core/admin/_services/workstatus.service';
 import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
 import {SweetAlertOptions} from "sweetalert2";
@@ -30,7 +37,8 @@ export class WorkHeaderComponent implements OnInit, OnChanges {
     private operatorService: OperatorService,
     private workstationService: WorkstationService,
     private workstatusService: WorkstatusService,
-    private statusNoteService: StatusNoteService
+    private statusNoteService: StatusNoteService,
+    private qaService: QaService
   ) { }
 
   ngOnInit() {
@@ -75,7 +83,14 @@ export class WorkHeaderComponent implements OnInit, OnChanges {
 
     this.workstatusService.getAll().subscribe(
       (workStatus) => {
-        this.workStatusEnum = workStatus;
+        let tempWorkStatus = [];
+        Object.keys(workStatus).forEach((key) => {
+          console.log(workStatus[key])
+          if (!environment.BANNED_STATUS.find(id => id == workStatus[key]['id'])) {
+            tempWorkStatus.push(workStatus[key]);
+          }
+        });
+        this.workStatusEnum = tempWorkStatus;
       }
     );
   }

@@ -41,9 +41,12 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
   private tempSubcategoryList: any[];
 
   @ViewChild('quantityInput', {static: true}) quantityInput: ElementRef;
+  @ViewChild('commentText', {static: false}) commentText: ElementRef;
   @ViewChild('priceInput', {static: true}) priceInput: ElementRef;
   @ViewChild('deleteItemModal', {static: false}) private deleteItemModal: SwalComponent;
   public deleteItemModalOption: SweetAlertOptions;
+  @ViewChild('commentItemModal', {static: false}) private commentItemModal: SwalComponent;
+  public commentItemModalOption: SweetAlertOptions;
   constructor(
     private fb: FormBuilder,
     private workSubCategoryService: WorkSubCategoryService,
@@ -74,17 +77,28 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
       focusCancel: true,
       preConfirm: () =>  this.removeWorkTodo()
     };
+    this.commentItemModalOption = {
+      title: 'Nota del trabajo',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#5d78ff',
+      confirmButtonText: 'Guardar',
+      confirmButtonClass: 'btn btn-primary btn-elevate',
+      cancelButtonClass: 'btn btn-secondary btn-elevate',
+      showLoaderOnConfirm: false,
+      focusCancel: true,
+      preConfirm: () =>  this.changeNoteWorkTodo()
+    };
+
   }
 
   ngOnChanges(changes) {
     if (this.category.id && this.worktodo.id) {
-      // this.initFormControl();
-      // this.bindUpdateValues();
+
     }
   }
 
   initFormControl() {
-    console.log(this.readOnlyStatus)
     this.updateWorkFormGroup = this.fb.group({
       work_subcategory: [{value: '', disabled: this.readOnlyStatus}, Validators.compose([Validators.required])
       ],
@@ -105,6 +119,17 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
       }
     });
   }
+
+  public openCommentModal() {
+    this.commentItemModal.fire().then((result) => {
+      if (result.value) {
+        // After press "Ok" button
+      } else {
+        // After press "Cancel" button or leave from modal
+      }
+    });
+  }
+
   removeWorkTodo() {
     return this.removeWorkTodoEmit.emit(this.worktodo.worktodo_id);
   }
@@ -155,7 +180,6 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
     if (!control) {
       return false;
     }
-    // console.log(control)
     const result = control.hasError(validationType) && (control.dirty || control.touched);
     return result;
   }
@@ -212,7 +236,9 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
     /**
      * Start list without subcategories
      */
-    this.subcategoryList = [this.workTodoSelected];
+    let tempList = this.workTodoSelected;
+    tempList.price = null;
+    this.subcategoryList = [tempList];
     this.updateWorkFormGroup.patchValue({
       work_subcategory: this.workTodoSelected,
       price: this.workTodoSelected.price,
@@ -232,6 +258,22 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
         this.emitUpdate(this.worktodo);
       }
     )
+  }
+
+  private changeNoteWorkTodo() {
+    this.workSubCategoryService.put(this.receptionId, this.worktodo.worktodo_id, {
+      notes: this.commentText.nativeElement.value
+    }).subscribe(
+      (response) => {
+        this.worktodo.notes = response.notes;
+        this.worktodo.price = response.price;
+        this.worktodo.quantity = response.quantity;
+        this.worktodo.subcategory = this.workTodoSelected.work;
+        this.worktodo.subcategory_id = response.work_subcategory;
+        this.emitUpdate(this.worktodo);
+      }
+    )
+    return true;
   }
 
 

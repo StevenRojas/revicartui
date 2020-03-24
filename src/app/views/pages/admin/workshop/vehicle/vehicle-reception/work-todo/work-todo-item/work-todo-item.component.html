@@ -1,11 +1,11 @@
 <form [formGroup]="updateWorkFormGroup" autocomplete="off" class="kt-register__form kt-form">
   <div class="row">
-    <div class="col-6 col-sm-7 col-md-7 col-lg-8">
+    <div class="col-4 col-sm-5 col-md-5 col-lg-7 mr-0 pr-0">
       <div class="row">
         <div class="col-1">
 <!--          TODO SET icon for inform about an update-->
         </div>
-        <div class="col-11">
+        <div class="col-11 mr-0 pr-0">
           <mat-form-field class="input-full-width w-100 p-0 m-0">
             <!--            <input type="text" placeholder="Sub Categoría" aria-label="Sub categoría" matInput formControlName="work_subcategory"  >-->
             <mat-select [(value)]="workTodoSelected" (opened)="getSubcategories()" placeholder="" (selectionChange)="setSubcategoryDefaultOptions($event)" formControlName="work_subcategory" >
@@ -20,21 +20,21 @@
         </div>
       </div>
     </div>
-    <div class="col-1 col-sm-1 col-md-1 col-lg-1">
+    <div class="col-3 col-sm-3 col-md-3 col-lg-2 ml-0 pl-0 mr-0 pr-0">
       <div class="row">
-        <div class="col-12 mt-2 text-center">
-          <button [disabled]="readOnlyStatus" mat-icon-button class="mr-1 text-black-50" (click)="openDeleteModal()">
-            <i class="fa flaticon2-trash text-danger"></i>
+        <div class="col-12 mt-2 text-center mr-0 pr-0 ml-0 pl-0">
+          <button [disabled]="readOnlyStatus" mat-icon-button class="mr-1 text-black-50 d-inline-block" (click)="openCommentModal()">
+            <i class="fa flaticon-chat-1 text-primary kt-font-bold"></i>
           </button>
-          <button [disabled]="readOnlyStatus" mat-icon-button class="mr-1 text-black-50" (click)="openDeleteModal()">
+          <button [disabled]="readOnlyStatus" mat-icon-button class="mr-1 text-black-50 d-inline-block" (click)="openDeleteModal()">
             <i class="fa flaticon2-trash text-danger"></i>
           </button>
         </div>
       </div>
     </div>
-    <div class="col-5 col-sm-4 col-md-4 col-lg-3">
+    <div class="col-5 col-sm-4 col-md-4 col-lg-3 ml-0 pl-0">
       <div class="row">
-        <div class="col-4">
+        <div class="col-4 ml-0 pl-0">
           <mat-form-field class="input-full-width w-100 pr-1">
             <mat-label>Cantidad</mat-label>
             <input #quantityInput formControlName="quantity" [value]="worktodo.quantity" matInput placeholder="Cantidad" type="number" min="0" max="10000" step="1" />
@@ -64,5 +64,16 @@
 >
   <div *swalPortal>
     <p>Desea eliminar el trabajo?</p>
+  </div>
+</swal>
+
+<swal
+  #commentItemModal
+  [swalOptions]="commentItemModalOption"
+>
+  <div *swalPortal>
+    <mat-form-field [ngStyle]="{'width': '100%'}">
+      <textarea [autofocus]="true" #commentText matInput [value]="worktodo.notes" placeholder="Nota" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
+    </mat-form-field>
   </div>
 </swal>

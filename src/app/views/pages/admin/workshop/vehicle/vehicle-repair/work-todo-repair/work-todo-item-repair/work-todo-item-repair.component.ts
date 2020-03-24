@@ -43,6 +43,10 @@ export class WorkTodoItemRepairComponent implements OnInit {
 
   @ViewChild('quantityInput', {static: true}) quantityInput: ElementRef;
   @ViewChild('priceInput', {static: true}) priceInput: ElementRef;
+  @ViewChild('commentText', {static: false}) commentText: ElementRef;
+  @ViewChild('commentItemModal', {static: false}) private commentItemModal: SwalComponent;
+  public commentItemModalOption: SweetAlertOptions;
+
   constructor(
     private fb: FormBuilder,
     private workSubCategoryService: WorkSubCategoryService,
@@ -72,6 +76,18 @@ export class WorkTodoItemRepairComponent implements OnInit {
       type: 'warning',
       focusCancel: true,
       preConfirm: () =>  this.removeWorkTodo()
+    };
+    this.commentItemModalOption = {
+      title: 'Nota del trabajo',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#5d78ff',
+      confirmButtonText: 'Guardar',
+      confirmButtonClass: 'btn btn-primary btn-elevate',
+      cancelButtonClass: 'btn btn-secondary btn-elevate',
+      showLoaderOnConfirm: false,
+      focusCancel: true,
+      preConfirm: () =>  this.changeNoteWorkTodo()
     };
   }
 
@@ -130,6 +146,17 @@ export class WorkTodoItemRepairComponent implements OnInit {
 
   public openDeleteModal() {
     this.deleteItemModal.fire().then((result) => {
+      if (result.value) {
+        // After press "Ok" button
+      } else {
+        // After press "Cancel" button or leave from modal
+      }
+    });
+  }
+
+
+  public openCommentModal() {
+    this.commentItemModal.fire().then((result) => {
       if (result.value) {
         // After press "Ok" button
       } else {
@@ -209,7 +236,9 @@ export class WorkTodoItemRepairComponent implements OnInit {
     /**
      * Start list without subcategories
      */
-    this.subcategoryList = [this.workTodoSelected];
+    let tempList = this.workTodoSelected;
+    tempList.price = null;
+    this.subcategoryList = [tempList];
     this.updateWorkFormGroup.patchValue({
       work_subcategory: this.workTodoSelected,
       price: this.workTodoSelected.price,
@@ -231,6 +260,21 @@ export class WorkTodoItemRepairComponent implements OnInit {
     )
   }
 
+  private changeNoteWorkTodo() {
+    this.workSubCategoryService.put(this.receptionId, this.worktodo.worktodo_id, {
+      notes: this.commentText.nativeElement.value
+    }).subscribe(
+      (response) => {
+        this.worktodo.notes = response.notes;
+        this.worktodo.price = response.price;
+        this.worktodo.quantity = response.quantity;
+        this.worktodo.subcategory = this.workTodoSelected.work;
+        this.worktodo.subcategory_id = response.work_subcategory;
+        this.emitUpdate(this.worktodo);
+      }
+    )
+    return true;
+  }
 
   private emitUpdate(workTodo: any) {
     this.workTodoService.updateRepairInfoMessage.emit('update'); // also could be delete

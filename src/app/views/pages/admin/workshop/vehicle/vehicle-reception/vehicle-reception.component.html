@@ -21,7 +21,7 @@
                           <h5>{{ vehicleReception.updated_at | dateFormat: 'LL' }}</h5>
                         </div>
                         <div class="col-1 col-md-1">
-                          <button mat-icon-button class="text-black-50" [ngStyle]="{'bottom' : '10px'}">
+                          <button mat-icon-button class="text-black-50" [ngStyle]="{'bottom' : '10px'}" (click)="openPrintPreviewModal()">
                             <i class="fa flaticon2-printer text-primary"></i>
                           </button>
                         </div>
@@ -94,5 +94,23 @@
 >
   <div *swalPortal>
     <p>Desea aprobar este formulario y pasarlo a la seccion de Reparaci&oacute;n?</p>
+  </div>
+</swal>
+
+
+<swal
+  #printPreviewModal
+  [swalOptions]="printPreviewModalOption"
+>
+  <div *swalPortal>
+    <div class="row">
+      <div class="col-12">
+        <section class="text-right">
+          <mat-checkbox class="mr-2" [(ngModel)]="withPhotos">Fotos</mat-checkbox>
+          <mat-checkbox class="ml-2" [(ngModel)]="withPrices">Precios</mat-checkbox>
+        </section>
+      </div>
+    </div>
+    <div class=""></div>
   </div>
 </swal>

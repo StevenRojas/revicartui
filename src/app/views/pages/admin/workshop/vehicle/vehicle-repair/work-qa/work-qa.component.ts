@@ -1,7 +1,8 @@
-import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import {OperatorService, QaService, Vehicle} from '../../../../../../../core/admin';
 import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
 import {SweetAlertOptions} from "sweetalert2";
+import {environment} from '../../../../../../../../environments/environment';
 
 @Component({
   selector: 'kt-work-qa',
@@ -12,9 +13,11 @@ export class WorkQaComponent implements OnInit, OnChanges {
   @Input() vehicleReception: any;
   @Input() vehicle: Vehicle;
   @Input() operatorEnum: any[] = [];
+  // @Output() changeStatusRejectedEmit = new EventEmitter<any>();
   @ViewChild('qaNoteModal', {static: false}) public qaNoteModal: SwalComponent;
   public qaNoteModalOption: SweetAlertOptions;
   public qa: any;
+  public qaHistory: any;
   public messageError: string;
   public lastNote: string;
   public accepted: boolean;
@@ -42,6 +45,7 @@ export class WorkQaComponent implements OnInit, OnChanges {
       this.qaService.get(this.vehicleReception.id).subscribe(
         (qa) => {
           this.qa = qa;
+          this.getHistory();
         },
         error => {
           this.messageError = "No hay reporte de Calidad"
@@ -82,8 +86,23 @@ export class WorkQaComponent implements OnInit, OnChanges {
       }, this.qa.id).subscribe(
         (result) => {
           this.qa = result;
+          this.getHistory();
+          if (this.accepted) {
+            this.qaService.updateStatusReceptionMessage.emit(environment.WORK_STATUS_ACCEPTED_QA_ID);
+          }
+          else {
+            this.qaService.updateStatusReceptionMessage.emit(environment.WORK_STATUS_REJECTED_QA_ID);
+          }
         }
       );
     }
+  }
+
+  private getHistory() {
+    this.qaService.history(this.qa.id).subscribe(
+      (qaHistory) => {
+        this.qaHistory = qaHistory;
+      }
+    );
   }
 }

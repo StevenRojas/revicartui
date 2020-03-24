@@ -102,6 +102,7 @@ export class WorkTodoComponent implements OnInit, OnChanges {
     this.workTodoService.all(this.vehicleReception.id).subscribe(
       (workTodos) => {
         this.workTodoList = this.formatTodoList(workTodos, this.workCategoryRef);
+        console.log(this.workTodoList)
       }
     );
   }
