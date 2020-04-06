@@ -80,17 +80,6 @@ export class VehicleResumeComponent implements OnInit {
       state: 'kt-header-mobile__toolbar-toggler--active'
     }
   };
-  // public historyModalOption = {
-  //   showCancelButton: true,
-  //   cancelButtonText: 'OK',
-  //   // confirmButtonColor: '#5d78ff',
-  //   // confirmButtonText: 'Eliminar',
-  //   // confirmButtonClass: 'btn btn-primary btn-elevate',
-  //   cancelButtonClass: 'btn btn-secondary btn-elevate',
-  //   // showLoaderOnConfirm: true,
-  //   focusCancel: true
-  //   // preConfirm: () => this.deleteClien   t(this.clientSelected)
-  // };
   public menuOptions: MenuOptions = {
     // vertical scroll
     scroll: null,
@@ -124,6 +113,8 @@ export class VehicleResumeComponent implements OnInit {
   public clientVehicleOwners: any[];
   // Totals
   public totalWorkTodo = 0;
+  // Control Errors
+  public errorConnection = false;
   constructor(
     private router: Router,
     private render: Renderer2,
@@ -217,6 +208,7 @@ export class VehicleResumeComponent implements OnInit {
             total: 1
           };
           this.vehicle = this.list.list[0];
+          console.log(this.vehicle)
           Object.keys(this.vehicle.photos).forEach((key) => {
             if(this.vehicle.photos[key]['is_primary']) {
               this.vehiclePhoto = this.vehicle.photos[key];
@@ -225,16 +217,15 @@ export class VehicleResumeComponent implements OnInit {
           // Get reception
           this.loadVehicleReception();
         }
-      }
+      },
+      error => this.errorConnection = true
     );
   }
 
   public loadVehicleReception() {
-    console.log('fired!!')
     this.vehicleReceptionServices.getLastReception(this.vehicle.id).subscribe(
       (vehicleReceptionObj) => {
         if (vehicleReceptionObj && Object.keys(vehicleReceptionObj).length > 0) {
-          console.log('update again')
           this.vehicleReception = vehicleReceptionObj[0];
         }
       }
@@ -536,7 +527,7 @@ export class VehicleResumeComponent implements OnInit {
       multiple: false,
       labelIdle: 'Arrastre y suelte los archivos aquí o puede  <a class="link"> buscarlos </a>',
       acceptedFileTypes: 'image/*',
-      instantUpload: false,
+      instantUpload: true,
       maxFileSize: '5MB',
       allowRevert: false,
       server: {

@@ -14,7 +14,6 @@ import {InlineSVGModule} from 'ng-inline-svg';
 
 // Perfect Scroll bar
 import {PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface} from 'ngx-perfect-scrollbar';
-
 // Guard
 import { AuthGuard } from './core/auth';
 

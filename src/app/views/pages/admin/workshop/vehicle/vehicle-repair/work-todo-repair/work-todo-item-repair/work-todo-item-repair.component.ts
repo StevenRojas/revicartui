@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {WorkSubCategoryService, WorkTodoService} from '../../../../../../../../core/admin';
+import {WorkSubCategoryService, WorkTodoRepairService, WorkTodoService} from '../../../../../../../../core/admin';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
@@ -50,6 +50,7 @@ export class WorkTodoItemRepairComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private workSubCategoryService: WorkSubCategoryService,
+    private workTodoRepairService: WorkTodoRepairService,
     private workTodoService: WorkTodoService,
   ) {
     this.workTodoSelected = {
@@ -195,7 +196,7 @@ export class WorkTodoItemRepairComponent implements OnInit {
       debounceTime(500),
       distinctUntilChanged()
     ).subscribe((text) => {
-      this.workSubCategoryService.put(this.receptionId, this.worktodo.worktodo_id, {
+      this.workTodoRepairService.put(this.receptionId, this.worktodo.worktodo_id, {
         'quantity': parseInt(text)
       }).subscribe(
         (response) => {
@@ -211,11 +212,11 @@ export class WorkTodoItemRepairComponent implements OnInit {
       debounceTime(500),
       distinctUntilChanged()
     ).subscribe((text) => {
-      this.workSubCategoryService.put(this.receptionId, this.worktodo.worktodo_id, {
+      this.workTodoRepairService.put(this.receptionId, this.worktodo.worktodo_id, {
         'price': parseFloat(text)
       }).subscribe(
         (response) => {
-          this.worktodo.price = response.price
+          this.worktodo.price = response.price;
           this.emitUpdate(this.worktodo);
         }
       )
@@ -248,7 +249,7 @@ export class WorkTodoItemRepairComponent implements OnInit {
 
   private changeWorkTodo(body: any) {
     body['notes'] = null;
-    this.workSubCategoryService.put(this.receptionId, this.worktodo.worktodo_id, body).subscribe(
+    this.workTodoRepairService.put(this.receptionId, this.worktodo.worktodo_id, body).subscribe(
       (response) => {
         this.worktodo.notes = null;
         this.worktodo.price = response.price;
@@ -261,7 +262,7 @@ export class WorkTodoItemRepairComponent implements OnInit {
   }
 
   private changeNoteWorkTodo() {
-    this.workSubCategoryService.put(this.receptionId, this.worktodo.worktodo_id, {
+    this.workTodoRepairService.put(this.receptionId, this.worktodo.worktodo_id, {
       notes: this.commentText.nativeElement.value
     }).subscribe(
       (response) => {

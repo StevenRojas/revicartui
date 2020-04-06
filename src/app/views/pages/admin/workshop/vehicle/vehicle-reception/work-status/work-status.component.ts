@@ -212,14 +212,16 @@ export class WorkStatusComponent implements OnInit, OnChanges {
     this.lastNoteAdd = this.receptionPhotoNoteInput.nativeElement.value;
     if(this.lastNoteAdd || this.lastFileAdd) {
       return new Promise((resolve, reject) => {
-        if(this.lastFileAdd && this.lastFileAdd != null && this.lastFileAdd.length == 0) {
+        if(this.lastFileAdd && this.lastFileAdd != null && this.lastFileAdd.length != 0) {
           response.subscribe(
-            (photoObj) => {
-              this.receptionPhotoService.add(photoObj.id, this.vehicleReception.id, this.lastNoteAdd).subscribe(
-                (receptionPhotoObj) => {
-                  this.receptionPhotos = [receptionPhotoObj, ...this.receptionPhotos];
-                }
-              );
+            (photoObj) => { // response array
+              Object.keys(photoObj).forEach((value, key) => {
+                this.receptionPhotoService.add(photoObj[key].id, this.vehicleReception.id, this.lastNoteAdd).subscribe(
+                  (receptionPhotoObj) => {
+                    this.receptionPhotos = [receptionPhotoObj, ...this.receptionPhotos];
+                  }
+                );
+              });
               resolve();
             },
             error => reject()

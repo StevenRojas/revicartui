@@ -10,7 +10,7 @@ import {MenuConfigService} from './menu-config.service';
 @Injectable()
 export class MenuAsideService {
   // Public properties
-  menuList$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
+  public menuList$: BehaviorSubject<any[]> = new BehaviorSubject<any[]>([]);
 
   /**
    * Service constructor
@@ -24,8 +24,9 @@ export class MenuAsideService {
   /**
    * Load menu list
    */
-  loadMenu() {
+  public loadMenu() {
     // get menu list
+    console.log(this.menuConfigService.getMenus())
     const menuItems: any[] = objectPath.get(this.menuConfigService.getMenus(), 'aside.items');
     this.menuList$.next(menuItems);
   }

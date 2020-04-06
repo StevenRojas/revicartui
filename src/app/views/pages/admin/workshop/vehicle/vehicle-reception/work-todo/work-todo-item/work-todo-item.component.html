@@ -1,6 +1,6 @@
 <form [formGroup]="updateWorkFormGroup" autocomplete="off" class="kt-register__form kt-form">
   <div class="row">
-    <div class="col-4 col-sm-5 col-md-5 col-lg-7 mr-0 pr-0">
+    <div class="col-4 col-sm-4 col-md-4 col-lg-5 mr-0 pr-0">
       <div class="row">
         <div class="col-1">
 <!--          TODO SET icon for inform about an update-->
@@ -32,9 +32,9 @@
         </div>
       </div>
     </div>
-    <div class="col-5 col-sm-4 col-md-4 col-lg-3 ml-0 pl-0">
+    <div class="col-5 col-sm-5 col-md-5 col-lg-5 ml-0 pl-0">
       <div class="row">
-        <div class="col-4 ml-0 pl-0">
+        <div class="col-3 ml-0 pl-0">
           <mat-form-field class="input-full-width w-100 pr-1">
             <mat-label>Cantidad</mat-label>
             <input #quantityInput formControlName="quantity" [value]="worktodo.quantity" matInput placeholder="Cantidad" type="number" min="0" max="10000" step="1" />
@@ -43,7 +43,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col-8">
+        <div class="col-5">
           <mat-form-field class="input-full-width w-100 pr-1">
             <mat-label>Precio</mat-label>
             <input #priceInput formControlName="price" [value]="worktodo.price" matInput placeholder="Precio" type="number" min="0.00" max="10000.00" step="0.5" />
@@ -51,6 +51,13 @@
             <mat-error *ngIf="isControlHasError('price','required')">
               <strong>Este campo es requerido</strong>
             </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-4">
+          <mat-form-field class="input-full-width w-100 pr-1">
+            <mat-label>Sub.</mat-label>
+            <input [value]="(worktodo.price * worktodo.quantity)" matInput placeholder="Sub" type="number" min="0.00" max="10000.00" step="0.5" disabled />
+            <span matSuffix>&nbsp;Bs.</span>
           </mat-form-field>
         </div>
       </div>

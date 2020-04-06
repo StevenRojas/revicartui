@@ -1,4 +1,4 @@
-<ng-container *ngIf="vehicleReception">
+<ng-container *ngIf="!errorConnection">
   <div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch kt_body_workshop">
     <!--  <div class="kt-container kt-container&#45;&#45;fluid kt-grid kt-grid&#45;&#45;ver kt_body-workshop-container">-->
     <div class="row">
@@ -75,7 +75,7 @@
                           ></kt-vehicle-reception>
                         </mat-tab>
                         <mat-tab label="Historial">
-                          <kt-vehicle-history></kt-vehicle-history>
+                          <kt-vehicle-history [vehicle]="vehicle"></kt-vehicle-history>
                         </mat-tab>
                         <mat-tab label="Reparación">
                           <ng-container *ngIf="vehicleReception">
@@ -124,7 +124,13 @@
     </div>
   </div>
 </ng-container>
-
+<ng-container *ngIf="errorConnection">
+<div class="row">
+  <div class="col-12 text-center m-5">
+    <h2>Error al conectarse con el servidor, por favor refresque la p&aacute;gina o intente mas tarde</h2>
+  </div>
+</div>
+</ng-container>
 <swal
     #photoModal
     [swalOptions]="addPhotoModalOption"

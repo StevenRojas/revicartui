@@ -102,7 +102,6 @@ export class WorkTodoComponent implements OnInit, OnChanges {
     this.workTodoService.all(this.vehicleReception.id).subscribe(
       (workTodos) => {
         this.workTodoList = this.formatTodoList(workTodos, this.workCategoryRef);
-        console.log(this.workTodoList)
       }
     );
   }
@@ -216,7 +215,7 @@ export class WorkTodoComponent implements OnInit, OnChanges {
       });
       if (todosInfo && todosInfo.length != 0) {
         todosInfo.forEach((value, key) => {
-          this.subTotal += value.price;
+          this.subTotal += (value.price * value.quantity);
         });
       }
       let todo = {
@@ -248,7 +247,7 @@ export class WorkTodoComponent implements OnInit, OnChanges {
     this.subTotal = 0;
     this.workTodoList.forEach((value, key) => {
       value.todos.forEach((item, key) => {
-        this.subTotal += item.price;
+        this.subTotal += (item.price * item.quantity);
       })
     });
   }

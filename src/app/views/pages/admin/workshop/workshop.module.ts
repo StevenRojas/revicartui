@@ -43,7 +43,7 @@ import {WorkMaterialsComponent} from './vehicle/vehicle-repair/work-materials/wo
 import {WorkAccesoriesComponent} from './vehicle/vehicle-repair/work-accesories/work-accesories.component';
 import {WorkQaComponent} from './vehicle/vehicle-repair/work-qa/work-qa.component';
 import {WorkMaintenanceComponent} from './vehicle/vehicle-repair/work-maintenance/work-maintenance.component';
-import {VehicleReceptionComponent} from './vehicle/vehicle-reception/vehicle-reception.component';
+import {DialogPrintReceptionDialog, VehicleReceptionComponent} from './vehicle/vehicle-reception/vehicle-reception.component';
 import {WorkStatusComponent} from './vehicle/vehicle-reception/work-status/work-status.component';
 import {WorkTodoComponent} from './vehicle/vehicle-reception/work-todo/work-todo.component';
 import {VehicleHistoryComponent} from './vehicle/vehicle-history/vehicle-history.component';
@@ -61,6 +61,7 @@ import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orien
 import { WorkTodoItemComponent } from './vehicle/vehicle-reception/work-todo/work-todo-item/work-todo-item.component';
 import { WorkStatusCommentComponent } from './vehicle/vehicle-reception/work-status/work-status-comment/work-status-comment.component';
 import { WorkMaintenanceItemComponent } from './vehicle/vehicle-repair/work-maintenance/work-maintenance-item/work-maintenance-item.component';
+import {PdfJsViewerModule} from 'ng2-pdfjs-viewer';
 
 
 // import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
@@ -74,6 +75,7 @@ registerPlugin(FilePondPluginImageExifOrientation);
 @NgModule({
   declarations: [
     DialogCarPhotoDialog,
+    DialogPrintReceptionDialog,
     WorkshopComponent,
     ClientComponent,
     ClientEditComponent,
@@ -133,10 +135,12 @@ registerPlugin(FilePondPluginImageExifOrientation);
     FilePondModule,
     MatRadioModule,
     MatCardModule,
-    MatMenuModule
+    MatMenuModule,
+    PdfJsViewerModule
   ],
   entryComponents: [
-    DialogCarPhotoDialog
+    DialogCarPhotoDialog,
+    DialogPrintReceptionDialog
   ]
 })
 export class WorkshopModule {

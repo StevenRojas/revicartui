@@ -221,7 +221,7 @@ export class WorkTodoRepairComponent implements OnInit, OnChanges {
       });
       if (todosInfo && todosInfo.length != 0) {
         todosInfo.forEach((value, key) => {
-          this.subTotal += value.price;
+          this.subTotal += (value.price * value.quantity);
         });
         this.totalWorkTodoRepairEmit.emit(this.subTotal);
       }
@@ -255,7 +255,7 @@ export class WorkTodoRepairComponent implements OnInit, OnChanges {
     this.subTotal = 0;
     this.workTodoList.forEach((value, key) => {
       value.todos.forEach((item, key) => {
-        this.subTotal += item.price;
+        this.subTotal += (item.price * item.quantity);
       })
     });
     this.totalWorkTodoRepairEmit.emit(this.subTotal)

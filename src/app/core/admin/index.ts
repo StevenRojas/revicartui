@@ -29,6 +29,7 @@ export {WorkstatusService} from './_services/workstatus.service';
 export {StatusNoteService} from './_services/status-note.service';
 export {QaService} from './_services/qa.service';
 export {MaintenanceService} from './_services/maintenance.service';
+export {HistoryService} from './_services/history.service';
 
 // MODELS
 export {Client} from './_models/client';

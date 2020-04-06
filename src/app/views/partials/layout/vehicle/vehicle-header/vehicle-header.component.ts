@@ -224,9 +224,7 @@ export class VehicleHeaderComponent implements OnInit {
       ]
     });
 
-    console.log(this.searchLicencePlate)
     if (this.searchLicencePlate) {
-
       this.vehicleAddFormControl.controls['license_plate'].setValue(this.searchLicencePlate);
     }
   }

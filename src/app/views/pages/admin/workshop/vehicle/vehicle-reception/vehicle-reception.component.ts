@@ -1,10 +1,12 @@
-import {Component, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, ElementRef, EventEmitter, Inject, Input, OnChanges, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
 import {Vehicle, VehicleReceptionService} from '../../../../../../core/admin';
 import {SweetAlertOptions} from "sweetalert2";
 import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
 import {environment} from '../../../../../../../environments/environment';
+import {MAT_DIALOG_DATA, MatDialog} from '@angular/material';
+import {DomSanitizer} from '@angular/platform-browser';
 
 @Component({
   selector: 'kt-vehicle-reception',
@@ -27,11 +29,14 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
   public cancelFormGroup: FormGroup;
   public withPhotos: boolean;
   public withPrices: boolean;
+  public pdfFile: any;
 
   constructor(
     private vehicleReceptionServices: VehicleReceptionService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private render: Renderer2,
+    public dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -80,7 +85,9 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes) {
     if (this.vehicle.id) {
-      this.readOnlyStatus = this.vehicleReception.work_status >= environment.WORK_STATUS_ACCEPTED_ID;
+      if (this.vehicleReception) {
+        this.readOnlyStatus = this.vehicleReception.work_status >= environment.WORK_STATUS_ACCEPTED_ID;
+      }
     }
   }
 
@@ -112,13 +119,33 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
   }
 
   public openPrintPreviewModal() {
-    this.printPreviewModal.fire().then((result) => {
-      if (result.value) {
-        // After press "Ok" button
-      } else {
-        // After press "Cancel" button or leave from modal
+    this.vehicleReceptionServices.print(this.vehicleReception.id, 0, 0).subscribe(
+      (pdfFile) => {
+        setTimeout(() => {
+          this.dialog.open(DialogPrintReceptionDialog, {
+            data: {
+              pdfFile: pdfFile.replace('"', '').replace('"', ''),
+              vehicleReceptionId: this.vehicleReception.id,
+              displayOptions: true
+            }
+          });
+        }, 300)
       }
-    });
+    );
+
+
+
+    // this.vehicleReceptionServices.print(this.vehicleReception.id, 0, 0).subscribe(
+    //   (pdfFile) => {
+    //     this.printPreviewModal.fire().then((result) => {
+    //       if (result.value) {
+    //         // After press "Ok" button
+    //       } else {
+    //         // After press "Cancel" button or leave from modal
+    //       }
+    //     });
+    //   }
+    // );
   }
   /**
    * Update Vehicle Reception Status and emit a update message
@@ -161,8 +188,11 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
   }
 
   public printReception() {
+
     return true;
   }
+
+
   public startReception() {
     this.vehicleReceptionServices.start(this.vehicle.id).subscribe(
       (response) => {
@@ -190,4 +220,55 @@ export class VehicleReceptionComponent implements OnInit, OnChanges {
     return result;
   }
 
+  public updatePreviewPrinter(event: any) {
+  }
+
 }
+
+@Component({
+  selector: 'dialog-print-reception-dialog',
+  template: `
+      <div mat-dialog-content style="width: 800px; height: 800px;margin-bottom: 30px" >
+
+            <section class="text-right" *ngIf="data.displayOptions">
+              <mat-checkbox class="mr-2" (change)="updatePreviewPrinter($event)" [(ngModel)]="withPhotos">Fotos</mat-checkbox>
+              <mat-checkbox class="ml-2" (change)="updatePreviewPrinter($event)" [(ngModel)]="withPrices">Precios</mat-checkbox>
+            </section>
+            <ng-container *ngIf="data.pdfFile">
+              <ng2-pdfjs-viewer #pdfViewer pdfSrc="{{ data.pdfFile }}" ></ng2-pdfjs-viewer>
+            </ng-container>
+
+      </div>
+	`,
+})
+export class DialogPrintReceptionDialog {
+  public withPhotos: any;
+  public withPrices: any;
+  @ViewChild('pdfViewer', {static: false}) public pdfViewer;
+  constructor(@Inject(MAT_DIALOG_DATA)
+              public data: any,
+              public vehicleReceptionServices: VehicleReceptionService,
+              public sanitizer: DomSanitizer,
+  ) {
+    console.log(this.data)
+  }
+
+  public updatePreviewPrinter(event: any) {
+    // this.sanitizer.bypassSecurityTrustUrl()
+    this.vehicleReceptionServices.print(this.data.vehicleReceptionId, this.withPhotos?1:0, this.withPrices?1:0).subscribe(
+      (pdfFile) => {
+        this.data.pdfFile = pdfFile.replace('"', '').replace('"', '')
+        this.pdfViewer.lastLoaded = undefined;
+        this.pdfViewer.pdfSrc = this.data.pdfFile; // pdfSrc can be Blob or Uint8Array
+        this.pdfViewer.refresh();
+        // this.pdfViewer.update();
+
+      }
+    );
+  }
+
+  public cleanUrl(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+}
+

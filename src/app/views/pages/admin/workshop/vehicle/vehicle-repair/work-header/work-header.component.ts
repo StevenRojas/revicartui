@@ -85,7 +85,6 @@ export class WorkHeaderComponent implements OnInit, OnChanges {
       (workStatus) => {
         let tempWorkStatus = [];
         Object.keys(workStatus).forEach((key) => {
-          console.log(workStatus[key])
           if (!environment.BANNED_STATUS.find(id => id == workStatus[key]['id'])) {
             tempWorkStatus.push(workStatus[key]);
           }
@@ -108,7 +107,6 @@ export class WorkHeaderComponent implements OnInit, OnChanges {
       'id': event.value
     }, this.vehicleReception.id).subscribe(
       (operator) => {
-        console.log(operator);
       }
     );
   }
@@ -124,7 +122,7 @@ export class WorkHeaderComponent implements OnInit, OnChanges {
       'id': event.value
     }, this.vehicleReception.id).subscribe(
       (status) => {
-        console.log(status);
+
       }
     )
   }

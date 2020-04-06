@@ -38,4 +38,8 @@ export class WorkTodoRepairService {
   delete(reparationId: number, workTodoId: number): Observable<any> {
     return this.http.delete<any>(environment.api_url + 'reparation/' + reparationId + '/worktodo/' + workTodoId);
   }
+
+  put(receptionId: any, id: string, body: {}): Observable<any> {
+    return this.http.put<any>(environment.api_url + 'reparation/' + receptionId + '/worktodo/' + id, body);
+  }
 }
