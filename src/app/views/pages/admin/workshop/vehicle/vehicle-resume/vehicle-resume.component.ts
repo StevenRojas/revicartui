@@ -31,7 +31,7 @@ import {LocalStoreService} from '../../../../../../core/_base/crud';
 export class VehicleResumeComponent implements OnInit {
   // PHOTO Variables
   public pondFiles = [];
-  public lastFileAdd = null;
+  public lastFileAdd = [];
   public photoError: string;
   public pondOptions = this.optionsFile();
   @ViewChild('myPond', { static: false }) myPond: any;
@@ -395,7 +395,7 @@ export class VehicleResumeComponent implements OnInit {
       if (result.value) {
         // After press "Ok" button
       } else {
-        this.lastFileAdd = null;
+        this.lastFileAdd = [];
         // After press "Cancel" button or leave from modal
       }
     });
@@ -441,7 +441,7 @@ export class VehicleResumeComponent implements OnInit {
         this.getClientOwner(this.vehicle.id);
         this.getCompanyOwner(this.vehicle.id);
       } else {
-        this.lastFileAdd = null;
+        this.lastFileAdd = [];
         // After press "Cancel" button or leave from modal
       }
     });
@@ -575,7 +575,7 @@ export class VehicleResumeComponent implements OnInit {
 
   private requestOnLoad(load: any, request: any, error: any) {
     if (request.status >= 200 && request.status < 300) {
-      this.lastFileAdd = request.responseText;
+      this.lastFileAdd.push(request.responseText);
       load(request.responseText);
     } else {
       error('El servicio no esta Disponible en este momento');
