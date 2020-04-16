@@ -1,104 +1,38 @@
-<div class="row row-full-height">
-  <div class="col-auto">
-    <kt-portlet [class]="'kt-portlet--height-fluid kt-portlet--border-bottom-brand'">
-      <kt-portlet-body [class]="'kt-portlet__body--fluid pl-5'">
-        <div class="row">
-          <div class="kt-portlet__body--fluid">
-            <div class="kt-widget5">
-              <div class="kt-widget5__item">
-                <div class="kt-widget5__content">
-                  <div class="kt-widget5__pic">
-                    <i class="fa fa-file-excel d-inline-block" [ngStyle]="{'font-size': '10rem'}"></i>
+<ng-container *ngIf="receptionId && documentsList.length > 0">
+  <div class="row row-full-height">
+    <div class="col-auto" *ngFor="let document of documentsList">
+      <kt-portlet [class]="'kt-portlet--height-fluid kt-portlet--border-bottom-brand'">
+        <kt-portlet-body [class]="'kt-portlet__body--fluid pl-5'">
+          <div class="row">
+            <div class="kt-portlet__body--fluid">
+              <div class="kt-widget5">
+                <div class="kt-widget5__item">
+                  <div class="kt-widget5__content">
+                    <div class="kt-widget5__pic">
+                      <i class="fa fa-file-pdf d-inline-block" [ngStyle]="{'font-size': '10rem'}"></i>
+                    </div>
+                    <div class="kt-widget5__section">
+<!--                      <p class="kt-widget5__desc"><mat-checkbox></mat-checkbox></p>-->
+                    </div>
                   </div>
-                  <div class="kt-widget5__section">
-                    <p class="kt-widget5__desc"><mat-checkbox></mat-checkbox></p>
-                  </div>
+                  <div class="kt-widget5__content"></div>
                 </div>
-                <div class="kt-widget5__content"></div>
               </div>
+              <p><input type="button" (click)="openPrintPreviewModal(document.filename)" [value]="document.name"></p>
             </div>
-            <p>Cotización</p>
           </div>
-        </div>
-      </kt-portlet-body>
-    </kt-portlet>
+        </kt-portlet-body>
+      </kt-portlet>
+    </div>
   </div>
-
-  <div class="col-auto">
-    <kt-portlet [class]="'kt-portlet--height-fluid kt-portlet--border-bottom-brand'">
-      <kt-portlet-body [class]="'kt-portlet__body--fluid pl-5'">
-        <div class="row">
-          <div class="kt-portlet__body--fluid">
-            <div class="kt-widget5">
-              <div class="kt-widget5__item">
-                <div class="kt-widget5__content">
-                  <div class="kt-widget5__pic">
-                    <i class="fa fa-file-alt d-inline-block" [ngStyle]="{'font-size': '10rem'}"></i>
-                  </div>
-                  <div class="kt-widget5__section">
-                    <p class="kt-widget5__desc"><mat-checkbox></mat-checkbox></p>
-                  </div>
-                </div>
-                <div class="kt-widget5__content"></div>
-              </div>
-            </div>
-            <p>Proforma</p>
-          </div>
-        </div>
-      </kt-portlet-body>
-    </kt-portlet>
+</ng-container>
+<ng-container *ngIf="documentsList.length == 0">
+  <div class="row">
+    <div class="col-12 text-center">
+      <p class="text-black-50">No hay Documentos guardados</p>
+    </div>
   </div>
+</ng-container>
 
-  <div class="col-auto">
-    <kt-portlet [class]="'kt-portlet--height-fluid kt-portlet--border-bottom-brand'">
-      <kt-portlet-body [class]="'kt-portlet__body--fluid pl-5'">
-        <div class="row">
-          <div class="kt-portlet__body--fluid">
-            <div class="kt-widget5">
-              <div class="kt-widget5__item">
-                <div class="kt-widget5__content">
-                  <div class="kt-widget5__pic">
-                    <i class="fa fa-file-pdf d-inline-block" [ngStyle]="{'font-size': '10rem'}"></i>
-                  </div>
-                  <div class="kt-widget5__section">
-                    <p class="kt-widget5__desc"><mat-checkbox></mat-checkbox></p>
-                  </div>
-                </div>
-                <div class="kt-widget5__content"></div>
-              </div>
-            </div>
-            <p>Factura</p>
-          </div>
-        </div>
-      </kt-portlet-body>
-    </kt-portlet>
-  </div>
-
-  <div class="col-auto">
-    <kt-portlet [class]="'kt-portlet--height-fluid kt-portlet--border-bottom-brand'">
-      <kt-portlet-body [class]="'kt-portlet__body--fluid pl-5'">
-        <div class="row">
-          <div class="kt-portlet__body--fluid">
-            <div class="kt-widget5">
-              <div class="kt-widget5__item">
-                <div class="kt-widget5__content">
-                  <div class="kt-widget5__pic">
-                    <i class="fa fa-file-pdf d-inline-block" [ngStyle]="{'font-size': '10rem'}"></i>
-                  </div>
-                  <div class="kt-widget5__section">
-                    <p class="kt-widget5__desc"><mat-checkbox></mat-checkbox></p>
-                  </div>
-                </div>
-                <div class="kt-widget5__content"></div>
-              </div>
-            </div>
-            <p>Factura Repuestos</p>
-          </div>
-        </div>
-      </kt-portlet-body>
-    </kt-portlet>
-  </div>
-
-</div>
 
 

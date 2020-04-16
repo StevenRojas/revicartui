@@ -4,229 +4,164 @@
     <h4>Trabajos a Realizar</h4>
   </div>
   <div class="col-6 text-right">
-    <h4 *ngIf="subTotal">SubTotal: {{ subTotal.toFixed(2) }} Bs</h4>
+    <h4 *ngIf="subTotal">Total: {{ subTotal.toFixed(2) }} Bs</h4>
   </div>
   <br>
   <br>
   <br>
 </div>
 <!--START LIST WORK TODO-->
-<ng-container *ngIf="workTodoList">
-  <div *ngFor="let categoryTodo of workTodoList | keyvalue">
-    <ng-container *ngIf="categoryTodo.value.todos.length != 0">
-<!--      <form #formTodo [formGroup]="addWorkFormGroup" autocomplete="off" class="kt-register__form kt-form" [ngStyle]="{}">-->
-        <div class="row">
-        <div class="col-12">
+<ng-container *ngIf="vehicle && vehicleReception">
+  <ng-container *ngIf="vehicle.subtype">
+    <ng-container *ngIf="workTodoList">
+      <div *ngFor="let categoryTodo of workTodoList | keyvalue">
+        <ng-container *ngIf="categoryTodo.value.todos.length != 0">
+          <!--      <form #formTodo [formGroup]="addWorkFormGroup" autocomplete="off" class="kt-register__form kt-form" [ngStyle]="{}">-->
           <div class="row">
-            <div class="col-12 mb-3">
-              <h5>{{ categoryTodo.value.category.category }}</h5>
+            <div class="col-12">
+              <div class="row">
+                <div class="col-12 mb-3">
+                  <h5>{{ categoryTodo.value.category.category }}</h5>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <ng-container *ngFor="let todoItem of categoryTodo.value.todos | keyvalue">
+                <kt-work-todo-item
+                  (removeWorkTodoEmit)="removeTodoItem(categoryTodo.key, todoItem.key, $event)"
+                  (updateWorkTodoEmit)="updateTodoItem(categoryTodo.key, todoItem.key, $event)"
+                  [receptionId]="vehicleReception.id"
+                  [category]="categoryTodo.value.category"
+                  [worktodo]="todoItem.value"
+                  [vehicleId]="vehicle.id"
+                  [vehicleSubtypeId]="vehicle.subtype.id"
+                  [readOnlyStatus]="readOnlyStatus"
+                ></kt-work-todo-item>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!workTodoList">
+      <div class="row">
+        <div class="col-12 text-center">
+          <p>No hay trabajos para este veh&iacute;culo</p>
+        </div>
+      </div>
+    </ng-container>
+    <!--END LIST WORK TODO-->
+    <!--START FORM ADD NEW WORK TODO-->
+    <ng-container *ngIf="displayAddWorkFlag">
+      <form [formGroup]="addWorkFormGroup" autocomplete="off" class="kt-register__form kt-form"
+            [ngStyle]="{}">
+
+        <div class="row">
+          <div class="col-8">
+            <div class="row">
+              <div class="col-12">
+                <mat-form-field class="input-full-width w-100 p-0 m-0">
+                  <input [disabled]="readOnlyStatus" type="text" placeholder="Categoría" aria-label="Categoría" matInput formControlName="work_category" [matAutocomplete]="work_category">
+                  <mat-autocomplete autoActiveFirstOption #work_category="matAutocomplete"  [displayWith]="displayName" (optionSelected)="setCategoryOption($event)">
+                    <mat-option *ngFor="let workCategory of workCategoriesFiltered | async" [value]="workCategory">
+                      {{ workCategory.category }}<span *ngIf="workCategory.section">, {{workCategory.section}}</span><span *ngIf="workCategory.area">, {{workCategory.area}}</span>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="isControlHasError('work_category','required')">
+                    <strong>Este campo es requerido</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-1"></div>
+              <div class="col-11">
+                <mat-form-field class="input-full-width w-100 p-0 m-0">
+                  <input [disabled]="readOnlyStatus" type="text" placeholder="Sub Categoría" aria-label="Sub categoría" matInput formControlName="work_subcategory" [matAutocomplete]="work_subcategory" >
+                  <mat-autocomplete autoActiveFirstOption #work_subcategory="matAutocomplete" [displayWith]="displaySubCategoryName" (optionSelected)="setSubcategoryDefaultOptions($event)"  >
+                    <mat-option *ngFor="let workSubCategory of workSubCategoriesFiltered | async" [value]="workSubCategory">
+                      {{ workSubCategory.work }}, <b>{{workSubCategory.price}} Bs.</b>
+                    </mat-option>
+                  </mat-autocomplete>
+                  <mat-error *ngIf="isControlHasError('work_subcategory','required')">
+                    <strong>Este campo es requerido</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-1">
+            <div class="row">
+              <div class="col-12 mt-2 text-center">
+                <button [disabled]="readOnlyStatus" mat-icon-button class="mr-1 text-black-50" (click)="saveTodoWork()">
+                  <i class="fa flaticon2-check-mark text-success"></i>
+                </button>
+              </div>
+              <div class="col-12 mt-2 text-center">
+                <button [disabled]="readOnlyStatus" mat-icon-button class="mr-1 text-black-50" (click)="cancelTodoWork()">
+                  <i class="flaticon2-cancel text-danger"></i>
+                </button>
+              </div>
+
+            </div>
+          </div>
+          <div class="col-3">
+            <div class="row">
+              <div class="col-12 h-100">
+                <div [ngStyle]="{'height': '50px'}">
+
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-4">
+                <mat-form-field class="input-full-width w-100 pr-1">
+                  <mat-label>Cantidad</mat-label>
+                  <input [disabled]="readOnlyStatus" formControlName="quantity" matInput placeholder="Cantidad" type="number" min="0" max="10000" step="1" />
+                  <mat-error *ngIf="isControlHasError('quantity','required')">
+                    <strong>Este campo es requerido</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
+              <div class="col-8">
+                <mat-form-field class="input-full-width w-100 pr-1">
+                  <mat-label>Precio</mat-label>
+                  <input [disabled]="readOnlyStatus" formControlName="price" matInput placeholder="Precio" type="number" min="0.00" max="10000.00" step="0.5" />
+                  <span matSuffix>&nbsp;Bs.</span>
+                  <mat-error *ngIf="isControlHasError('price','required')">
+                    <strong>Este campo es requerido</strong>
+                  </mat-error>
+                </mat-form-field>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-12">
-          <ng-container *ngFor="let todoItem of categoryTodo.value.todos | keyvalue">
-            <kt-work-todo-item
-              (removeWorkTodoEmit)="removeTodoItem(categoryTodo.key, todoItem.key, $event)"
-              (updateWorkTodoEmit)="updateTodoItem(categoryTodo.key, todoItem.key, $event)"
-              [receptionId]="vehicleReception.id"
-              [category]="categoryTodo.value.category"
-              [worktodo]="todoItem.value"
-              [vehicleId]="vehicle.id"
-              [vehicleSubtypeId]="vehicle.subtype.id" ></kt-work-todo-item>
-          </ng-container>
-        </div>
-      </div>
-<!--      </form>-->
-    </ng-container>
 
-  </div>
+        <ng-container *ngIf="errorMessage">
+          <div class="row">
+            <div class="col-12">
+              <p class="text-danger">{{ errorMessage }}</p>
+            </div>
+          </div>
+        </ng-container>
+      </form>
+    </ng-container>
+    <!--END FORM ADD NEW WORK TODO-->
+    <button [disabled]="readOnlyStatus" mat-button color="accent" (click)="displayAddWork($event)" >AGREGAR TRABAJO</button>
+  </ng-container>
 </ng-container>
-<ng-container *ngIf="!workTodoList">
+<ng-container *ngIf="!vehicle.subtype">
   <div class="row">
     <div class="col-12 text-center">
-      <p>No hay trabajos para este veh&iacute;culo</p>
+      <p>Es necesario definir el tipo de vehiculo para acceder a la lista de precios</p>
     </div>
   </div>
 </ng-container>
-<!--END LIST WORK TODO-->
-<!--START FORM ADD NEW WORK TODO-->
-<ng-container *ngIf="displayAddWorkFlag">
-  <form [formGroup]="addWorkFormGroup" autocomplete="off" class="kt-register__form kt-form"
-        [ngStyle]="{}">
-
-    <div class="row">
-      <div class="col-8">
-        <div class="row">
-          <div class="col-12">
-            <mat-form-field class="input-full-width w-100 p-0 m-0">
-              <!--            <input type="text" placeholder="Categoría" aria-label="Categoría" matInput formControlName="work_category" >-->
-              <mat-select placeholder="Categoría" (selectionChange)="setCategoryOption($event)" formControlName="work_category" >
-                <mat-option *ngFor="let workCategory of workCategories | async" [value]="workCategory">
-                  {{ workCategory.category }}<span *ngIf="workCategory.section">, {{workCategory.section}}</span><span *ngIf="workCategory.area">, {{workCategory.area}}</span>
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="isControlHasError('work_category','required')">
-                <strong>Este campo es requerido</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-1"></div>
-          <div class="col-11">
-            <mat-form-field class="input-full-width w-100 p-0 m-0">
-              <!--            <input type="text" placeholder="Sub Categoría" aria-label="Sub categoría" matInput formControlName="work_subcategory"  >-->
-              <mat-select  placeholder="Sub Categoría" (selectionChange)="setSubcategoryDefaultOptions($event)" formControlName="work_subcategory" >
-                <mat-option *ngFor="let workSubCategory of workSubCategories | async" [value]="workSubCategory">
-                  {{ workSubCategory.work }}, <b>{{workSubCategory.price}} Bs.</b>
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="isControlHasError('work_subcategory','required')">
-                <strong>Este campo es requerido</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-      </div>
-      <div class="col-1">
-        <div class="row">
-          <div class="col-12 mt-2 text-center">
-            <button mat-icon-button class="mr-1 text-black-50" (click)="cancelTodoWork()">
-              <i class="flaticon2-cancel text-danger"></i>
-            </button>
-          </div>
-          <div class="col-12 mt-2 text-center">
-            <button mat-icon-button class="mr-1 text-black-50" (click)="saveTodoWork()">
-              <i class="fa flaticon2-check-mark text-success"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="col-3">
-        <div class="row">
-          <div class="col-12 h-100">
-            <div [ngStyle]="{'height': '50px'}">
-
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-4">
-            <mat-form-field class="input-full-width w-100 pr-1">
-              <mat-label>Cantidad</mat-label>
-              <input formControlName="quantity" matInput placeholder="Cantidad" type="number" min="0" max="10000" step="1" />
-              <mat-error *ngIf="isControlHasError('quantity','required')">
-                <strong>Este campo es requerido</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-8">
-            <mat-form-field class="input-full-width w-100 pr-1">
-              <mat-label>Precio</mat-label>
-              <input formControlName="price" matInput placeholder="Precio" type="number" min="0.00" max="10000.00" step="0.5" />
-              <span matSuffix>&nbsp;Bs.</span>
-              <mat-error *ngIf="isControlHasError('price','required')">
-                <strong>Este campo es requerido</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <ng-container *ngIf="errorMessage">
-      <div class="row">
-        <div class="col-12">
-          <p class="text-danger">{{ errorMessage }}</p>
-        </div>
-      </div>
-    </ng-container>
-  </form>
-</ng-container>
-<!--END FORM ADD NEW WORK TODO-->
-<button mat-button color="accent" (click)="displayAddWork($event)" >AGREGAR TRABAJO</button>
-
 
 <swal
     #addWorkModal
     [swalOptions]="addWorkModalOption"
 >
   <div *swalPortal>
-    <form [formGroup]="addWorkFormGroup" autocomplete="off" class="kt-register__form kt-form"
-          [ngStyle]="{}">
-      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">
-        <div class="form-group" >
-          <mat-form-field class="input-full-width w-100">
-<!--            <input type="text" placeholder="Categoría" aria-label="Categoría" matInput formControlName="work_category" >-->
-            <mat-select placeholder="Categoría" (selectionChange)="setCategoryOption($event)" formControlName="work_category" >
-              <mat-option *ngFor="let workCategory of workCategories | async" [value]="workCategory">
-                {{ workCategory.category }}<span *ngIf="workCategory.section">, {{workCategory.section}}</span><span *ngIf="workCategory.area">, {{workCategory.area}}</span>
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="isControlHasError('work_category','required')">
-              <strong>Este campo es requerido</strong>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">
-        <div class="form-group" >
-          <mat-form-field class="input-full-width w-100">
-<!--            <input type="text" placeholder="Sub Categoría" aria-label="Sub categoría" matInput formControlName="work_subcategory"  >-->
-            <mat-select  placeholder="Sub Categoría" (selectionChange)="setSubcategoryDefaultOptions($event)" formControlName="work_subcategory" >
-              <mat-option *ngFor="let workSubCategory of workSubCategories | async" [value]="workSubCategory">
-                {{ workSubCategory.work }}, <b>{{workSubCategory.price}} Bs.</b>
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="isControlHasError('work_subcategory','required')">
-              <strong>Este campo es requerido</strong>
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-6 col-xs-6 col-6 col-md-6 col-lg-6">
-          <div class="form-group">
-            <mat-form-field class="input-full-width">
-              <mat-label>Precio</mat-label>
-              <input formControlName="price" matInput placeholder="Precio" type="number" min="0.00" max="10000.00" step="0.01" />
-              <mat-error *ngIf="isControlHasError('price','required')">
-                <strong>Este campo es requerido</strong>
-              </mat-error>
-            </mat-form-field>
-
-          </div>
-        </div>
-        <div class="col-sm-6 col-xs-6 col-6 col-md-6 col-lg-6">
-          <div class="form-group">
-            <mat-form-field class="input-full-width">
-              <mat-label>Cantidad</mat-label>
-              <input formControlName="quantity" matInput placeholder="Cantidad" type="number" min="0" max="10000" step="1" />
-              <mat-error *ngIf="isControlHasError('quantity','required')">
-                <strong>Este campo es requerido</strong>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-      </div>
-<!--      <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-12">-->
-<!--        <div class="form-group">-->
-<!--          <mat-form-field class="input-full-width w-100">-->
-<!--            <mat-label>Repuesto o Accesorio</mat-label>-->
-<!--            <textarea formControlName="notes" matInput placeholder="Repuesto o Accesorio" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>-->
-<!--            <mat-error *ngIf="isControlHasError('notes','required')">-->
-<!--              <strong>Este campo es requerido</strong>-->
-<!--            </mat-error>-->
-<!--          </mat-form-field>-->
-<!--        </div>-->
-<!--      </div>-->
-      <ng-container *ngIf="errorMessage">
-        <div class="row">
-          <div class="col-12">
-            <p class="text-danger">{{ errorMessage }}</p>
-          </div>
-        </div>
-      </ng-container>
-    </form>
   </div>
 </swal>

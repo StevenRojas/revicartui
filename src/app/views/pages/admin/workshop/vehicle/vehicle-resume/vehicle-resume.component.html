@@ -1,92 +1,121 @@
-<div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch kt_body_workshop">
-  <!--  <div class="kt-container kt-container&#45;&#45;fluid kt-grid kt-grid&#45;&#45;ver kt_body-workshop-container">-->
-  <div class="row">
-    <div class="col-12 col-12 col-sm-12 col-md-12 col-lg-12">
-      <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" [ngStyle]="">
-        <div ktContentAnimate class="kt-container kt-grid__item kt-grid__item--fluid kt-container--fluid">
-          <div class="">
-            <div class="row">
-              <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3">
-                <kt-portlet [class]="'kt-portlet--height-fluid'">
-                  <kt-portlet-body [class]="'p-0 mb-0 '">
-                    <div class="kt-widget26 p-4">
-                      <div class="kt-widget26__content" *ngIf="vehicle.brand && vehicle.model">
-                        <span class="kt-widget26__number"> <img class="image-brand-logo pr-1" [src]="urlImages + vehicle.brand.icon" >{{ vehicle?.brand.name }} {{ vehicle?.model.name }} <span class="kt-font-md ">{{ vehicle.year }}</span></span>
-                        <span class="kt-widget26__desc kt-font-xl kt-form__heading-title">{{ vehicle.license_plate }}</span>
-                        <ng-container *ngFor="let owner of clientVehicleOwners">
-                          <ng-container *ngIf="owner.client && owner.client?.id">
-                            <span class="kt-widget26__desc">{{ owner.client?.name }} <{{ owner.client?.email }}></span>
+<ng-container *ngIf="!errorConnection">
+  <div class="kt-body kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor kt-grid--stretch kt_body_workshop">
+    <!--  <div class="kt-container kt-container&#45;&#45;fluid kt-grid kt-grid&#45;&#45;ver kt_body-workshop-container">-->
+    <div class="row">
+      <div class="col-12 col-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="kt-content kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor" [ngStyle]="">
+          <div ktContentAnimate class="kt-container kt-grid__item kt-grid__item--fluid kt-container--fluid">
+            <div class="">
+              <div class="row">
+                <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-3">
+                  <kt-portlet [class]="'kt-portlet--height-fluid'">
+                    <kt-portlet-body [class]="'p-0 mb-0 '">
+                      <div class="kt-widget26 p-4">
+                        <div class="kt-widget26__content" *ngIf="vehicle.brand && vehicle.model">
+                          <span class="kt-widget26__number"> <img class="image-brand-logo pr-1" [src]="urlImages + vehicle.brand.icon" >{{ vehicle?.brand.name }} {{ vehicle?.model.name }} <span class="kt-font-md ">{{ vehicle.year }}</span></span>
+                          <span class="kt-widget26__desc kt-font-xl kt-form__heading-title">{{ vehicle.license_plate }}</span>
+                          <ng-container *ngFor="let owner of clientVehicleOwners">
+                            <ng-container *ngIf="owner.client && owner.client?.id">
+                              <span class="kt-widget26__desc">{{ owner.client?.name }} <{{ owner.client?.email }}></span>
+                            </ng-container>
                           </ng-container>
-                        </ng-container>
-                        <ng-container *ngFor="let owner of companyVehicleOwners">
-                          <ng-container *ngIf="owner.company && owner.company?.id">
-                            <span class="kt-widget26__desc">{{ owner.company?.name }} <{{ owner.company?.email }}></span>
+                          <ng-container *ngFor="let owner of companyVehicleOwners">
+                            <ng-container *ngIf="owner.company && owner.company?.id">
+                              <span class="kt-widget26__desc">{{ owner.company?.name }} <{{ owner.company?.email }}></span>
+                            </ng-container>
                           </ng-container>
-                        </ng-container>
 
-                        <ng-container *ngIf="vehicle.updated_at != ''">
+                          <ng-container *ngIf="vehicle.updated_at != ''">
                         <span class="kt-widget26__desc">
                           <i class="flaticon2-calendar-1"></i> {{ vehicle.updated_at | dateFormat: 'LL' }}
                         </span>
-                        </ng-container>
-                        <ng-container *ngIf="vehicle.updated_at == ''">
+                          </ng-container>
+                          <ng-container *ngIf="vehicle.updated_at == ''">
                         <span class="kt-widget26__desc">
                           <i class="flaticon2-calendar-1"></i> Sin definir
                         </span>
-                        </ng-container>
-                      </div>
-                      <div class="kt-widget26__chart" style="height:auto; width: auto;">
-                        <ng-container *ngIf="vehiclePhoto">
-                          <ng-container *ngIf="vehiclePhoto.path_file == ''">
+                          </ng-container>
+                        </div>
+                        <div class="kt-widget26__chart" style="height:auto; width: auto;">
+                          <ng-container *ngIf="vehiclePhoto">
+                            <ng-container *ngIf="vehiclePhoto.path_file == ''">
+                              <img class="img-fluid " [src]="'./assets/media/cars/default_car.png'">
+                            </ng-container>
+                            <ng-container *ngIf="vehiclePhoto.path_file != ''">
+                              <img class="img-fluid " [src]="urlImages + vehiclePhoto['path_file']" >
+                            </ng-container>
+                          </ng-container>
+                          <ng-container *ngIf="!vehiclePhoto">
                             <img class="img-fluid " [src]="'./assets/media/cars/default_car.png'">
                           </ng-container>
-                          <ng-container *ngIf="vehiclePhoto.path_file != ''">
-                            <img class="img-fluid " [src]="urlImages + vehiclePhoto['path_file']" >
+                        </div>
+                        <div class="kt-widget26__content">
+                          <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent" (click)="openPhotoModal($event)">Cambiar Foto</button></span>
+                          <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent" (click)="updateOwner($event)" >Cambiar Dueño</button></span>
+                          <span class="kt-widget26__desc"><i class="flaticon2-trash"></i> <button mat-button color="warn" (click)="openDeleteVehicleModal($event)" >Eliminar vehiculo</button></span>
+                        </div>
+                      </div>
+                    </kt-portlet-body>
+                  </kt-portlet>
+                </div>
+                <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9">
+                  <kt-portlet [class]="'kt-portlet--height-fluid'">
+                    <kt-portlet-body [class]="'p-5 mb-3 '">
+                      <mat-tab-group  #matTabGroup [selectedIndex]="defaultTab" (selectedIndexChange)="setDefaultTab($event)">
+                        <mat-tab label="Detalles">
+                          <ng-container *ngIf="vehicle.id">
+                            <kt-vehicle-edit [vehicle]="vehicle" (vehicleUpdateEmit)="updateVehicleInList($event)" ></kt-vehicle-edit>
                           </ng-container>
-                        </ng-container>
-                        <ng-container *ngIf="!vehiclePhoto">
-                          <img class="img-fluid " [src]="'./assets/media/cars/default_car.png'">
-                        </ng-container>
-                      </div>
-                      <div class="kt-widget26__content">
-                        <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent" (click)="openPhotoModal($event)">Cambiar Foto</button></span>
-                        <span class="kt-widget26__desc"><i class="flaticon2-refresh"></i> <button mat-button color="accent" (click)="updateOwner($event)" >Cambiar Dueño</button></span>
-                        <span class="kt-widget26__desc"><i class="flaticon2-trash"></i> <button mat-button color="warn" (click)="openDeleteVehicleModal($event)" >Eliminar vehiculo</button></span>
-                      </div>
-                    </div>
-                  </kt-portlet-body>
-                </kt-portlet>
-              </div>
-              <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-9">
-                <kt-portlet [class]="'kt-portlet--height-fluid'">
-                  <kt-portlet-body [class]="'p-5 mb-3 '">
-                    <mat-tab-group  [selectedIndex]="defaultTab" (selectedIndexChange)="setDefaultTab($event)">
-                      <mat-tab label="Detalles">
-                        <ng-container *ngIf="vehicle.id">
-                          <kt-vehicle-edit [vehicle]="vehicle" (vehicleUpdateEmit)="updateVehicleInList($event)" ></kt-vehicle-edit>
-                        </ng-container>
-                      </mat-tab>
-                      <mat-tab label="Recepción">
-                        <kt-vehicle-reception [vehicle]="vehicle"></kt-vehicle-reception>
-                      </mat-tab>
-                      <mat-tab label="Historial">
-                        <kt-vehicle-history></kt-vehicle-history>
-                      </mat-tab>
-                      <mat-tab label="Reparación">
-                        <div class="row">
-                          <div class="col-12">
-                            <kt-work-header></kt-work-header>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-12">
-                            <kt-vehicle-repair></kt-vehicle-repair>
-                          </div>
-                        </div>
-                      </mat-tab>
-                    </mat-tab-group>
-                  </kt-portlet-body>
-                </kt-portlet>
+                        </mat-tab>
+                        <mat-tab label="Recepción">
+                          <kt-vehicle-reception [vehicle]="vehicle"
+                                                [vehicleReception]="vehicleReception"
+                                                (updateVehicleReceptionEmit)="refreshVehicleReception($event)"
+                                                (goToReparationEmit)="matTabGroup.selectedIndex = 3"
+                          ></kt-vehicle-reception>
+                        </mat-tab>
+                        <mat-tab label="Historial">
+                          <kt-vehicle-history [vehicle]="vehicle"></kt-vehicle-history>
+                        </mat-tab>
+                        <mat-tab label="Reparación">
+                          <ng-container *ngIf="vehicleReception">
+                            <ng-container *ngIf="vehicleReception.work_status > _showReparationIdFlag">
+                              <div class="row">
+                                <div class="col-12">
+                                  <kt-work-header [vehicle]="vehicle"
+                                                  [vehicleReception]="vehicleReception"
+                                                  [totalWorkTodo]="totalWorkTodo"
+                                                  [operatorEnum]="operatorEnum"
+                                                  (updateWorkStatusEmit)="refreshFromReception($event)"
+                                  ></kt-work-header>
+                                </div>
+                              </div>
+                              <div class="row">
+                                <div class="col-12">
+                                  <kt-vehicle-repair [vehicle]="vehicle" [vehicleReception]="vehicleReception" (totalEmit)="totalWorkTodo=$event" [operatorEnum]="operatorEnum"></kt-vehicle-repair>
+                                </div>
+                              </div>
+                            </ng-container>
+                            <ng-container *ngIf="vehicleReception.work_status <= _showReparationIdFlag">
+                              <div class="row">
+                                <div class="col-12 m-5 text-center">
+                                  <p>Por favor, es necesario <span class="text-success">"Aprobar ( <i class="fa flaticon2-check-mark text-success"></i> )"</span> el formulario de la seccion <button mat-button color="primary" (click)="matTabGroup.selectedIndex = 1">"Recepci&oacute;n"</button> para continuar</p>
+                                </div>
+                              </div>
+                            </ng-container>
+                          </ng-container>
+                          <ng-container *ngIf="!vehicleReception ">
+                            <div class="row">
+                              <div class="col-12 m-5 text-center">
+                                <p>No hay acciones para este vehiculo</p>
+                              </div>
+                            </div>
+                          </ng-container>
+                        </mat-tab>
+                      </mat-tab-group>
+                    </kt-portlet-body>
+                  </kt-portlet>
+                </div>
               </div>
             </div>
           </div>
@@ -94,8 +123,14 @@
       </div>
     </div>
   </div>
+</ng-container>
+<ng-container *ngIf="errorConnection">
+<div class="row">
+  <div class="col-12 text-center m-5">
+    <h2>Error al conectarse con el servidor, por favor refresque la p&aacute;gina o intente mas tarde</h2>
+  </div>
 </div>
-
+</ng-container>
 <swal
     #photoModal
     [swalOptions]="addPhotoModalOption"

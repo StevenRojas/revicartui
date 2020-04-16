@@ -1,0 +1,22 @@
+:host ::ng-deep .selection {
+  height: 60px!important;
+}
+:host ::ng-deep .select2-selection__placeholder{
+  top: 5px!important;
+  color: rgba(0, 0, 0, 0.54)!important;
+  font-size: 1rem!important;
+  font-weight: 400!important;
+}
+
+:host ::ng-deep .select2-selection__placeholder.select2-selection__placeholder__option{
+  top: 10px!important;
+}
+
+:host ::ng-deep .select2-selection.select2-selection--single {
+  height: 28px!important;
+  box-sizing: border-box!important;
+  line-height: 3!important;
+}
+:host ::ng-deep .selection.select2-focused{
+  height: 62px!important;
+}

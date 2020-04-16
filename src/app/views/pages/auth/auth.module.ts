@@ -22,6 +22,7 @@ import { AuthNoticeComponent } from './auth-notice/auth-notice.component';
 // Auth
 import { AuthGuard, AuthService } from '../../../core/auth';
 import {JwtInterceptorService} from '../../../core/_base/crud';
+import {PartialsModule} from '../../partials/partials.module';
 
 const routes: Routes = [
 	{
@@ -56,19 +57,20 @@ const routes: Routes = [
 
 
 @NgModule({
-	imports: [
-		CommonModule,
-		FormsModule,
-		ReactiveFormsModule,
-		MatButtonModule,
-		RouterModule.forChild(routes),
-		MatInputModule,
-		MatFormFieldModule,
-		MatCheckboxModule,
-		TranslateModule.forChild(),
-		// StoreModule.forFeature('auth', authReducer),
-		// EffectsModule.forFeature([AuthEffects])
-	],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    RouterModule.forChild(routes),
+    MatInputModule,
+    MatFormFieldModule,
+    MatCheckboxModule,
+    TranslateModule.forChild(),
+    PartialsModule,
+    // StoreModule.forFeature('auth', authReducer),
+    // EffectsModule.forFeature([AuthEffects])
+  ],
 	exports: [AuthComponent],
 	declarations: [
 		AuthComponent,

@@ -91,7 +91,7 @@
         <div class="form-group">
           <mat-form-field class="input-full-width w-100">
             <mat-label>Kilometraje</mat-label>
-            <input formControlName="mileage" matInput placeholder="Kilometraje" type="text"/>
+            <input formControlName="mileage" matInput placeholder="Kilometraje" type="number"/>
             <mat-error *ngIf="isControlHasError('mileage','required')">
               <strong>Este campo es requerido</strong>
             </mat-error>
@@ -109,7 +109,7 @@
         <div class="form-group">
           <mat-form-field class="input-full-width w-100">
             <mat-label>Año</mat-label>
-            <input formControlName="year" matInput placeholder="Año" type="text"/>
+            <input formControlName="year" matInput placeholder="Año" type="number"/>
           </mat-form-field>
         </div>
       </div>
@@ -118,7 +118,7 @@
         <div class="form-group" >
           <mat-form-field class="input-full-width w-100">
             <input type="text" placeholder="Marca" aria-label="Marca" matInput formControlName="brand" [matAutocomplete]="brand" >
-            <mat-autocomplete #brand="matAutocomplete" [displayWith]="displayName">
+            <mat-autocomplete autoActiveFirstOption #brand="matAutocomplete" [displayWith]="displayName">
               <mat-option *ngFor="let brand of brands | async" [value]="brand">
                 {{ brand.name }}
               </mat-option>
@@ -134,7 +134,7 @@
         <div class="form-group" >
           <mat-form-field class="input-full-width w-100">
             <input type="text" placeholder="Modelo" aria-label="Modelo" matInput formControlName="model" [matAutocomplete]="model" >
-            <mat-autocomplete #model="matAutocomplete" [displayWith]="displayName">
+            <mat-autocomplete autoActiveFirstOption #model="matAutocomplete" [displayWith]="displayName">
               <mat-option *ngFor="let model of models | async" [value]="model">
                 {{ model.name }}
               </mat-option>
@@ -149,12 +149,12 @@
       <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
         <div class="form-group" >
           <mat-form-field class="input-full-width w-100">
-<!--            <input type="text" placeholder="Sub Tipo" aria-label="Sub Tipo" matInput formControlName="subtype" [matAutocomplete]="subtype" >-->
-            <mat-select formControlName="subtype" placeholder="Sub Tipo" aria-label="Sub Tipo">
-              <mat-option *ngFor="let subtype of subtypes" [value]="subtype">
+            <input type="text" placeholder="Sub Tipo" aria-label="Sub Tipo" matInput formControlName="subtype" [matAutocomplete]="subtype" >
+            <mat-autocomplete autoActiveFirstOption #subtype="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let subtype of subtypesFiltered | async" [value]="subtype">
                 {{ subtype.name }}
               </mat-option>
-            </mat-select>
+            </mat-autocomplete>
             <mat-error *ngIf="isControlHasError('subtype','required')">
               <strong>Este campo es requerido</strong>
             </mat-error>
@@ -165,12 +165,12 @@
       <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
         <div class="form-group" >
           <mat-form-field class="input-full-width w-100">
-<!--            <input type="text" placeholder="Tipo de Transmisión" aria-label="Tipo de Transmisión" matInput formControlName="transmission" [matAutocomplete]="transmission" >-->
-            <mat-select formControlName="transmission" placeholder="Tipo de Transmisión" aria-label="Tipo de Transmisión">
-              <mat-option *ngFor="let transmission of transmissions" [value]="transmission">
+            <input type="text" placeholder="Tipo de Transmisión" aria-label="Tipo de Transmisión" matInput formControlName="transmission" [matAutocomplete]="transmission" >
+            <mat-autocomplete autoActiveFirstOption #transmission="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let transmission of transmissionsFiltered | async" [value]="transmission">
                 {{ transmission.name }}
               </mat-option>
-            </mat-select>
+            </mat-autocomplete>
             <mat-error *ngIf="isControlHasError('transmission','required')">
               <strong>Este campo es requerido</strong>
             </mat-error>
@@ -181,12 +181,12 @@
       <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
         <div class="form-group" >
           <mat-form-field class="input-full-width w-100">
-<!--            <input type="text" placeholder="Tipo de combustible" aria-label="Tipo de combustible" matInput formControlName="gas_type" [matAutocomplete]="gas_type" >-->
-            <mat-select formControlName="gas_type" placeholder="Tipo de combustible" aria-label="Tipo de combustible" >
-              <mat-option *ngFor="let gas_type of gastypes" [value]="gas_type">
+            <input type="text" placeholder="Tipo de combustible" aria-label="Tipo de combustible" matInput formControlName="gas_type" [matAutocomplete]="gas_type" >
+            <mat-autocomplete autoActiveFirstOption #gas_type="matAutocomplete" [displayWith]="displayName" >
+              <mat-option *ngFor="let gas_type of gastypesFiltered| async" [value]="gas_type">
                 {{ gas_type.name }}
               </mat-option>
-            </mat-select>
+            </mat-autocomplete>
             <mat-error *ngIf="isControlHasError('gas_type','required')">
               <strong>Este campo es requerido</strong>
             </mat-error>
@@ -197,12 +197,12 @@
       <div class="col-sm-12 col-xs-12 col-12 col-md-12 col-lg-6">
         <div class="form-group" >
           <mat-form-field class="input-full-width w-100">
-<!--            <input type="text" placeholder="Tipo de Uso" aria-label="Tipo de Uso" matInput formControlName="use_type" [matAutocomplete]="use_type" >-->
-            <mat-select formControlName="use_type" placeholder="Tipo de Uso" aria-label="Tipo de Uso">
-              <mat-option *ngFor="let use_type of usetypes" [value]="use_type">
+            <input type="text" placeholder="Tipo de Uso" aria-label="Tipo de Uso" matInput formControlName="use_type" [matAutocomplete]="use_type" >
+            <mat-autocomplete autoActiveFirstOption #use_type="matAutocomplete" [displayWith]="displayName">
+              <mat-option *ngFor="let use_type of usetypesFiltered | async" [value]="use_type">
                 {{ use_type.name }}
               </mat-option>
-            </mat-select>
+            </mat-autocomplete>
             <mat-error *ngIf="isControlHasError('use_type','required')">
               <strong>Este campo es requerido</strong>
             </mat-error>

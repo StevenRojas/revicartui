@@ -18,15 +18,15 @@
                     <div class="col-7 text-right">
                       <div class="row">
                         <div class="col-9 col-md-9">
-                          <h4>{{ vehicleReception.updated_at | dateFormat: 'LL' }}</h4>
+                          <h5>{{ vehicleReception.updated_at | dateFormat: 'LL' }}</h5>
                         </div>
                         <div class="col-1 col-md-1">
-                          <button mat-icon-button class="text-black-50" [ngStyle]="{'bottom' : '10px'}">
+                          <button mat-icon-button class="text-black-50" [ngStyle]="{'bottom' : '10px'}" (click)="openPrintPreviewModal()">
                             <i class="fa flaticon2-printer text-primary"></i>
                           </button>
                         </div>
                         <div class="col-1 col-md-1">
-                          <button mat-icon-button class="text-black-50" [ngStyle]="{'bottom' : '10px'}" (click)="openApproveReceptionModal()">
+                          <button mat-icon-button class="text-black-50" [disabled]="readOnlyStatus" [ngStyle]="{'bottom' : '10px'}" (click)="openApproveReceptionModal()">
                             <i class="fa flaticon2-check-mark text-success"></i>
                           </button>
                         </div>
@@ -41,19 +41,19 @@
                     <br>
                     <br>
                   </div>
-                  <kt-work-status [vehicleReception]="vehicleReception"></kt-work-status>
+                  <kt-work-status [vehicleReception]="vehicleReception" [readOnlyStatus]="readOnlyStatus"></kt-work-status>
                 </div>
               </div>
               <div class="row">
                 <div class="col-12">
-                  <kt-work-todo [vehicleReception]="vehicleReception" [vehicle]="vehicle" ></kt-work-todo>
+                  <kt-work-todo [vehicleReception]="vehicleReception" [vehicle]="vehicle" [readOnlyStatus]="readOnlyStatus"></kt-work-todo>
                 </div>
               </div>
             </div>
           </ng-container>
           <ng-container *ngIf="!vehicleReception">
             <div class="row">
-              <div class="col-12 text-center">
+              <div class="col-12 m-5 text-center">
                 <button mat-stroked-button color="primary" (click)="startReception()">Comenzar con la recepción del auto</button>
               </div>
             </div>
@@ -73,6 +73,7 @@
       <div class="row">
         <div class="col-12">
           <p>Esta seguro que desea cancelar la recepci&oacute;n?</p>
+          <p>Realizar esta acci&oacute;n eliminar&aacute; todos los cambios en Recepci&oacute;n y Reparaci&oacute;n</p>
           <br>
           <mat-form-field class="input-full-width w-100 pr-1">
             <mat-label>Motivo de la cancelaci&oacute;n</mat-label>
@@ -93,5 +94,22 @@
 >
   <div *swalPortal>
     <p>Desea aprobar este formulario y pasarlo a la seccion de Reparaci&oacute;n?</p>
+  </div>
+</swal>
+
+
+<swal
+  #printPreviewModal
+  [swalOptions]="printPreviewModalOption"
+>
+  <div *swalPortal>
+    <div class="row">
+      <div class="col-12">
+        <section class="text-right">
+          <mat-checkbox class="mr-2" (change)="updatePreviewPrinter($event)" [(ngModel)]="withPhotos">Fotos</mat-checkbox>
+          <mat-checkbox class="ml-2" (change)="updatePreviewPrinter($event)" [(ngModel)]="withPrices">Precios</mat-checkbox>
+        </section>
+      </div>
+    </div>
   </div>
 </swal>

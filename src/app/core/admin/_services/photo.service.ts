@@ -29,7 +29,7 @@ export class PhotoService {
         'vehicle': {
           'id': vehicleId.toString()
         },
-        'filename': file,
+        '_filename': file,
         'path_file': file,
         'is_primary': isPrimary
       }
@@ -43,7 +43,7 @@ export class PhotoService {
         'vehicle': {
           'id': vehicle.id.toString()
         },
-        'filename': file,
+        '_filename': file,
         'path_file': file,
         'is_primary': isPrimary
       }

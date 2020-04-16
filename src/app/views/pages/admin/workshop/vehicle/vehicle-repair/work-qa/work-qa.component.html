@@ -1,20 +1,78 @@
-<div class="row">
-  <div class="col-6">
+<ng-container *ngIf="qa">
+  <div class="row">
+    <div class="col-6">
+      <mat-form-field class="w-100">
+        <mat-select [(value)]="qa.operator" placeholder="Revisor" (selectionChange)="updateQa($event)">
+          <mat-option  *ngFor="let reviewer of operatorEnum" [value]="reviewer.id">
+            {{ reviewer.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="col-6">
+      <button [disabled]="qa.accepted" class="btn" [ngClass]="{'btn-success':qa.accepted, 'text-black-50':!qa.accepted}" (click)="openQaNoteModal($event, true)">Aceptado</button>
+      <button [disabled]="qa.accepted" class="btn ml-4" [ngClass]="{'btn-success':!qa.accepted, 'text-black-50':qa.accepted}" (click)="openQaNoteModal($event, false)">Rechazado</button>
+    </div>
+
+<!--    <div class="col-12">-->
+<!--      <div class="row">-->
+<!--        <div class="col-1 text-center">-->
+<!--          <button mat-mini-fab color="primary" ><i class="flaticon2-send"></i></button>-->
+<!--        </div>-->
+<!--        <div class="col-11">-->
+<!--          <mat-form-field class="w-100">-->
+<!--            <textarea matInput placeholder="Notas" [value]="qa.accepted_notes" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>-->
+<!--          </mat-form-field>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+  </div>
+  <div class="row" *ngIf="qa.accepted">
+    <div class="col-12">
+      <p>
+        <span class="text-success" [ngStyle]="{'width': '160px', 'display': 'inline-block'}">{{ qa.updated_at | dateFormat: 'LL' }}</span>
+        <span class="text-black-50" *ngIf="qa.accepted_notes">{{ qa.accepted_notes | titlecase }}</span>
+      </p>
+    </div>
+  </div>
+  <ng-container *ngIf="qaHistory">
+    <div *ngFor="let history of qaHistory">
+      <div class="row">
+        <div class="col-12">
+          <p>
+            <span class="text-danger" [ngStyle]="{'width': '160px', 'display': 'inline-block'}">{{ history.created_at | dateFormat: 'LL' }}</span>
+            <span class="text-black-50" *ngIf="history.rejected_notes">{{ history.rejected_notes | titlecase }}</span>
+            <span class="text-black-50" *ngIf="!history.rejected_notes">Sin notas para esta fecha</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="!qaHistory">
+    <div class="row">
+      <div class="col-12">
+        <p>No hay Historial</p>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>
+<ng-container *ngIf="!qa">
+  <div class="row">
+    <div class="col-12 text-info">
+      <p *ngIf="messageError">{{ messageError }}</p>
+      <p *ngIf="!messageError">Cargando ...</p>
+    </div>
+  </div>
+</ng-container>
+
+
+<swal
+  #qaNoteModal
+  [swalOptions]="qaNoteModalOption"
+>
+  <div *swalPortal >
     <mat-form-field class="w-100">
-      <mat-select placeholder="Revisor">
-        <mat-option *ngFor="let reviewer of ['Revisor 01', 'Revisor 02', 'Revisor 03', 'Revisor 04']" [value]="reviewer">
-          {{ reviewer }}
-        </mat-option>
-      </mat-select>
+    <textarea matInput autofocus placeholder="Nota" [(ngModel)]="lastNote" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="10"></textarea>
     </mat-form-field>
   </div>
-  <div class="col-6">
-    <button mat-raised-button color="primary" class="btn btn-success">Aceptado</button>
-    <button mat-raised-button class="ml-4 btn-danger">Rechazado</button>
-  </div>
-  <div class="col-12">
-    <mat-form-field class="w-100">
-      <textarea matInput placeholder="Notas" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
-    </mat-form-field>
-  </div>
-</div>
+</swal>

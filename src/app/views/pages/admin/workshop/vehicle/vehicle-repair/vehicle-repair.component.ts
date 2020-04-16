@@ -1,5 +1,14 @@
-import {Component, OnInit, Renderer2, ViewChild} from '@angular/core';
-import {Client, ClientService, Company, CompanyService, Vehicle, VehicleList, VehicleService} from '../../../../../../core/admin';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
+import {
+  Client,
+  ClientService,
+  Company,
+  CompanyService,
+  Vehicle,
+  VehicleList,
+  VehicleReparationService,
+  VehicleService
+} from '../../../../../../core/admin';
 import {ActivatedRoute, Router} from '@angular/router';
 import {LayoutConfigService, MenuOptions, OffcanvasOptions} from '../../../../../../core/_base/layout';
 import {FormGroup} from '@angular/forms';
@@ -11,9 +20,15 @@ import * as moment from 'moment';
   templateUrl: './vehicle-repair.component.html',
   styleUrls: ['./vehicle-repair.component.scss']
 })
-export class VehicleRepairComponent implements OnInit {
+export class VehicleRepairComponent implements OnInit, OnChanges {
+  @Input() vehicle: Vehicle;
+  @Input() vehicleReception: any;
+  @Input() operatorEnum: any[];
+  @Output() totalEmit = new EventEmitter<any>();
   public insideTm: any;
   public outsideTm: any;
+  public total: number;
+  public totalWorkTodo: number;
   public menuCanvasOptions: OffcanvasOptions = {
     baseClass: 'kt-aside',
     overlay: true,
@@ -23,6 +38,8 @@ export class VehicleRepairComponent implements OnInit {
       state: 'kt-header-mobile__toolbar-toggler--active'
     }
   };
+
+
   public historyModalOption = {
     showCancelButton: true,
     cancelButtonText: 'OK',
@@ -57,11 +74,10 @@ export class VehicleRepairComponent implements OnInit {
   public registerVehicleForm: FormGroup;
   public list: VehicleList;
   public searchList: VehicleList;
-  public vehicle: Vehicle;
   public pagination = { page: 1, query: undefined, queryId: undefined, limit: 10, sort: 'vehicle.id'};
   // Search Vars
   public query = { q: '', q_id: '' };
-  @ViewChild('historyModal', {static: false}) private historyModal: SwalComponent;
+  // @ViewChild('historyModal', {static: false}) private historyModal: SwalComponent;
   public works = [];
   public client: Client;
   public company: Company;
@@ -74,7 +90,8 @@ export class VehicleRepairComponent implements OnInit {
     private layoutConfigService: LayoutConfigService,
     private activatedRoute: ActivatedRoute,
     private clientService: ClientService,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private vehicleReparationService: VehicleReparationService
   ) {
     this.list = new VehicleList();
     this.vehicle = new Vehicle();
@@ -83,32 +100,38 @@ export class VehicleRepairComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
-      this.activatedRoute.queryParams.subscribe(queryParams => {
-        let detail = true;
-        if (queryParams.page) {
-          this.pagination.page = queryParams.page;
-        }
-        if (queryParams.company_id) {
-          this.getCompany(queryParams.company_id);
-        }
-        if (queryParams.client_id) {
-          this.getClient(queryParams.client_id);
-        }
-        if (queryParams.q_id) {
-          this.pagination.queryId = queryParams.q_id;
-          detail = true;
-        }
-        this.vehicleService.all(this.pagination, detail).subscribe(
-          (list: VehicleList) => {
-            if (list) {
-              this.list = list;
-              this.vehicle = this.list.list[0];
-            }
-          }
-        );
-      });
-    });
+    // this.route.params.subscribe(params => {
+    //   this.activatedRoute.queryParams.subscribe(queryParams => {
+    //     let detail = true;
+    //     if (queryParams.page) {
+    //       this.pagination.page = queryParams.page;
+    //     }
+    //     if (queryParams.company_id) {
+    //       this.getCompany(queryParams.company_id);
+    //     }
+    //     if (queryParams.client_id) {
+    //       this.getClient(queryParams.client_id);
+    //     }
+    //     if (queryParams.q_id) {
+    //       this.pagination.queryId = queryParams.q_id;
+    //       detail = true;
+    //     }
+    //     this.vehicleService.all(this.pagination, detail).subscribe(
+    //       (list: VehicleList) => {
+    //         if (list) {
+    //           this.list = list;
+    //           this.vehicle = this.list.list[0];
+    //         }
+    //       }
+    //     );
+    //   });
+    // });
+  }
+
+  ngOnChanges(changes) {
+    if (this.vehicle.id) {
+      // this.loadVehicleReception();
+    }
   }
 
   getClient(clientId: string) {
@@ -229,14 +252,19 @@ export class VehicleRepairComponent implements OnInit {
     }
   }
 
-  showHistory() {
-    this.historyModal.fire().then((result) => {
-      if (result.value) {
-      }
-    });
-  }
+  // showHistory() {
+  //   this.historyModal.fire().then((result) => {
+  //     if (result.value) {
+  //     }
+  //   });
+  // }
 
   getMomentObj(date) {
     return moment(date);
+  }
+  updateTotal(totalWorkTodo: number) {
+    // TODO sum all totals
+    this.total = totalWorkTodo;
+    this.totalEmit.emit(this.total);
   }
 }

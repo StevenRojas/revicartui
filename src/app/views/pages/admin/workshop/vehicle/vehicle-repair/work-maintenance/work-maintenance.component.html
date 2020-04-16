@@ -1,41 +1,20 @@
-<mat-form-field class="w-100">
-  <textarea matInput placeholder="Notas Client" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
-</mat-form-field>
-<mat-form-field class="w-100">
-  <textarea matInput placeholder="Notas Vehiculo" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
-</mat-form-field>
-<div class="row">
-  <div class="col-4">
-    <h6 class="text-black-50">Aceite Motor</h6>
-    <mat-form-field class="w-100 pb-2">
-      <input matInput [matDatepicker]="pickerOilM" placeholder="Fecha">
-      <mat-datepicker-toggle matSuffix [for]="pickerOilM"></mat-datepicker-toggle>
-      <mat-datepicker #pickerOilM></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field class="w-100 pb-2">
-      <input matInput placeholder="Kilometraje" type="number" class="example-right-align" />
-    </mat-form-field>
-  </div>
-  <div class="col-4">
-    <h6 class="text-black-50">Aceite Caja</h6>
-    <mat-form-field class="w-100 pb-2">
-      <input matInput [matDatepicker]="pickerOilB" placeholder="Fecha">
-      <mat-datepicker-toggle matSuffix [for]="pickerOilB"></mat-datepicker-toggle>
-      <mat-datepicker #pickerOilB></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field class="w-100 pb-2">
-      <input matInput placeholder="Kilometraje" type="number" class="example-right-align" />
-    </mat-form-field>
-  </div>
-  <div class="col-4">
-    <h6 class="text-black-50">Mantenimiento</h6>
-    <mat-form-field class="w-100 pb-2">
-      <input matInput [matDatepicker]="pickerOilC" placeholder="Fecha">
-      <mat-datepicker-toggle matSuffix [for]="pickerOilC"></mat-datepicker-toggle>
-      <mat-datepicker #pickerOilC></mat-datepicker>
-    </mat-form-field>
-    <mat-form-field class="w-100 pb-2">
-      <input matInput placeholder="Kilometraje" type="number" class="example-right-align" />
-    </mat-form-field>
+<div [hidden]="!maintenance">
+  <mat-form-field class="w-100">
+    <textarea #ownerNotes [value]="maintenance.owner_notes" matInput placeholder="Notas Client" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
+  </mat-form-field>
+  <mat-form-field class="w-100">
+    <textarea #vehicleNotes [value]="maintenance.vehicle_notes" matInput placeholder="Notas Vehiculo" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
+  </mat-form-field>
+  <div class="row">
+    <div class="col-4" *ngFor="let maintenanceDate of maintenance.maintenance_dates | keyvalue ">
+      <kt-work-maintenance-item [vehicleReception]="vehicleReception" [maintenance]="maintenanceDate.value" (maintenanceUpdateEmit)="updateMaintenance($event, maintenanceDate.key)"></kt-work-maintenance-item>
+    </div>
   </div>
 </div>
+<ng-container *ngIf="!maintenance">
+<div class="row">
+  <div class="col-12">
+    <p class="text-success text-center">Sin informaci&oacute;n para esta secci&oacute;n</p>
+  </div>
+</div>
+</ng-container>
