@@ -1,8 +1,10 @@
 import {Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Company, WorkSubCategoryService} from '../../../../../../../../core/admin';
+import {Company, WorkSubCategoryService, WorkTodoRepairService} from '../../../../../../../../core/admin';
 import {fromEvent} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
+import {SwalComponent} from '@sweetalert2/ngx-sweetalert2';
+import {SweetAlertOptions} from "sweetalert2";
 
 @Component({
   selector: 'kt-work-todo-item',
@@ -21,6 +23,7 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
   @Input() vehicleId: any;
   @Input() vehicleSubtypeId: any;
   @Input() receptionId: any;
+  @Input() readOnlyStatus = true;
   @Output() updateWorkTodoEmit = new EventEmitter<any>();
   @Output() removeWorkTodoEmit = new EventEmitter<any>();
   public updateWorkFormGroup: FormGroup;
@@ -38,10 +41,16 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
   private tempSubcategoryList: any[];
 
   @ViewChild('quantityInput', {static: true}) quantityInput: ElementRef;
+  @ViewChild('commentText', {static: false}) commentText: ElementRef;
   @ViewChild('priceInput', {static: true}) priceInput: ElementRef;
+  @ViewChild('deleteItemModal', {static: false}) private deleteItemModal: SwalComponent;
+  public deleteItemModalOption: SweetAlertOptions;
+  @ViewChild('commentItemModal', {static: false}) private commentItemModal: SwalComponent;
+  public commentItemModalOption: SweetAlertOptions;
   constructor(
     private fb: FormBuilder,
-    private workSubCategoryService: WorkSubCategoryService
+    private workSubCategoryService: WorkSubCategoryService,
+    private workTodoRepairService: WorkTodoRepairService
   ) {
     this.workTodoSelected = {
       "default_quantity": null,
@@ -55,6 +64,32 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.initFormControl();
     this.bindUpdateValues();
+    this.deleteItemModalOption = {
+      title: 'Advertencia',
+      showCancelButton: true,
+      cancelButtonText: 'No',
+      confirmButtonColor: '#5d78ff',
+      confirmButtonText: 'S&iacute;',
+      confirmButtonClass: 'btn btn-primary btn-elevate',
+      cancelButtonClass: 'btn btn-secondary btn-elevate',
+      showLoaderOnConfirm: true,
+      type: 'warning',
+      focusCancel: true,
+      preConfirm: () =>  this.removeWorkTodo()
+    };
+    this.commentItemModalOption = {
+      title: 'Nota del trabajo',
+      showCancelButton: true,
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#5d78ff',
+      confirmButtonText: 'Guardar',
+      confirmButtonClass: 'btn btn-primary btn-elevate',
+      cancelButtonClass: 'btn btn-secondary btn-elevate',
+      showLoaderOnConfirm: false,
+      focusCancel: true,
+      preConfirm: () =>  this.changeNoteWorkTodo()
+    };
+
   }
 
   ngOnChanges(changes) {
@@ -65,19 +100,38 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
 
   initFormControl() {
     this.updateWorkFormGroup = this.fb.group({
-      work_subcategory: ['', Validators.compose([Validators.required])
+      work_subcategory: [{value: '', disabled: this.readOnlyStatus}, Validators.compose([Validators.required])
       ],
-      price: ['', Validators.compose([Validators.required])
+      price: [{value: '', disabled: this.readOnlyStatus}, Validators.compose([Validators.required])
       ],
-      quantity: ['', Validators.compose([Validators.required])
+      quantity: [{value: '', disabled: this.readOnlyStatus}, Validators.compose([Validators.required])
       ]
     });
     this.bindValues();
-    // console.log(this.worktodo)
+  }
+
+  public openDeleteModal() {
+    this.deleteItemModal.fire().then((result) => {
+      if (result.value) {
+        // After press "Ok" button
+      } else {
+        // After press "Cancel" button or leave from modal
+      }
+    });
+  }
+
+  public openCommentModal() {
+    this.commentItemModal.fire().then((result) => {
+      if (result.value) {
+        // After press "Ok" button
+      } else {
+        // After press "Cancel" button or leave from modal
+      }
+    });
   }
 
   removeWorkTodo() {
-    this.removeWorkTodoEmit.emit(this.worktodo.worktodo_id);
+    return this.removeWorkTodoEmit.emit(this.worktodo.worktodo_id);
   }
 
   setSubcategoryDefaultOptions(subcategory: any) {
@@ -126,7 +180,6 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
     if (!control) {
       return false;
     }
-    // console.log(control)
     const result = control.hasError(validationType) && (control.dirty || control.touched);
     return result;
   }
@@ -162,7 +215,7 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
         'price': parseFloat(text)
       }).subscribe(
         (response) => {
-          this.worktodo.price = response.price
+          this.worktodo.price = response.price;
           this.emitUpdate(this.worktodo);
         }
       )
@@ -183,7 +236,9 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
     /**
      * Start list without subcategories
      */
-    this.subcategoryList = [this.workTodoSelected];
+    let tempList = this.workTodoSelected;
+    tempList.price = null;
+    this.subcategoryList = [tempList];
     this.updateWorkFormGroup.patchValue({
       work_subcategory: this.workTodoSelected,
       price: this.workTodoSelected.price,
@@ -205,8 +260,25 @@ export class WorkTodoItemComponent implements OnInit, OnChanges {
     )
   }
 
+  private changeNoteWorkTodo() {
+    this.workSubCategoryService.put(this.receptionId, this.worktodo.worktodo_id, {
+      notes: this.commentText.nativeElement.value
+    }).subscribe(
+      (response) => {
+        this.worktodo.notes = response.notes;
+        this.worktodo.price = response.price;
+        this.worktodo.quantity = response.quantity;
+        this.worktodo.subcategory = this.workTodoSelected.work;
+        this.worktodo.subcategory_id = response.work_subcategory;
+        this.emitUpdate(this.worktodo);
+      }
+    )
+    return true;
+  }
+
 
   private emitUpdate(workTodo: any) {
     this.updateWorkTodoEmit.emit(workTodo);
+    this.workTodoRepairService.updateReceptionInfoMessage.emit('update');
   }
 }

@@ -1,22 +1,49 @@
 <div class="row">
-  <div class="col-4">
-    <div class="card-img">
-      <img src="./assets/media/test_images/history_01.jpg" class="img-thumbnail w-100" [ngStyle]="{'height': '200px', 'object-fit': 'cover'}" (click)="openDialog('./assets/media/test_images/history_01.jpg')">
-    </div>
-  </div>
-  <div class="col-4">
-    <div class="card-img">
-      <img src="./assets/media/test_images/history_02.jpg" class="img-thumbnail w-100" [ngStyle]="{'height': '200px', 'object-fit': 'cover'}" (click)="openDialog('./assets/media/test_images/history_02.jpg')">
-    </div>
-  </div>
-  <div class="col-4">
-    <div class="card-img">
-      <img src="./assets/media/test_images/history_03.jpg" class="img-thumbnail w-100" [ngStyle]="{'height': '200px', 'object-fit': 'cover'}" (click)="openDialog('./assets/media/test_images/history_03.jpg')">
-    </div>
-  </div>
-  <div class="col-4">
-    <div class="card-img">
-      <img src="./assets/media/test_images/history_04.jpg" class="img-thumbnail w-100" [ngStyle]="{'height': '200px', 'object-fit': 'cover'}" (click)="openDialog('./assets/media/test_images/history_04.jpg')">
-    </div>
-  </div>
+
 </div>
+<div class="row">
+  <div class="col-2"></div>
+  <div class="col-8">
+    <h4 class="text-center">Lista de accesorios</h4>
+    <ng-container *ngFor="let vehicle_accessory of vehicleAccessories">
+      <div class="kt-widget4" *ngIf="receptionAccessoriesIds.indexOf(vehicle_accessory.id) !== -1">
+        <div class="kt-widget4__item" [ngStyle]="{'height': '25px'}">
+          <div class="kt-widget4__info">
+            <label>{{ vehicle_accessory.name }}</label>
+          </div>
+          <mat-form-field [ngStyle]="{'width': '40px'}">
+            <input [disabled]="readOnlyStatus" #input_accessory_quantity
+                   matInput placeholder="" type="number" class="example-right-align" value="{{ receptionAccessoriesIds.indexOf(vehicle_accessory.id) !== -1 ? receptionAccessories[receptionAccessoriesIds.indexOf(vehicle_accessory.id)]['quantity'] : vehicle_accessory.default_quantity }}">
+          </mat-form-field>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+  <div class="col-2"></div>
+  <div class="col-12"><h4 class="text-center">Lista de Im&aacute;genes</h4></div>
+  <ng-container *ngIf="receptionId && photoList.length > 0">
+      <ng-container *ngFor="let photo of photoList">
+        <div class="col-4" *ngIf="photo.photo">
+          <div class="card-img">
+            <img src="{{ pathImageServer + photo.photo.path_file }}" class="img-thumbnail w-100" [ngStyle]="{'height': '200px', 'object-fit': 'cover'}" (click)="openDialog(pathImageServer + photo.photo.path_file, photo.notes)">
+            <button
+              placement="auto"
+              ngbTooltip="{{ photo.notes }}"
+              mat-mini-fab color="accent"
+              *ngIf="photo.notes != '' && photo.notes"
+              class=""
+              [ngStyle]="{'display':'block', 'bottom':'50px', 'left': '10px'}" ><i class="flaticon-chat-1"></i></button>
+          </div>
+        </div>
+      </ng-container>
+
+  </ng-container>
+</div>
+<ng-container *ngIf="photoList.length == 0">
+  <div class="row">
+    <div class="col-12 text-center">
+      <p class="text-black-50">No hay im&aacute;genes guardadas</p>
+    </div>
+  </div>
+</ng-container>
+

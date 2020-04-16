@@ -16,16 +16,12 @@ export class FileService {
 
 
   quickSearch(name: string): Observable<any[]> {
-    const httpHeaders = new HttpHeaders();
-    httpHeaders.set('Content-Type', 'application/json');
-    httpHeaders.set('token', '123');
     let params = new HttpParams();
     params = params.set('q', name);
     params = params.set('page', '1');
     params = params.set('pagination', '0');
     return this.http.get<any[]>(environment.api_url + 'brand', {
-      params: params,
-      headers: httpHeaders
+      params: params
     });
   }
 }

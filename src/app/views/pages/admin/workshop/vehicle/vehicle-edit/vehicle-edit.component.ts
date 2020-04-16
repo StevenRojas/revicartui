@@ -11,8 +11,9 @@ import {
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ClientVehicleService} from '../../../../../../core/admin/_services/client-vehicle.service';
 import {CompanyVehicleService} from '../../../../../../core/admin/_services/company-vehicle.service';
-import {debounceTime, distinctUntilChanged, filter, switchMap} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, filter, map, startWith, switchMap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
+import {isObject} from 'util';
 
 @Component({
   selector: 'kt-vehicle-edit',
@@ -30,9 +31,13 @@ export class VehicleEditComponent implements OnInit, OnChanges {
   public brands: Observable<any[]>;
   public models: Observable<any[]>;
   public subtypes: any[];
-  public transmissions: any[];
+  public subtypesFiltered: Observable<any[]>;
+  public transmissions: any[] = [];
+  public transmissionsFiltered: Observable<any[]>;
   public gastypes: any[];
+  public gastypesFiltered: Observable<any[]>;
   public usetypes: any[];
+  public usetypesFiltered: Observable<any[]>;
   constructor(
     private fb: FormBuilder,
     private brandService: BrandService,
@@ -52,6 +57,8 @@ export class VehicleEditComponent implements OnInit, OnChanges {
     this.initRegisterVehicleForm();
     this.bindAutocompleteFields();
   }
+
+
 
   ngOnChanges(changes) {
     if (this.vehicleFormControl) {
@@ -133,24 +140,46 @@ export class VehicleEditComponent implements OnInit, OnChanges {
     this.subtypeService.all().subscribe(
       (subtypes) => {
         this.subtypes = subtypes;
+        /**
+         * Bind autocomplete list after get enumerator
+         */
+        this.subtypesFiltered = this.vehicleFormControl.controls.subtype.valueChanges.pipe(
+          startWith(''),
+          map(value => this._filter(this.subtypes, value))
+        );
         if (this.vehicle.subtype) {
           const selected = this.subtypes.find(s => s.id == this.vehicle.subtype.id)
           this.vehicleFormControl.get('subtype').setValue(selected);
         }
-
     });
     this.transmissionService.all().subscribe(
       (transmissions) => {
         this.transmissions = transmissions;
+        /**
+         * Bind autocomplete list after get enumerator
+         */
+        this.transmissionsFiltered = this.vehicleFormControl.controls.transmission.valueChanges.pipe(
+          startWith(''),
+          map(value => this._filter(this.transmissions, value))
+        );
+
         if (this.vehicle.transmission) {
           const selected = this.transmissions.find(s => s.id == this.vehicle.transmission.id)
           this.vehicleFormControl.get('transmission').setValue(selected);
+
         }
       }
     );
     this.gasTypeService.all().subscribe(
       (gasTypes) => {
         this.gastypes = gasTypes;
+        /**
+         * Bind autocomplete list after get enumerator
+         */
+        this.gastypesFiltered = this.vehicleFormControl.controls.gas_type.valueChanges.pipe(
+          startWith(''),
+          map(value => this._filter(this.gastypes, value))
+        );
         if (this.vehicle.gas_type) {
           const selected = this.gastypes.find(s => s.id == this.vehicle.gas_type.id)
           this.vehicleFormControl.get('gas_type').setValue(selected);
@@ -160,6 +189,13 @@ export class VehicleEditComponent implements OnInit, OnChanges {
     this.useTypeService.all().subscribe(
       (useTypes) => {
         this.usetypes = useTypes;
+        /**
+         * Bind autocomplete list after get enumerator
+         */
+        this.usetypesFiltered = this.vehicleFormControl.controls.use_type.valueChanges.pipe(
+          startWith(''),
+          map(value => this._filter(this.usetypes, value))
+        );
         if (this.vehicle.use_type) {
           const selected = this.usetypes.find(s => s.id == this.vehicle.use_type.id)
           this.vehicleFormControl.get('use_type').setValue(selected);
@@ -192,7 +228,6 @@ export class VehicleEditComponent implements OnInit, OnChanges {
       );
       return;
     }
-
     this.loading = true;
     let putObj = this.vehicleFormControl.getRawValue();
     Object.keys(putObj).forEach(controlName => {
@@ -238,5 +273,19 @@ export class VehicleEditComponent implements OnInit, OnChanges {
 
     const result = control.hasError(validationType) && (control.dirty || control.touched);
     return result;
+  }
+
+  /**
+   * Acept enumerator with id and name properties
+   *
+   * @param vehicleEnum
+   * @param value
+   * @private
+   */
+  private _filter(vehicleEnum: any[], value: string): any[] {
+    if (!isObject(value) && value != '' && value !=undefined && value != null) {
+      return vehicleEnum.filter(option => option.name.toLowerCase().indexOf(value.toLowerCase()) >= 0);
+    }
+    return vehicleEnum;
   }
 }

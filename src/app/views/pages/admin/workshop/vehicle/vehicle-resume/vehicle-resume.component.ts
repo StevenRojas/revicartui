@@ -5,11 +5,11 @@ import {
   Client,
   ClientService,
   Company,
-  CompanyService,
-  PhotoService,
+  CompanyService, OperatorService,
+  PhotoService, QaService,
   Vehicle,
-  VehicleList,
-  VehicleService
+  VehicleList, VehicleReceptionService,
+  VehicleService, WorkstatusService
 } from '../../../../../../core/admin';
 import {BeforeOpenEvent, SwalComponent} from '@sweetalert2/ngx-sweetalert2';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -31,7 +31,7 @@ import {LocalStoreService} from '../../../../../../core/_base/crud';
 export class VehicleResumeComponent implements OnInit {
   // PHOTO Variables
   public pondFiles = [];
-  public lastFileAdd = null;
+  public lastFileAdd = [];
   public photoError: string;
   public pondOptions = this.optionsFile();
   @ViewChild('myPond', { static: false }) myPond: any;
@@ -59,11 +59,17 @@ export class VehicleResumeComponent implements OnInit {
    */
   public clientList: any[];
   public companyList: any[];
+  /**
+   * Enums
+   */
+  public operatorEnum: any[];
 
   public insideTm: any;
   public outsideTm: any;
   public urlImages = environment.urlImages;
-
+  public _workStatusAcceptedId = environment.WORK_STATUS_ACCEPTED_ID;
+  public _workStatsRejectedId = environment.WORK_STATUS_REJECTED_ID;
+  public _showReparationIdFlag = environment.SHOW_REPARATION_WHEN_ID_STATUS_UP;
 
   public menuCanvasOptions: OffcanvasOptions = {
     baseClass: 'kt-aside',
@@ -74,17 +80,6 @@ export class VehicleResumeComponent implements OnInit {
       state: 'kt-header-mobile__toolbar-toggler--active'
     }
   };
-  // public historyModalOption = {
-  //   showCancelButton: true,
-  //   cancelButtonText: 'OK',
-  //   // confirmButtonColor: '#5d78ff',
-  //   // confirmButtonText: 'Eliminar',
-  //   // confirmButtonClass: 'btn btn-primary btn-elevate',
-  //   cancelButtonClass: 'btn btn-secondary btn-elevate',
-  //   // showLoaderOnConfirm: true,
-  //   focusCancel: true
-  //   // preConfirm: () => this.deleteClien   t(this.clientSelected)
-  // };
   public menuOptions: MenuOptions = {
     // vertical scroll
     scroll: null,
@@ -113,34 +108,34 @@ export class VehicleResumeComponent implements OnInit {
   // Search Vars
   public query = { q: '', q_id: '' };
   public works = [];
-  // public client: Client;
-  // public company: Company;
-  public clientVehicleOwners: any[];
-  public companyVehicleOwners: any[];
-  /**
-   * Tab display by default
-   */
-  public defaultTab = 0;
 
+  public vehicleReception: any;
+  public clientVehicleOwners: any[];
+  // Totals
+  public totalWorkTodo = 0;
+  // Control Errors
+  public errorConnection = false;
   constructor(
     private router: Router,
     private render: Renderer2,
+    private qaService: QaService,
     private route: ActivatedRoute,
+    private authService: AuthService,
     private photoService: PhotoService,
     private clientService: ClientService,
     private activatedRoute: ActivatedRoute,
     private vehicleService: VehicleService,
     private companyService: CompanyService,
+    private operatorService: OperatorService,
+    private localStoreService: LocalStoreService,
+    private workstatusService: WorkstatusService,
     private layoutConfigService: LayoutConfigService,
-    private companyVehicleService: CompanyVehicleService,
     private clientVehicleService: ClientVehicleService,
-    private authService: AuthService,
-    private localStoreService: LocalStoreService
+    private companyVehicleService: CompanyVehicleService,
+    private vehicleReceptionServices: VehicleReceptionService
   ) {
     this.list = new VehicleList();
     this.vehicle = new Vehicle();
-    // this.client = new Client();
-    // this.company = new Company();
     const defaultTab = this.localStoreService.getItem('vehicle_resume_reception_tab');
     if (defaultTab == null) {
       this.localStoreService.setItem('vehicle_resume_reception_tab', 0);
@@ -148,6 +143,12 @@ export class VehicleResumeComponent implements OnInit {
       this.defaultTab = defaultTab;
     }
   }
+  public companyVehicleOwners: any[];
+
+  /**
+   * Tab display by default
+   */
+  public defaultTab = 0;
 
   ngOnInit() {
     this.loadConfigurationModals();
@@ -167,6 +168,22 @@ export class VehicleResumeComponent implements OnInit {
 
       });
     });
+    this.operatorService.getAll().subscribe(
+      (operators) => {
+        this.operatorEnum = operators;
+      }
+    );
+    this.qaService.updateStatusReceptionMessage.subscribe(
+      (newIdStatus) => {
+        this.workstatusService.update({
+          'id': newIdStatus
+        }, this.vehicleReception.id).subscribe(
+          (status) => {
+            this.loadVehicleReception();
+          }
+        );
+      }
+    );
   }
 
   getVehicles() {
@@ -191,16 +208,46 @@ export class VehicleResumeComponent implements OnInit {
             total: 1
           };
           this.vehicle = this.list.list[0];
+          console.log(this.vehicle)
           Object.keys(this.vehicle.photos).forEach((key) => {
             if(this.vehicle.photos[key]['is_primary']) {
               this.vehiclePhoto = this.vehicle.photos[key];
-              // Get owner
-
             }
           });
+          // Get reception
+          this.loadVehicleReception();
+        }
+      },
+      error => this.errorConnection = true
+    );
+  }
+
+  public loadVehicleReception() {
+    this.vehicleReceptionServices.getLastReception(this.vehicle.id).subscribe(
+      (vehicleReceptionObj) => {
+        if (vehicleReceptionObj && Object.keys(vehicleReceptionObj).length > 0) {
+          this.vehicleReception = vehicleReceptionObj[0];
         }
       }
     );
+  }
+
+  public refreshFromReception(statusId: any) {
+    this.workstatusService.update({
+      'id': statusId
+    }, this.vehicleReception.id).subscribe(
+      (status) => {
+        if (statusId <= environment.SHOW_REPARATION_WHEN_ID_STATUS_UP) {
+          this.loadVehicleReception();
+        }
+      }
+    );
+  }
+
+  public refreshVehicleReception(event: any) {
+    if(event) {
+      this.loadVehicleReception();
+    }
   }
 
   getCompanyOwner(vehicleId: number) {
@@ -348,7 +395,7 @@ export class VehicleResumeComponent implements OnInit {
       if (result.value) {
         // After press "Ok" button
       } else {
-        this.lastFileAdd = null;
+        this.lastFileAdd = [];
         // After press "Cancel" button or leave from modal
       }
     });
@@ -394,7 +441,7 @@ export class VehicleResumeComponent implements OnInit {
         this.getClientOwner(this.vehicle.id);
         this.getCompanyOwner(this.vehicle.id);
       } else {
-        this.lastFileAdd = null;
+        this.lastFileAdd = [];
         // After press "Cancel" button or leave from modal
       }
     });
@@ -480,7 +527,7 @@ export class VehicleResumeComponent implements OnInit {
       multiple: false,
       labelIdle: 'Arrastre y suelte los archivos aquí o puede  <a class="link"> buscarlos </a>',
       acceptedFileTypes: 'image/*',
-      instantUpload: false,
+      instantUpload: true,
       maxFileSize: '5MB',
       allowRevert: false,
       server: {
@@ -528,7 +575,7 @@ export class VehicleResumeComponent implements OnInit {
 
   private requestOnLoad(load: any, request: any, error: any) {
     if (request.status >= 200 && request.status < 300) {
-      this.lastFileAdd = request.responseText;
+      this.lastFileAdd.push(request.responseText);
       load(request.responseText);
     } else {
       error('El servicio no esta Disponible en este momento');

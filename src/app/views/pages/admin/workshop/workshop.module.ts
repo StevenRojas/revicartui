@@ -36,13 +36,14 @@ import {VehicleEditComponent} from './vehicle/vehicle-edit/vehicle-edit.componen
 import {VehicleListComponent} from './vehicle/vehicle-list/vehicle-list.component';
 
 import {WorkHeaderComponent} from './vehicle/vehicle-repair/work-header/work-header.component';
-import {WorkComponent} from './vehicle/vehicle-repair/work/work.component';
+import {WorkTodoRepairComponent} from './vehicle/vehicle-repair/work-todo-repair/work-todo-repair.component';
+import {WorkTodoItemRepairComponent} from './vehicle/vehicle-repair/work-todo-repair/work-todo-item-repair/work-todo-item-repair.component';
 import {WorkThirdpartyComponent} from './vehicle/vehicle-repair/work-thirdparty/work-thirdparty.component';
 import {WorkMaterialsComponent} from './vehicle/vehicle-repair/work-materials/work-materials.component';
 import {WorkAccesoriesComponent} from './vehicle/vehicle-repair/work-accesories/work-accesories.component';
 import {WorkQaComponent} from './vehicle/vehicle-repair/work-qa/work-qa.component';
 import {WorkMaintenanceComponent} from './vehicle/vehicle-repair/work-maintenance/work-maintenance.component';
-import {VehicleReceptionComponent} from './vehicle/vehicle-reception/vehicle-reception.component';
+import {DialogPrintReceptionDialog, VehicleReceptionComponent} from './vehicle/vehicle-reception/vehicle-reception.component';
 import {WorkStatusComponent} from './vehicle/vehicle-reception/work-status/work-status.component';
 import {WorkTodoComponent} from './vehicle/vehicle-reception/work-todo/work-todo.component';
 import {VehicleHistoryComponent} from './vehicle/vehicle-history/vehicle-history.component';
@@ -59,6 +60,9 @@ import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import { WorkTodoItemComponent } from './vehicle/vehicle-reception/work-todo/work-todo-item/work-todo-item.component';
 import { WorkStatusCommentComponent } from './vehicle/vehicle-reception/work-status/work-status-comment/work-status-comment.component';
+import { WorkMaintenanceItemComponent } from './vehicle/vehicle-repair/work-maintenance/work-maintenance-item/work-maintenance-item.component';
+import {PdfJsViewerModule} from 'ng2-pdfjs-viewer';
+
 
 // import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 
@@ -71,6 +75,7 @@ registerPlugin(FilePondPluginImageExifOrientation);
 @NgModule({
   declarations: [
     DialogCarPhotoDialog,
+    DialogPrintReceptionDialog,
     WorkshopComponent,
     ClientComponent,
     ClientEditComponent,
@@ -86,7 +91,8 @@ registerPlugin(FilePondPluginImageExifOrientation);
     VehicleEditComponent,
     VehicleListComponent,
     WorkHeaderComponent,
-    WorkComponent,
+    WorkTodoRepairComponent,
+    WorkTodoItemRepairComponent,
     WorkThirdpartyComponent,
     WorkMaterialsComponent,
     WorkAccesoriesComponent,
@@ -102,7 +108,8 @@ registerPlugin(FilePondPluginImageExifOrientation);
     VehicleResumeComponent,
     ReceptionComponent,
     WorkTodoItemComponent,
-    WorkStatusCommentComponent
+    WorkStatusCommentComponent,
+    WorkMaintenanceItemComponent
   ],
   imports: [
     CommonModule,
@@ -128,10 +135,12 @@ registerPlugin(FilePondPluginImageExifOrientation);
     FilePondModule,
     MatRadioModule,
     MatCardModule,
-    MatMenuModule
+    MatMenuModule,
+    PdfJsViewerModule
   ],
   entryComponents: [
-    DialogCarPhotoDialog
+    DialogCarPhotoDialog,
+    DialogPrintReceptionDialog
   ]
 })
 export class WorkshopModule {

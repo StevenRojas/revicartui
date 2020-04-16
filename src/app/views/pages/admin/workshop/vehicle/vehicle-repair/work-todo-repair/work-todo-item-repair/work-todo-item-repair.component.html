@@ -1,0 +1,86 @@
+<form [formGroup]="updateWorkFormGroup" autocomplete="off" class="kt-register__form kt-form">
+  <div class="row">
+    <div class="col-4 col-sm-4 col-md-4 col-lg-5 mr-0 pr-0">
+      <div class="row">
+        <div class="col-1">
+          <!--          TODO SET icon for inform about an update-->
+        </div>
+        <div class="col-11">
+          <mat-form-field class="input-full-width w-100 p-0 m-0">
+            <!--            <input type="text" placeholder="Sub Categoría" aria-label="Sub categoría" matInput formControlName="work_subcategory"  >-->
+            <mat-select [(value)]="workTodoSelected" (opened)="getSubcategories()" placeholder="" (selectionChange)="setSubcategoryDefaultOptions($event)" formControlName="work_subcategory" >
+              <mat-option *ngFor="let workSubCategory of subcategoryList" [value]="workSubCategory">
+                {{ workSubCategory.work }} <span *ngIf="workSubCategory.price"><b>, {{ workSubCategory.price }} Bs.</b></span>
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="isControlHasError('work_subcategory','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <div class="col-3 col-sm-3 col-md-3 col-lg-2 ml-0 pl-0 mr-0 pr-0">
+      <div class="row">
+        <div class="col-12 mt-2 text-center mr-0 pr-0 ml-0 pl-0">
+          <button mat-icon-button class="mr-1 text-black-50 d-inline-block" (click)="openCommentModal()">
+            <i class="fa flaticon-chat-1 text-primary kt-font-bold"></i>
+          </button>
+          <button mat-icon-button class="mr-1 text-black-50 d-inline-block" (click)="openDeleteModal()">
+            <i class="fa flaticon2-trash text-danger"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-5 col-sm-5 col-md-5 col-lg-5 ml-0 pl-0">
+      <div class="row">
+        <div class="col-3">
+          <mat-form-field class="input-full-width w-100 pr-1">
+            <mat-label>Cantidad</mat-label>
+            <input #quantityInput formControlName="quantity" [value]="worktodo.quantity" matInput placeholder="Cantidad" type="number" min="0" max="10000" step="1" />
+            <mat-error *ngIf="isControlHasError('quantity','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-5">
+          <mat-form-field class="input-full-width w-100 pr-1">
+            <mat-label>Precio</mat-label>
+            <input #priceInput formControlName="price" [value]="worktodo.price" matInput placeholder="Precio" type="number" min="0.00" max="10000.00" step="0.5" />
+            <span matSuffix>&nbsp;Bs.</span>
+            <mat-error *ngIf="isControlHasError('price','required')">
+              <strong>Este campo es requerido</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-4">
+          <mat-form-field class="input-full-width w-100 pr-1">
+            <mat-label>Sub.</mat-label>
+            <input [value]="(worktodo.price * worktodo.quantity)" matInput placeholder="Sub" type="number" min="0.00" max="10000.00" step="0.5" disabled />
+            <span matSuffix>&nbsp;Bs.</span>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<swal
+  #deleteItemModal
+  [swalOptions]="deleteItemModalOption"
+>
+  <div *swalPortal>
+    <p>Desea eliminar el trabajo?</p>
+  </div>
+</swal>
+
+<swal
+  #commentItemModal
+  [swalOptions]="commentItemModalOption"
+>
+  <div *swalPortal>
+    <mat-form-field [ngStyle]="{'width': '100%'}">
+      <textarea [autofocus]="true" #commentText matInput [value]="worktodo.notes" placeholder="Nota" matTextareaAutosize matAutosizeMinRows="2" matAutosizeMaxRows="5"></textarea>
+    </mat-form-field>
+  </div>
+</swal>

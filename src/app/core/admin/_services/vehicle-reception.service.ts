@@ -61,4 +61,17 @@ export class VehicleReceptionService {
   cancel(receptionId: any, notes: {}): Observable<any> {
     return this.http.patch<any>(environment.api_url + 'reception/' + receptionId + '/cancel', notes);
   }
+
+  print(receptionId: number, withImages: number, withPrices: number): Observable<any> {
+    const httpHeaders = new HttpHeaders();
+    httpHeaders.set('Content-Type', 'text/html');
+    let params = new HttpParams();
+    params = params.set('with_photos', withImages.toString());
+    params = params.set('with_prices', withPrices.toString());
+    return this.http.get(environment.api_url + 'reception/' + receptionId + '/print', {
+      params: params,
+      headers: httpHeaders,
+      responseType: 'text'
+    });
+  }
 }

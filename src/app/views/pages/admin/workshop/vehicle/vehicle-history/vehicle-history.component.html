@@ -1,182 +1,89 @@
-<div class="row">
-  <div class="col-6">
-    <h3>19 de Marzo, 2019</h3>
-  </div>
-  <div class="col-6 kt-align-right">
-    <button mat-button
-            (click)="controlCollapse(1, 'photo')"
-            [attr.aria-expanded]="!isCollapsedPhotos[1]"
-            aria-controls="collapse_photo_1" [ngClass]="{'text-success': !isCollapsedPhotos[1]}">Fotos</button>
-    <button mat-button
-            (click)="controlCollapse(1, 'doc')"
-            [attr.aria-expanded]="!isCollapsedDocuments[1]"
-            aria-controls="collapse_documents_1" [ngClass]="{'text-success': !isCollapsedDocuments[1]}">Documentos</button>
-    <button mat-button
-            (click)="controlCollapse(1, 'work')"
-            [attr.aria-expanded]="!isCollapsedWorks[1]"
-            aria-controls="collapse_works_1" [ngClass]="{'text-success': !isCollapsedWorks[1]}">Trabajos</button>
-  </div>
-  <div class="col-12 d-flex">
-    <div class="position-relative d-flex">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+<ng-container *ngIf="historyList.length != 0">
+  <div class="row" *ngFor="let reception of historyList | keyvalue">
+    <div class="col-6">
+      <h3>{{ reception.updated_at | dateFormat: 'LL' }}</h3>
     </div>
-    <div class="position-relative d-flex">
-      <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>
-      <button mat-button><i class="flaticon2-mail fa-2x"></i></button>
+    <div class="col-6 kt-align-right">
+      <button mat-button
+              (click)="controlCollapse(reception.key, 'photo', reception.value.id)"
+              [attr.aria-expanded]="!isCollapsedPhotos[reception.key]"
+              aria-controls="collapse_photo_1" [ngClass]="{'text-success': !isCollapsedPhotos[reception.key]}">Recepci&oacute;n</button>
+      <button mat-button
+              (click)="controlCollapse(reception.key, 'doc', reception.value.id)"
+              [attr.aria-expanded]="!isCollapsedDocuments[reception.key]"
+              aria-controls="collapse_documents_1" [ngClass]="{'text-success': !isCollapsedDocuments[reception.key]}">Documentos</button>
+      <button mat-button
+              (click)="controlCollapse(reception.key, 'work', reception.value.id)"
+              [attr.aria-expanded]="!isCollapsedWorks[reception.key]"
+              aria-controls="collapse_works_1" [ngClass]="{'text-success': !isCollapsedWorks[reception.key]}">Trabajos</button>
     </div>
-  </div>
-  <div class="col-12">
-    <div id="collapse_photo_1" [ngbCollapse]="isCollapsedPhotos[1]">
-      <div class="card">
-        <div class="card-body">
-          <kt-work-photos></kt-work-photos>
+    <div class="col-12 d-flex">
+      <div class="position-relative d-flex" *ngIf="reception.value.owner_notes != null || reception.value.vehicle_notes != null">
+        <div class="row">
+          <div *ngIf="reception.value.owner_notes != null" class="col-12">
+            <p class="d-inline-block"><b>Notas del dueño: </b></p>
+            <p class="d-inline-block">{{ reception.value.owner_notes }}</p>
+          </div>
+          <br>
+          <div *ngIf="reception.value.vehicle_notes != null" class="col-12">
+            <p class="d-inline-block"><b>Notas del veh&iacute;culo: </b></p>
+            <p class="d-inline-block">{{ reception.value.vehicle_notes }}</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="position-relative text-center d-flex" *ngIf="(!reception.value.owner_notes && !reception.value.vehicle_notes) || (reception.value.owner_notes.trim() == '' && reception.value.vehicle_notes.trim() == '')">
+        <p class="text-black-50">Esta recepci&oacute;n no tiene notas guardadas</p>
+      </div>
+      <div class="position-relative d-flex">
+<!--        <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>-->
+<!--        <button mat-button><i class="flaticon2-mail fa-2x"></i></button>-->
+      </div>
+    </div>
+    <div class="col-12">
+      <div id="collapse_photo_1" [ngbCollapse]="isCollapsedPhotos[reception.key]">
+        <div class="card">
+          <div class="card-body">
+            <ng-container *ngIf="reception.value.id == receptionIdSelected">
+              <kt-work-photos [receptionId]="receptionIdSelected"></kt-work-photos>
+            </ng-container>
+
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-12">
-    <div id="collapse_documents_1" [ngbCollapse]="isCollapsedDocuments[1]">
-      <div class="card">
-        <div class="card-body">
-          <kt-work-documents></kt-work-documents>
+    <div class="col-12">
+      <div id="collapse_documents_1" [ngbCollapse]="isCollapsedDocuments[reception.key]">
+        <div class="card">
+          <div class="card-body">
+            <ng-container *ngIf="reception.value.id == receptionIdSelected">
+              <kt-work-documents [receptionId]="receptionIdSelected" ></kt-work-documents>
+            </ng-container>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-12">
-    <div id="collapse_works_1" [ngbCollapse]="isCollapsedWorks[1]">
-      <div class="card">
-        <div class="card-body">
-          <kt-work-resume></kt-work-resume>
+    <div class="col-12">
+      <div id="collapse_works_1" [ngbCollapse]="isCollapsedWorks[reception.key]">
+        <div class="card">
+          <div class="card-body">
+            <ng-container *ngIf="reception.value.id == receptionIdSelected">
+              <kt-work-resume [receptionId]="receptionIdSelected"></kt-work-resume>
+            </ng-container>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-12">
-    <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-  </div>
-</div>
-
-
-<div class="row">
-  <div class="col-6">
-    <h3>19 de Marzo, 2019</h3>
-  </div>
-  <div class="col-6 kt-align-right">
-    <button mat-button>Fotos</button>
-    <button mat-button>Documentos</button>
-    <button mat-button>Trabajos</button>
-  </div>
-  <div class="col-12 d-flex">
-    <div class="position-relative d-flex">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    </div>
-    <div class="position-relative d-flex">
-      <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>
-      <button mat-button><i class="flaticon2-mail fa-2x"></i></button>
+    <div class="col-12">
+      <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
     </div>
   </div>
-  <div class="col-12">
-    <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-  </div>
-</div>
-
-
-
-<div class="row">
-  <div class="col-6">
-    <h3>19 de Marzo, 2019</h3>
-  </div>
-  <div class="col-6 kt-align-right">
-    <button mat-button>Fotos</button>
-    <button mat-button>Documentos</button>
-    <button mat-button>Trabajos</button>
-  </div>
-  <div class="col-12 d-flex">
-    <div class="position-relative d-flex">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    </div>
-    <div class="position-relative d-flex">
-      <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>
-      <button mat-button><i class="flaticon2-mail fa-2x"></i></button>
+</ng-container>
+<ng-container *ngIf="historyList.length == 0">
+  <div class="row">
+    <div class="col-12 m-5 text-center">
+      <p class="">No hay informaci&oacute;n hist&oacute;rica para este veh&iacute;culo</p>
     </div>
   </div>
-  <div class="col-12">
-    <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-  </div>
-</div>
+</ng-container>
 
-
-
-<div class="row">
-  <div class="col-6">
-    <h3>19 de Marzo, 2019</h3>
-  </div>
-  <div class="col-6 kt-align-right">
-    <button mat-button>Fotos</button>
-    <button mat-button>Documentos</button>
-    <button mat-button>Trabajos</button>
-  </div>
-  <div class="col-12 d-flex">
-    <div class="position-relative d-flex">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    </div>
-    <div class="position-relative d-flex">
-      <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>
-      <button mat-button><i class="flaticon2-mail fa-2x"></i></button>
-    </div>
-  </div>
-  <div class="col-12">
-    <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-  </div>
-</div>
-
-
-
-<div class="row">
-  <div class="col-6">
-    <h3>19 de Marzo, 2019</h3>
-  </div>
-  <div class="col-6 kt-align-right">
-    <button mat-button>Fotos</button>
-    <button mat-button>Documentos</button>
-    <button mat-button>Trabajos</button>
-  </div>
-  <div class="col-12 d-flex">
-    <div class="position-relative d-flex">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    </div>
-    <div class="position-relative d-flex">
-      <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>
-      <button mat-button><i class="flaticon2-mail fa-2x"></i></button>
-    </div>
-  </div>
-  <div class="col-12">
-    <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-  </div>
-</div>
-
-
-
-<div class="row">
-  <div class="col-6">
-    <h3>19 de Marzo, 2019</h3>
-  </div>
-  <div class="col-6 kt-align-right">
-    <button mat-button>Fotos</button>
-    <button mat-button>Documentos</button>
-    <button mat-button>Trabajos</button>
-  </div>
-  <div class="col-12 d-flex">
-    <div class="position-relative d-flex">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    </div>
-    <div class="position-relative d-flex">
-      <button mat-button><i class="fa fa-sign-in-alt fa-2x"></i></button>
-      <button mat-button><i class="flaticon2-mail fa-2x"></i></button>
-    </div>
-  </div>
-  <div class="col-12">
-    <div class="kt-separator kt-separator--dashed pt-1 pb-1 mt-1 mb-3"></div>
-  </div>
-</div>

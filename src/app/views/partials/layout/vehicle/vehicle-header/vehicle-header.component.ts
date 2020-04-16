@@ -13,9 +13,10 @@ import {SwalComponent, SwalPortalTargets} from '@sweetalert2/ngx-sweetalert2';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {SweetAlertOptions} from 'sweetalert2';
 import {Observable} from 'rxjs';
-import {debounceTime, distinctUntilChanged, filter, switchMap} from 'rxjs/operators';
+import {debounceTime, distinctUntilChanged, filter, map, startWith, switchMap} from 'rxjs/operators';
 import {ClientVehicleService} from '../../../../../core/admin/_services/client-vehicle.service';
 import {CompanyVehicleService} from '../../../../../core/admin/_services/company-vehicle.service';
+import {isObject} from "util";
 
 @Component({
   selector: 'kt-vehicle-header',
@@ -34,7 +35,7 @@ export class VehicleHeaderComponent implements OnInit {
   @Output() vehicleUpdateListRequestEmit = new EventEmitter<Vehicle>();
   @Output() vehicleAddListRequestEmit = new EventEmitter<Vehicle>();
 
-  @ViewChild('deleteVehicleModal', {static: false}) private deleteVehicleModal: SwalComponent;
+  // @ViewChild('deleteVehicleModal', {static: false}) private deleteVehicleModal: SwalComponent;
   @ViewChild('addVehicleModal', {static: false}) private addVehicleModal: SwalComponent;
 
   public vehicleAddFormControl: FormGroup;
@@ -45,9 +46,14 @@ export class VehicleHeaderComponent implements OnInit {
   public brands: Observable<any[]>;
   public models: Observable<any[]>;
   public subtypes: any[];
+  public subtypesFiltered: Observable<any[]>;
   public transmissions: any[];
+  public transmissionsFiltered: Observable<any[]>;
   public gastypes: any[];
+  public gastypesFiltered: Observable<any[]>;
   public usetypes: any[];
+  public usetypesFiltered: Observable<any[]>;
+
 
   constructor(
     private vehicleService: VehicleService,
@@ -182,13 +188,13 @@ export class VehicleHeaderComponent implements OnInit {
       }
     });
   }
-  openDeleteVehicleModal(event: any) {
-    this.deleteVehicleModal.fire().then((result) => {
-      if (result.value) {
-        this.updateListRequest(this.vehicleSelected);
-      }
-    });
-  }
+  // openDeleteVehicleModal(event: any) {
+  //   this.deleteVehicleModal.fire().then((result) => {
+  //     if (result.value) {
+  //       this.updateListRequest(this.vehicleSelected);
+  //     }
+  //   });
+  // }
 
   initRegisterVehicleForm() {
     this.vehicleAddFormControl = this.fb.group({
@@ -218,9 +224,7 @@ export class VehicleHeaderComponent implements OnInit {
       ]
     });
 
-    console.log(this.searchLicencePlate)
     if (this.searchLicencePlate) {
-
       this.vehicleAddFormControl.controls['license_plate'].setValue(this.searchLicencePlate);
     }
   }
@@ -300,21 +304,60 @@ export class VehicleHeaderComponent implements OnInit {
     this.subtypeService.all().subscribe(
       (subtypes) => {
         this.subtypes = subtypes;
+        /**
+         * Bind autocomplete list after get enumerator
+         */
+        this.subtypesFiltered = this.vehicleAddFormControl.controls.subtype.valueChanges.pipe(
+          startWith(''),
+          map(value => this._filter(this.subtypes, value))
+        );
       });
     this.transmissionService.all().subscribe(
       (transmissions) => {
         this.transmissions = transmissions;
+        /**
+         * Bind autocomplete list after get enumerator
+         */
+        this.transmissionsFiltered = this.vehicleAddFormControl.controls.transmission.valueChanges.pipe(
+          startWith(''),
+          map(value => this._filter(this.transmissions, value))
+        );
       }
     );
     this.gasTypeService.all().subscribe(
       (gasTypes) => {
         this.gastypes = gasTypes;
+        /**
+         * Bind autocomplete list after get enumerator
+         */
+        this.gastypesFiltered = this.vehicleAddFormControl.controls.gas_type.valueChanges.pipe(
+          startWith(''),
+          map(value => this._filter(this.gastypes, value))
+        );
       }
     );
     this.useTypeService.all().subscribe(
       (useTypes) => {
         this.usetypes = useTypes;
+        this.usetypesFiltered = this.vehicleAddFormControl.controls.use_type.valueChanges.pipe(
+          startWith(''),
+          map(value => this._filter(this.usetypes, value))
+        );
       }
     );
+  }
+
+  /**
+   * Acept enumerator with id and name properties
+   *
+   * @param vehicleEnum
+   * @param value
+   * @private
+   */
+  private _filter(vehicleEnum: any[], value: string): any[] {
+    if (!isObject(value) && value != '' && value !=undefined && value != null) {
+      return vehicleEnum.filter(option => option.name.toLowerCase().indexOf(value.toLowerCase()) >= 0);
+    }
+    return vehicleEnum;
   }
 }

@@ -1,70 +1,49 @@
+<ng-container *ngIf="receptionId && workList.length > 0">
+  <div class="row">
+    <div class="col-6"><h3>Trabajos Realizados</h3></div>
+    <div class="col-6 text-right"><h5>Total {{ total }}.</h5></div>
+  </div>
+  <div class="row">
+    <div class="table-responsive">
+      <table class="table table-responsive-lg table-responsive-xl">
+        <thead>
+        <tr>
+          <th scope="col">Rubro</th>
+          <th scope="col">Cantidad</th>
+          <th scope="col">Item</th>
+          <!--        <th scope="col">Unitario</th>-->
+          <th scope="col">Parcial</th>
+          <th scope="col">Notas</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let work of workList">
+          <th scope="row">{{ work.work_subcategory.work_category.category }}</th>
+          <td>{{ work.quantity }}</td>
+          <td>{{ work.work_subcategory.work }}</td>
+          <!--        <td>200</td>-->
+          <td>{{ work.price }}</td>
+          <td><i [ngStyle]="{'cursor': 'pointer'}" class="fa fa-edit" (click)="openModalNotes(work.notes)"></i></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-container>
+<ng-container *ngIf="workList.length == 0">
 <div class="row">
-  <div class="col-6"><h3>Trabajos Realizados</h3></div>
-  <div class="col-6 text-right"><h5>Total 340Bs.</h5></div>
-</div>
-<div class="row">
-  <div class="table-responsive-xl">
-    <table class="table table-sm table-dark">
-      <thead>
-      <tr>
-        <th scope="col">Rubro</th>
-        <th scope="col">Cantidad</th>
-        <th scope="col">Item</th>
-        <th scope="col">Unitario</th>
-        <th scope="col">Parcial</th>
-        <th scope="col">Notas</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <th scope="row">Mecánica</th>
-        <td>1</td>
-        <td>Cambio de aceite</td>
-        <td>200</td>
-        <td>200</td>
-        <td><i class="fa fa-edit"></i></td>
-      </tr>
-      <tr>
-        <th scope="row">Mecánica</th>
-        <td>1</td>
-        <td>Reparar puertas traseras</td>
-        <td>200</td>
-        <td>200</td>
-        <td><i class="fa fa-edit"></i></td>
-      </tr>
-      </tbody>
-    </table>
+  <div class="col-12 text-center">
+    <p class="text-black-50">No hay Trabajos guardados</p>
   </div>
 </div>
+</ng-container>
 
-<div class="row">
-  <div class="col-6"><h3>Trabajos de Terceros</h3></div>
-  <div class="col-6 text-right"><h5>Total 340Bs.</h5></div>
-</div>
-
-<div class="row">
-  <div class="table-responsive-xl">
-    <table class="table table-sm table-dark">
-      <thead>
-      <tr>
-        <th scope="col">Rubro</th>
-        <th scope="col">Cantidad</th>
-        <th scope="col">Item</th>
-        <th scope="col">Unitario</th>
-        <th scope="col">Parcial</th>
-        <th scope="col">Notas</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <th scope="row">Pastiquero</th>
-        <td>1</td>
-        <td>Pegar bomba</td>
-        <td>60</td>
-        <td>60</td>
-        <td><i class="fa fa-edit"></i></td>
-      </tr>
-      </tbody>
-    </table>
+<swal
+  #noteModal
+  [swalOptions]="noteModalOption"
+>
+  <div *swalPortal>
+    <p *ngIf="noteSelected">"{{ noteSelected }}"</p>
+    <p *ngIf="!noteSelected">"Sin notas guardadas."</p>
   </div>
-</div>
+</swal>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Company, Vehicle} from '..';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
@@ -8,7 +8,7 @@ import {environment} from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class WorkTodoService {
-
+  public updateRepairInfoMessage = new EventEmitter();
   constructor(
     private http: HttpClient
   ) { }
